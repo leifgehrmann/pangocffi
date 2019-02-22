@@ -5,7 +5,24 @@ pangocffi
 
 pangocffi is a `CFFI`_-based set of Python bindings for pango_.
 
-The intention is to initially support operations for `cairo rendering`_ only and not to support Win32, Freetype, Xft and Coretext, but these could be added later.
+Usage
+_____
+
+Assuming Pango has been installed, and running Python v3:
+
+.. code-block::
+
+   from pangocffi import Context, Layout, Alignment, Rectangle
+   context = Context()
+   layout = Layout(context)
+   layout.set_width(300)
+   layout.set_alignment(Alignment.CENTER)
+   layout.set_markup(u"Παν語")
+
+   (ink_rect, logical_rect) = layout.get_extents()
+
+   print(ink_rect.width)
+   print(ink_rect.height)
 
 Running tests
 _____________

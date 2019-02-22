@@ -6,7 +6,6 @@ if sys.version_info.major < 3:
 
 setup(
     setup_requires=['pytest-runner'],
-    tests_requires=['pytest'],
     cffi_modules=[
         'pangocffi/ffi_build.py:ffi'
     ]
