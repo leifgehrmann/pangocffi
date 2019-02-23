@@ -1,28 +1,12 @@
 pangocffi
 =========
 
-⚠️ This project is work-in-progress.
-
 pangocffi is a `CFFI`_-based set of Python bindings for pango_.
 
-Usage
-_____
+See pangocairocffi_ for bindings that allow you to render pango objects with cairo.
 
-Assuming Pango has been installed, and running Python v3:
-
-.. code-block::
-
-   from pangocffi import Context, Layout, Alignment, Rectangle
-   context = Context()
-   layout = Layout(context)
-   layout.set_width(300)
-   layout.set_alignment(Alignment.CENTER)
-   layout.set_markup(u"Παν語")
-
-   (ink_rect, logical_rect) = layout.get_extents()
-
-   print(ink_rect.width)
-   print(ink_rect.height)
+pangocffi on its own is not that useful, since it depends on a PangoFontMap being declared against the PangoContext.
+PangoFontMap instances can only be retrieved from libraries such as PangoCairo, PangoXft, PangoFT2, PangoWin32 (See gnome's documentation `Rendering with Pango`_ for a list of rendering engines).
 
 Running tests
 _____________
@@ -33,4 +17,5 @@ _____________
 
 .. _CFFI: https://cffi.readthedocs.org/
 .. _pango: https://pango.org/
-.. _cairo rendering: https://developer.gnome.org/pango/unstable/rendering.html
+.. _pangocairocffi: https://github.com/leifgehrmann/pangocairocffi
+.. _Rendering with Pango: https://developer.gnome.org/pango/stable/rendering.html

@@ -33,6 +33,8 @@ ffi.cdef('''
     typedef ... PangoFontDescription;
     
     PangoContext * pango_context_new (void);
+    PangoFontDescription * pango_context_get_font_description (PangoContext *context);
+    void pango_context_set_font_description (PangoContext *context, const PangoFontDescription *desc);
     
     /* --- Fonts --- */
     typedef enum {
@@ -138,7 +140,10 @@ ffi.cdef('''
     
     PangoLayout * pango_layout_new (PangoContext *context);
     PangoContext * pango_layout_get_context (PangoLayout *layout);
-    void pango_layout_set_markup (PangoLayout *layout, const char *text, int length);
+    void pango_layout_set_text (PangoLayout *layout, const char *text, int length);
+    void pango_layout_set_markup (PangoLayout *layout, const char *markup, int length);
+    void pango_layout_set_font_description (PangoLayout *layout, const PangoFontDescription *desc);
+    const PangoFontDescription * pango_layout_get_font_description (PangoLayout *layout);
     void pango_layout_set_width (PangoLayout *layout, int width);
     int pango_layout_get_width (PangoLayout *layout);
     void pango_layout_set_height (PangoLayout *layout, int height);
@@ -146,6 +151,7 @@ ffi.cdef('''
     void pango_layout_set_alignment (PangoLayout *layout, PangoAlignment alignment);
     PangoAlignment pango_layout_get_alignment(PangoLayout *layout);
     void pango_layout_get_extents (PangoLayout *layout, PangoRectangle *ink_rect, PangoRectangle *logical_rect);
+    void pango_layout_get_size (PangoLayout *layout, int *width, int *height);
     
     /* --- Version Checking --- */
     int pango_version (void);
