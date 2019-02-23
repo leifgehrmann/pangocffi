@@ -1,5 +1,6 @@
-from . import pango, gobject, ffi, Context, Alignment
+from . import pango, gobject, ffi, Context, Alignment, Rectangle
 import ctypes
+from typing import Tuple
 
 
 class Layout(object):
@@ -12,6 +13,10 @@ class Layout(object):
 
     def get_context(self) -> Context:
         return Context.from_pointer(pango.pango_layout_get_context(self._pointer))
+
+    def set_markup(self, markup: str) -> None:
+        markup_pointer = ffi.new('char[]', markup.encode('utf8'))
+        pango.pango_layout_set_markup(self._pointer, markup_pointer, -1)
 
     def set_width(self, width: int) -> None:
         pango.pango_layout_set_width(self._pointer, width)
@@ -30,3 +35,9 @@ class Layout(object):
 
     def get_alignment(self) -> Alignment:
         return Alignment(pango.pango_layout_get_alignment(self._pointer))
+
+    def get_extents(self) -> Tuple[Rectangle, Rectangle]:
+        ink_rect_pointer = ffi.new("PangoRectangle *")
+        logical_rect_pointer = ffi.new("PangoRectangle *")
+        pango.pango_layout_get_extents(self._pointer, ink_rect_pointer, logical_rect_pointer)
+        return Rectangle.from_pointer(ink_rect_pointer), Rectangle.from_pointer(logical_rect_pointer)

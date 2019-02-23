@@ -62,5 +62,7 @@ def pango_version_check(required_major: int, required_minor: int, required_micro
 # But the wrapper API requires that the pango library be loaded first.
 # Therefore, we have to disable linting rules for these lines.
 from .constants import *  # noqa
+from .font_description import FontDescription
+from .rectangle import Rectangle  # noqa
 from .context import Context  # noqa
 from .layout import Layout  # noqa

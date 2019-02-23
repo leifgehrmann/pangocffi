@@ -22,14 +22,93 @@ ffi.cdef('''
     /* === GLib === */
     
     typedef void* gpointer;
+    typedef int gint;
+    typedef int gboolean;
     void g_object_unref (gpointer object);
 
     /* === Pango === */
     
     /* --- Rendering --- */
     typedef ... PangoContext;
+    typedef ... PangoFontDescription;
     
     PangoContext * pango_context_new (void);
+    
+    /* --- Fonts --- */
+    typedef enum {
+        PANGO_STYLE_NORMAL,
+        PANGO_STYLE_OBLIQUE,
+        PANGO_STYLE_ITALIC
+    } PangoStyle;
+    typedef enum {
+        PANGO_WEIGHT_THIN,
+        PANGO_WEIGHT_ULTRALIGHT,
+        PANGO_WEIGHT_LIGHT,
+        PANGO_WEIGHT_SEMILIGHT,
+        PANGO_WEIGHT_BOOK,
+        PANGO_WEIGHT_NORMAL,
+        PANGO_WEIGHT_MEDIUM,
+        PANGO_WEIGHT_SEMIBOLD,
+        PANGO_WEIGHT_BOLD,
+        PANGO_WEIGHT_ULTRABOLD,
+        PANGO_WEIGHT_HEAVY,
+        PANGO_WEIGHT_ULTRAHEAVY
+    } PangoWeight;
+    typedef enum {
+        PANGO_VARIANT_NORMAL,
+        PANGO_VARIANT_SMALL_CAPS
+    } PangoVariant;
+    typedef enum {
+        PANGO_STRETCH_ULTRA_CONDENSED,
+        PANGO_STRETCH_EXTRA_CONDENSED,
+        PANGO_STRETCH_CONDENSED,
+        PANGO_STRETCH_SEMI_CONDENSED,
+        PANGO_STRETCH_NORMAL,
+        PANGO_STRETCH_SEMI_EXPANDED,
+        PANGO_STRETCH_EXPANDED,
+        PANGO_STRETCH_EXTRA_EXPANDED,
+        PANGO_STRETCH_ULTRA_EXPANDED
+    } PangoStretch;
+    typedef enum {
+        PANGO_FONT_MASK_FAMILY,
+        PANGO_FONT_MASK_STYLE,
+        PANGO_FONT_MASK_VARIANT,
+        PANGO_FONT_MASK_WEIGHT,
+        PANGO_FONT_MASK_STRETCH,
+        PANGO_FONT_MASK_SIZE,
+        PANGO_FONT_MASK_GRAVITY
+    } PangoFontMask;
+    typedef enum {
+        PANGO_GRAVITY_SOUTH,
+        PANGO_GRAVITY_EAST,
+        PANGO_GRAVITY_NORTH,
+        PANGO_GRAVITY_WEST,
+        PANGO_GRAVITY_AUTO
+    } PangoGravity;
+    typedef enum {
+        PANGO_GRAVITY_HINT_NATURAL,
+        PANGO_GRAVITY_HINT_STRONG,
+        PANGO_GRAVITY_HINT_LINE
+    } PangoGravityHint;
+    
+    PangoFontDescription * pango_font_description_new (void);
+    void pango_font_description_free (PangoFontDescription *desc);
+    void pango_font_description_set_family (PangoFontDescription *desc, const char *family);
+    const char * pango_font_description_get_family (const PangoFontDescription *desc);
+    void pango_font_description_set_style (PangoFontDescription *desc, PangoStyle style);
+    PangoStyle pango_font_description_get_style (const PangoFontDescription *desc);
+    void pango_font_description_set_variant (PangoFontDescription *desc, PangoVariant variant);
+    PangoVariant pango_font_description_get_variant (const PangoFontDescription *desc);
+    void pango_font_description_set_weight (PangoFontDescription *desc, PangoWeight weight);
+    PangoWeight pango_font_description_get_weight (const PangoFontDescription *desc);
+    void pango_font_description_set_stretch (PangoFontDescription *desc, PangoStretch stretch);
+    PangoStretch pango_font_description_get_stretch (const PangoFontDescription *desc);
+    void pango_font_description_set_size (PangoFontDescription *desc, gint size);
+    gint pango_font_description_get_size (const PangoFontDescription *desc);
+    void pango_font_description_set_absolute_size (PangoFontDescription *desc, double size);
+    gboolean pango_font_description_get_size_is_absolute (const PangoFontDescription *desc);
+    void pango_font_description_set_gravity (PangoFontDescription *desc, PangoGravity gravity);
+    PangoGravity pango_font_description_get_gravity (const PangoFontDescription *desc);
     
     /* --- Glyph Storage --- */
     typedef struct {
