@@ -1,8 +1,8 @@
 # Build artifacts
 .eggs
 *.egg-info
-build
-dist
+/build
+/dist
 __pycache__
 
 # Build artifacts specific to pangocffi
@@ -13,3 +13,10 @@ venv
 
 # PyCharm
 .idea
+
+# Code Coverage
+/.coverage
+/htmlcov
+
+# Documentation
+/docs/_build

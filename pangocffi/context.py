@@ -27,7 +27,11 @@ class Context(object):
         return NotImplemented
 
     def set_font_description(self, desc: FontDescription) -> None:
-        pango.pango_context_set_font_description(self._pointer, desc.get_pointer())
+        pango.pango_context_set_font_description(
+            self._pointer, desc.get_pointer()
+        )
 
     def get_font_description(self) -> FontDescription:
-        return FontDescription.from_pointer(pango.pango_context_get_font_description(self._pointer))
+        return FontDescription.from_pointer(
+            pango.pango_context_get_font_description(self._pointer)
+        )

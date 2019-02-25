@@ -14,11 +14,41 @@ sys.path.append(str(Path(__file__).parent))
 
 # Create an empty _generated folder if needed
 (Path(__file__).parent / '_generated').mkdir(exist_ok=True)
+cdefs_file = open(Path(__file__).parent / 'cdefs.txt', 'r')
+cdefs = cdefs_file.read()
 
-# cffi definitions, in the order outlined in https://developer.gnome.org/pango/stable
+# cffi definitions, in the order outlined in:
+# https://developer.gnome.org/pango/stable
 ffi = FFI()
 ffi.set_source('pangocffi._generated.ffi', None)
-ffi.cdef('''
+ffi.cdef("""
+    typedef ... GType;
+    typedef unsigned int guint8;
+    typedef unsigned int guint16;
+    typedef unsigned int guint32;
+    typedef unsigned int guint;
+    typedef int gint;
+    typedef int gint32;
+    typedef gint gboolean;
+    typedef char gchar;
+    typedef unsigned char guchar;
+    typedef ... gunichar;
+    typedef void* gpointer;
+    typedef ... gconstpointer;
+    typedef ... GObject;
+    typedef ... GObjectClass;
+    typedef ... GString;
+    typedef ... GDestroyNotify;
+    typedef ... GList;
+    typedef ... GSList;
+    typedef ... GError;
+    typedef ... GMarkupParseContext;
+    typedef ... GTypeModule;
+    
+    void g_object_unref (gpointer object);
+""")
+ffi.cdef(cdefs)
+"""ffi.cdef('''
     /* === GLib === */
     
     typedef void* gpointer;
@@ -33,8 +63,13 @@ ffi.cdef('''
     typedef ... PangoFontDescription;
     
     PangoContext * pango_context_new (void);
-    PangoFontDescription * pango_context_get_font_description (PangoContext *context);
-    void pango_context_set_font_description (PangoContext *context, const PangoFontDescription *desc);
+    PangoFontDescription * pango_context_get_font_description (
+        PangoContext *context
+    );
+    void pango_context_set_font_description (
+        PangoContext *context,
+        const PangoFontDescription *desc
+    );
     
     /* --- Fonts --- */
     typedef enum {
@@ -94,23 +129,65 @@ ffi.cdef('''
     } PangoGravityHint;
     
     PangoFontDescription * pango_font_description_new (void);
-    void pango_font_description_free (PangoFontDescription *desc);
-    void pango_font_description_set_family (PangoFontDescription *desc, const char *family);
-    const char * pango_font_description_get_family (const PangoFontDescription *desc);
-    void pango_font_description_set_style (PangoFontDescription *desc, PangoStyle style);
-    PangoStyle pango_font_description_get_style (const PangoFontDescription *desc);
-    void pango_font_description_set_variant (PangoFontDescription *desc, PangoVariant variant);
-    PangoVariant pango_font_description_get_variant (const PangoFontDescription *desc);
-    void pango_font_description_set_weight (PangoFontDescription *desc, PangoWeight weight);
-    PangoWeight pango_font_description_get_weight (const PangoFontDescription *desc);
-    void pango_font_description_set_stretch (PangoFontDescription *desc, PangoStretch stretch);
-    PangoStretch pango_font_description_get_stretch (const PangoFontDescription *desc);
-    void pango_font_description_set_size (PangoFontDescription *desc, gint size);
-    gint pango_font_description_get_size (const PangoFontDescription *desc);
-    void pango_font_description_set_absolute_size (PangoFontDescription *desc, double size);
-    gboolean pango_font_description_get_size_is_absolute (const PangoFontDescription *desc);
-    void pango_font_description_set_gravity (PangoFontDescription *desc, PangoGravity gravity);
-    PangoGravity pango_font_description_get_gravity (const PangoFontDescription *desc);
+    void pango_font_description_free (
+        PangoFontDescription *desc
+    );
+    void pango_font_description_set_family (
+        PangoFontDescription *desc,
+        const char *family
+    );
+    const char * pango_font_description_get_family (
+        const PangoFontDescription *desc
+    );
+    void pango_font_description_set_style (
+        PangoFontDescription *desc,
+        PangoStyle style
+    );
+    PangoStyle pango_font_description_get_style (
+        const PangoFontDescription *desc
+    );
+    void pango_font_description_set_variant (
+        PangoFontDescription *desc,
+        PangoVariant variant
+    );
+    PangoVariant pango_font_description_get_variant (
+        const PangoFontDescription *desc
+    );
+    void pango_font_description_set_weight (
+        PangoFontDescription *desc,
+        PangoWeight weight
+    );
+    PangoWeight pango_font_description_get_weight (
+        const PangoFontDescription *desc
+    );
+    void pango_font_description_set_stretch (
+        PangoFontDescription *desc,
+        PangoStretch stretch
+    );
+    PangoStretch pango_font_description_get_stretch (
+        const PangoFontDescription *desc
+    );
+    void pango_font_description_set_size (
+        PangoFontDescription *desc,
+        gint size
+    );
+    gint pango_font_description_get_size (
+        const PangoFontDescription *desc
+    );
+    void pango_font_description_set_absolute_size (
+        PangoFontDescription *desc,
+        double size
+    );
+    gboolean pango_font_description_get_size_is_absolute (
+        const PangoFontDescription *desc
+    );
+    void pango_font_description_set_gravity (
+        PangoFontDescription *desc,
+        PangoGravity gravity
+    );
+    PangoGravity pango_font_description_get_gravity (
+        const PangoFontDescription *desc
+    );
     
     /* --- Glyph Storage --- */
     typedef struct {
@@ -140,24 +217,48 @@ ffi.cdef('''
     
     PangoLayout * pango_layout_new (PangoContext *context);
     PangoContext * pango_layout_get_context (PangoLayout *layout);
-    void pango_layout_set_text (PangoLayout *layout, const char *text, int length);
-    void pango_layout_set_markup (PangoLayout *layout, const char *markup, int length);
-    void pango_layout_set_font_description (PangoLayout *layout, const PangoFontDescription *desc);
-    const PangoFontDescription * pango_layout_get_font_description (PangoLayout *layout);
+    void pango_layout_set_text (
+        PangoLayout *layout,
+        const char *text,
+        int length
+    );
+    void pango_layout_set_markup (
+        PangoLayout *layout,
+        const char *markup,
+        int length
+    );
+    void pango_layout_set_font_description (
+        PangoLayout *layout,
+        const PangoFontDescription *desc
+    );
+    const PangoFontDescription * pango_layout_get_font_description (
+        PangoLayout *layout
+    );
     void pango_layout_set_width (PangoLayout *layout, int width);
     int pango_layout_get_width (PangoLayout *layout);
     void pango_layout_set_height (PangoLayout *layout, int height);
     int pango_layout_get_height (PangoLayout *layout);
-    void pango_layout_set_alignment (PangoLayout *layout, PangoAlignment alignment);
+    void pango_layout_set_alignment (
+        PangoLayout *layout,
+        PangoAlignment alignment
+    );
     PangoAlignment pango_layout_get_alignment(PangoLayout *layout);
-    void pango_layout_get_extents (PangoLayout *layout, PangoRectangle *ink_rect, PangoRectangle *logical_rect);
+    void pango_layout_get_extents (
+        PangoLayout *layout,
+        PangoRectangle *ink_rect,
+        PangoRectangle *logical_rect
+    );
     void pango_layout_get_size (PangoLayout *layout, int *width, int *height);
     
     /* --- Version Checking --- */
     int pango_version (void);
     const char * pango_version_string (void);
-    const char * pango_version_check (int required_major, int required_minor, int required_micro);
-''')
+    const char * pango_version_check (
+        int required_major,
+        int required_minor,
+        int required_micro
+    );
+''')"""
 
 if __name__ == '__main__':
     ffi.compile()

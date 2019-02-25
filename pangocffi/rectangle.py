@@ -11,4 +11,9 @@ class Rectangle:
 
     @staticmethod
     def from_pointer(pointer: ctypes.c_void_p) -> 'Rectangle':
-        return Rectangle(x=pointer.x, y=pointer.y, width=pointer.width, height=pointer.height)
+        return Rectangle(
+            x=pointer.x,
+            y=pointer.y,
+            width=pointer.width,
+            height=pointer.height
+        )
