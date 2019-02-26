@@ -154,4 +154,6 @@ Low Level Functionality
 Version Checking
 ________________
 
-.. autofunction:: pangocffi.get_pango_version
+.. autofunction:: pangocffi.pango_version
+
+.. autofunction:: pangocffi.pango_version_string
