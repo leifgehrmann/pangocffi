@@ -1,10 +1,1 @@
-.. include:: ../README.rst
-
-Documentation
--------------
-
-.. toctree::
-
-    api
-    binding-progress
-
+.. include:: pangocffi.rst

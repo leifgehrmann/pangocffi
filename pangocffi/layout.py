@@ -7,7 +7,7 @@ from typing import Tuple, Optional
 
 class Layout(object):
     """
-    A Pango ``Layout`` represents an entire paragraph of text. It is
+    A Pango :class:`Layout` represents an entire paragraph of text. It is
     initialized with a Pango :class:`Context`, UTF-8 string and set of
     attributes for that string. Once that is done, the set of formatted lines
     can be extracted from the object, the layout can be rendered, and
@@ -17,7 +17,7 @@ class Layout(object):
 
     def __init__(self, context: Context):
         """
-        Create a new ``Layout`` object with attributes initialized to default
+        Create a new :class:`Layout` object with attributes initialized to default
         values for a particular :class:`Context`.
 
         :param context:
@@ -31,7 +31,7 @@ class Layout(object):
     @classmethod
     def from_pointer(cls, pointer: ctypes.c_void_p) -> 'Layout':
         """
-        Instantiates a ``Layout`` from a pointer.
+        Instantiates a :class:`Layout` from a pointer.
 
         :return:
             the layout.
@@ -53,7 +53,7 @@ class Layout(object):
 
     def get_context(self) -> Context:
         """
-        Returns the Pango Context used for this layout.
+        Returns the Pango :class:`Context` used for this layout.
 
         :return:
             the :class:`Context` for the layout.
@@ -95,7 +95,7 @@ class Layout(object):
         layout's context is used.
 
         :param desc:
-            the new ``FontDescription``, or ``None`` to unset the current
+            the new :class:`FontDescription`, or ``None`` to unset the current
             ``FontDescription``.
         """
         if desc is None:
@@ -111,8 +111,9 @@ class Layout(object):
         Returns the font description for the layout, if any.
 
         :return:
-            the layout's ``FontDescription``, or ``None`` if the
-            ``FontDescription`` from the layout's :class:`Context` is inherited.
+            the layout's :class:`FontDescription`, or ``None`` if the
+            :class:`FontDescription` from the layout's :class:`Context` is
+            inherited.
         """
         desc_pointer = pango.pango_layout_get_font_description(self._pointer)
         if desc_pointer == ffi.NULL:
@@ -213,7 +214,7 @@ class Layout(object):
         layout coordinates begin at the top left corner of the layout.
 
         :return:
-            a tuple containing two ``Rectangle`` objects.
+            a tuple containing two :class:`Rectangle` objects.
             The first is the extent of the layout as drawn.
             The second is the logical extent of the layout.
         """
@@ -231,7 +232,7 @@ class Layout(object):
     def get_size(self) -> Tuple[int, int]:
         """
         Determines the logical width and height of the layout in Pango units.
-        This is simply a convenience function around get_extents().
+        This is simply a convenience function around :meth:`get_extents()`.
 
         :return:
             a tuple containing the logical width and height, respectively.

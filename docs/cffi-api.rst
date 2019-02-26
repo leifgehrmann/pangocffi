@@ -3,19 +3,15 @@ CFFI API
 
 .. currentmodule:: pangocffi
 
-pangocffi’s :doc:`API <api>` is made of a number of
-:ref:`wrapper <wrappers>` classes
+pangocffi’s :doc:`API <modules>` is made of a number of wrapper classes
 that provide a more Pythonic interface for various pango objects.
-Functions that take a pointer as their first argument become methods,
-error statuses become exceptions,
-and :ref:`reference counting <refcounting>` is hidden away.
+Functions that take a pointer as their first argument become methods.
 
 In order to use other C libraries that use integrate with pango,
 or if pangocffi’s API is not sufficient
 you can access cairo’s lower level C pointers and API through CFFI_.
 
 .. _CFFI: https://cffi.readthedocs.org/
-
 
 Module-level objects
 --------------------
@@ -30,11 +26,11 @@ Module-level objects
     All cairo functions are accessible as attributes of this object::
 
         import pangocffi
-        from pangocffi import pango as pango_c, SURFACE_TYPE_XLIB
+        from pangocffi import pango as pango_c
 
         if pango_c.pango_renderer_draw_layout(my_renderer, layout.get_pointer(), 0, 0):
             ...
 
-    See the `cairo manual`_ for details.
+    See the `pango reference manual`_ for details.
 
-    .. _cairo manual: http://cairographics.org/manual/
+.. _pango reference manual: https://developer.gnome.org/pango/stable/index.html

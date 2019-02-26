@@ -94,7 +94,11 @@ def remove_glib_compiler_flags(source: str) -> str:
 
 
 def remove_multiple_blank_lines(text: str) -> str:
-    return re.sub(r'\n[\r\t\f\v ]*\n', '\n', text, 0, re.MULTILINE)
+    return re.sub(r'^(?:[\t ]*(?:\r?\n|\r))+', '', text, 0, re.MULTILINE)
+
+
+def remove_multiple_spaces(text: str) -> str:
+    return re.sub(r'[\t ]{2,}', ' ', text, 0, re.MULTILINE)
 
 
 def replace_unknown_typedef_with_struct(
@@ -198,6 +202,7 @@ def generate(pango_git_dir):
     cdefs = re.sub(r'const PangoRectangle', 'PangoRectangle', cdefs)
 
     cdefs = remove_multiple_blank_lines(cdefs)
+    cdefs = remove_multiple_spaces(cdefs)
     print(cdefs)
 
 
