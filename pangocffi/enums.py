@@ -6,7 +6,6 @@ class Style(Enum):
     """
     An enumeration specifying the various slant styles possible for a font.
     """
-
     NORMAL = pango.PANGO_STYLE_NORMAL
     """the font is upright."""
     OBLIQUE = pango.PANGO_STYLE_OBLIQUE
@@ -113,8 +112,11 @@ class Alignment(Enum):
     :meth:`set_justify()`, this only has effect for partial lines.
     """
     LEFT = pango.PANGO_ALIGN_LEFT
+    """Put all available space on the right"""
     CENTER = pango.PANGO_ALIGN_CENTER
+    """Center the line within the available space"""
     RIGHT = pango.PANGO_ALIGN_RIGHT
+    """Put all available space on the left"""
 
 
 class EllipsizeMode(Enum):
@@ -125,9 +127,13 @@ class EllipsizeMode(Enum):
     width and replaced with an ellipsis.
     """
     NONE = pango.PANGO_ELLIPSIZE_NONE
+    """No ellipsization"""
     START = pango.PANGO_ELLIPSIZE_START
+    """Omit characters at the start of the text"""
     MIDDLE = pango.PANGO_ELLIPSIZE_MIDDLE
+    """Omit characters in the middle of the text"""
     END = pango.PANGO_ELLIPSIZE_END
+    """Omit characters at the end of the text"""
 
 
 class Gravity(Enum):
@@ -141,13 +147,36 @@ class Gravity(Enum):
     can only be returned by ``Context.get_base_gravity()``.
     """
     SOUTH = pango.PANGO_GRAVITY_SOUTH
+    """Glyphs stand upright (default)"""
     EAST = pango.PANGO_GRAVITY_EAST
+    """Glyphs are rotated 90 degrees clockwise"""
     NORTH = pango.PANGO_GRAVITY_NORTH
+    """Glyphs are upside-down"""
     WEST = pango.PANGO_GRAVITY_WEST
+    """Glyphs are rotated 90 degrees counter-clockwise"""
     AUTO = pango.PANGO_GRAVITY_AUTO
+    """Gravity is resolved from the context matrix"""
 
 
 class GravityHint(Enum):
+    """
+    :class:`GravityHint` defines how horizontal scripts should behave in a
+    vertical context. That is, English excerpt in a vertical paragraph for
+    example.
+
+    See :class:`Gravity`.
+    """
     NATURAL = pango.PANGO_GRAVITY_HINT_NATURAL
+    """
+    scripts will take their natural gravity based on the base gravity and the 
+    script. This is the default.
+    """
     STRONG = pango.PANGO_GRAVITY_HINT_STRONG
+    """always use the base gravity set, regardless of the script."""
     LINE = pango.PANGO_GRAVITY_HINT_LINE
+    """
+    for scripts not in their natural direction (eg. Latin in East gravity), 
+    choose per-script gravity such that every script respects the line
+    progression. This means, Latin and Arabic will take opposite gravities and
+    both flow top-to-bottom for example.
+    """

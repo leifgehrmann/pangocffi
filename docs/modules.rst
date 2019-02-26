@@ -18,6 +18,10 @@ Structures for storing information about glyphs.
 Units and conversion
 ____________________
 
+.. autofunction:: pangocffi.units_to_double
+
+.. autofunction:: pangocffi.units_from_double
+
 Matrix
 ______
 
@@ -82,8 +86,10 @@ Structures for storing tab stops.
 Text Attribute Markup
 =====================
 
-See https://developer.gnome.org/pango/stable/PangoMarkupFormat.html for details
-on how to use the Pango Text Attribute Markup Language.
+See `Gnome's documentation`_ for details on how to use the Pango Text Attribute
+Markup Language.
+
+.. _`Gnome's documentation`: https://developer.gnome.org/pango/stable/PangoMarkupFormat.html
 
 Layout Objects
 ==============
@@ -131,3 +137,21 @@ Vertical Text
 =============
 
 Laying text out in vertical directions.
+
+Gravity
+_______
+
+.. autoclass:: Gravity
+
+Gravity Hints
+_____________
+
+.. autoclass:: GravityHint
+
+Low Level Functionality
+=======================
+
+Version Checking
+________________
+
+.. autofunction:: pangocffi.get_pango_version
