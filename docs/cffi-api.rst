@@ -9,7 +9,7 @@ Functions that take a pointer as their first argument become methods.
 
 In order to use other C libraries that use integrate with pango,
 or if pangocffi’s API is not sufficient
-you can access cairo’s lower level C pointers and API through CFFI_.
+you can access pango’s lower level C pointers and API through CFFI_.
 
 .. _CFFI: https://cffi.readthedocs.org/
 
@@ -23,7 +23,7 @@ Module-level objects
 .. data:: pango
 
     The libpango library, pre-loaded with :meth:`ffi.dlopen`.
-    All cairo functions are accessible as attributes of this object::
+    All pango functions are accessible as attributes of this object::
 
         import pangocffi
         from pangocffi import pango as pango_c
