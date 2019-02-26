@@ -5,6 +5,7 @@ Documentation
 
 .. toctree::
 
+    overview
     modules
     cffi-api
     binding-progress
