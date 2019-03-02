@@ -25,11 +25,17 @@ ____________________
 Matrix
 ______
 
+API not implemented yet.
+
 Glyph String
 ____________
 
+API not implemented yet.
+
 Glyph Item
 __________
+
+API not implemented yet.
 
 Fonts
 =====
@@ -44,14 +50,22 @@ ________________
 Font Metrics
 ____________
 
+API not implemented yet.
+
 Font Map
 ________
+
+API not implemented yet.
 
 Font Set
 ________
 
+API not implemented yet.
+
 Font Fields
 ___________
+
+API not implemented yet.
 
 Style
 -----
@@ -78,10 +92,14 @@ Text Attributes
 
 Font and other attributes for annotating text.
 
+API not implemented yet.
+
 Tab Stops
 =========
 
 Structures for storing tab stops.
+
+API not implemented yet.
 
 Text Attribute Markup
 =====================
@@ -104,11 +122,18 @@ ______
 Layout Line
 ___________
 
+API not implemented yet.
+
 Layout Modes
 ____________
 
+API not implemented yet.
+
 Wrap Mode
 ---------
+
+API not implemented yet.
+
 Ellipsize Mode
 --------------
 .. autoclass:: EllipsizeMode
@@ -125,13 +150,19 @@ Identifying writing systems and languages.
 Script
 ______
 
+API not implemented yet.
+
 Language
 ________
+
+API not implemented yet.
 
 Bidirectional Text
 ==================
 
 Types and functions to help with handling bidirectional text.
+
+API not implemented yet.
 
 Vertical Text
 =============

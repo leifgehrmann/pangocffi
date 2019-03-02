@@ -20,8 +20,8 @@ pangocffi depends on Pango_, GLib_, and libffi_ being installed.
     brew install pango
     brew install glib
 
-Feel free to contribute a guide for how to install these dependencies on linux
-and windows systems.
+Feel free to contribute a guide for how to install these dependencies on other
+systems.
 
 .. _homebrew: https://brew.sh
 
@@ -33,6 +33,8 @@ Install with pip_::
     pip install pangocffi
 
 .. _pip: https://pip.pypa.io/
+
+Note: Python versions less than 3 are not supported.
 
 Importing pangocffi
 -------------------
