@@ -72,7 +72,7 @@ docs: ## generate Sphinx HTML documentation, including API docs
 release: dist ## package and upload a release
 	twine upload dist/*
 
-dist: clean ## builds source and wheel package
+dist: clean ## builds source
 	python setup.py sdist
 	ls -l dist
 
