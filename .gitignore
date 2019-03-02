@@ -20,3 +20,6 @@ venv
 
 # Documentation
 /docs/_build
+
+# Mac OS
+.DS_store
