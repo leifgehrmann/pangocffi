@@ -1,5 +1,7 @@
-Progress
-========
+.. _binding-progress:
+
+Binding Progress
+================
 
 Below is a list of bindings that have (denoted with a ✔︎) and have not been implemented.
 
