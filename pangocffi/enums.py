@@ -168,14 +168,14 @@ class GravityHint(Enum):
     """
     NATURAL = pango.PANGO_GRAVITY_HINT_NATURAL
     """
-    scripts will take their natural gravity based on the base gravity and the 
+    scripts will take their natural gravity based on the base gravity and the
     script. This is the default.
     """
     STRONG = pango.PANGO_GRAVITY_HINT_STRONG
     """always use the base gravity set, regardless of the script."""
     LINE = pango.PANGO_GRAVITY_HINT_LINE
     """
-    for scripts not in their natural direction (eg. Latin in East gravity), 
+    for scripts not in their natural direction (eg. Latin in East gravity),
     choose per-script gravity such that every script respects the line
     progression. This means, Latin and Arabic will take opposite gravities and
     both flow top-to-bottom for example.

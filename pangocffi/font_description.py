@@ -133,7 +133,10 @@ class FontDescription(object):
 
         """
         if isinstance(weight, Weight):
-            pango.pango_font_description_set_weight(self._pointer, weight.value)
+            pango.pango_font_description_set_weight(
+                self._pointer,
+                weight.value
+            )
         else:
             pango.pango_font_description_set_weight(self._pointer, weight)
 

@@ -17,8 +17,8 @@ class Layout(object):
 
     def __init__(self, context: Context):
         """
-        Create a new :class:`Layout` object with attributes initialized to default
-        values for a particular :class:`Context`.
+        Create a new :class:`Layout` object with attributes initialized to
+        default values for a particular :class:`Context`.
 
         :param context:
             the Pango :class:`Context`
