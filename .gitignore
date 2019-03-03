@@ -11,6 +11,9 @@ _generated
 # Virtualenv
 venv
 
+# Tox
+.tox
+
 # PyCharm
 .idea
 
