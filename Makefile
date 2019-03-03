@@ -57,6 +57,9 @@ lint: ## check style with flake8
 tests: ## run tests quickly with the default Python
 	python setup.py test
 
+tests-all: ## run tests on all minor python versions
+	tox
+
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source pangocffi setup.py test
 	coverage report -m
