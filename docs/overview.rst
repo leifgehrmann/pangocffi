@@ -34,7 +34,7 @@ Install with pip_::
 
 .. _pip: https://pip.pypa.io/
 
-Note: Python versions less than 3 are not supported.
+Note: Python versions < 3.5 are not supported.
 
 Importing pangocffi
 -------------------

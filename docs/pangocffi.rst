@@ -9,3 +9,4 @@ Documentation
     modules
     cffi-api
     binding-progress
+    changelog
