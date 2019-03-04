@@ -16,9 +16,9 @@ sys.path.append(str(Path(__file__).parent))
 (Path(__file__).parent / '_generated').mkdir(exist_ok=True)
 
 # Read the CFFI definitions
-cdefs_glib_file = open(Path(__file__).parent / 'cdefs_glib.txt', 'r')
+cdefs_glib_file = open(str(Path(__file__).parent / 'cdefs_glib.txt'), 'r')
 cdefs_glib = cdefs_glib_file.read()
-cdefs_pango_file = open(Path(__file__).parent / 'cdefs_pango.txt', 'r')
+cdefs_pango_file = open(str(Path(__file__).parent / 'cdefs_pango.txt'), 'r')
 cdefs_pango = cdefs_pango_file.read()
 
 # cffi definitions, in the order outlined in:
