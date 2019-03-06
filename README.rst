@@ -1,6 +1,21 @@
 pangocffi
 =========
 
+.. image:: https://img.shields.io/pypi/v/pangocffi.svg
+    :target: https://pypi.python.org/pypi/pangocffi
+    :alt: Latest PyPi Release
+
+.. image:: https://img.shields.io/pypi/pyversions/pangocffi.svg?style=flat
+    :target: https://pypi.python.org/pypi/pangocffi
+    :alt: Supported Python Versions
+
+.. image:: https://travis-ci.org/leifgehrmann/pangocffi.svg?branch=master
+    :target: https://travis-ci.org/leifgehrmann/pangocffi
+
+.. image:: https://readthedocs.org/projects/pangocffi/badge/?version=latest
+    :target: https://pangocffi.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 pangocffi is a `CFFI`_-based set of Python bindings for pango_.
 
 pangocffi on its own is not that useful, since it depends on a PangoFontMap
