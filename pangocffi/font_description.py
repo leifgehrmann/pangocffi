@@ -140,14 +140,14 @@ class FontDescription(object):
         else:
             pango.pango_font_description_set_weight(self._pointer, weight)
 
-    def get_weight(self) -> Weight:
+    def get_weight(self) -> int:
         """
         Returns the weight field of a font description.
 
         :return:
             the weight field for the font description.
         """
-        return Weight(pango.pango_font_description_get_weight(self._pointer))
+        return pango.pango_font_description_get_weight(self._pointer)
 
     def set_stretch(self, stretch: Stretch) -> None:
         """
