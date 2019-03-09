@@ -1,6 +1,15 @@
 Changelog
 ---------
 
+Version 0.2.0
+.............
+
+Released on 2019-03-09.
+
+* ``FontDescription.getWeight()`` now returns ``int``, instead of the
+  ``Weight`` enum.
+* Improved test coverage.
+
 Version 0.1.1
 .............
 
