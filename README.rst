@@ -16,6 +16,10 @@ pangocffi
     :target: https://pangocffi.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
+.. image:: https://codecov.io/gh/leifgehrmann/pangocffi/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/leifgehrmann/pangocffi
+    :alt: Code Coverage
+
 pangocffi is a `CFFI`_-based set of Python bindings for pango_.
 
 pangocffi on its own is not that useful, since it depends on a PangoFontMap
