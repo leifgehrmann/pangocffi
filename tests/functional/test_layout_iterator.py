@@ -39,6 +39,10 @@ class TestLayoutIterator(unittest.TestCase):
         assert y0 == 0
         assert y1 == 0
 
+        line_ink, line_logical = layout_iter.get_line_extents()
+        assert isinstance(line_ink, Rectangle)
+        assert isinstance(line_logical, Rectangle)
+
         layout_ink, layout_logical = layout_iter.get_layout_extents()
         assert isinstance(layout_ink, Rectangle)
         assert isinstance(layout_logical, Rectangle)
