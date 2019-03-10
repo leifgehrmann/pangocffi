@@ -30,3 +30,4 @@ from .font_description import FontDescription  # noqa
 from .rectangle import Rectangle  # noqa
 from .context import Context  # noqa
 from .layout import Layout  # noqa
+from .layout_iterator import LayoutIterator  # noqa

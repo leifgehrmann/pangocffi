@@ -119,6 +119,11 @@ ______
 
 .. autoclass:: Layout
 
+Layout Iterator
+_______________
+
+.. autoclass:: LayoutIterator
+
 Layout Line
 ___________
 

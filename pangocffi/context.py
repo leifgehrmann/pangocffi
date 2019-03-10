@@ -1,5 +1,4 @@
 from . import pango, gobject, ffi, FontDescription
-import ctypes
 
 
 class Context(object):
@@ -23,10 +22,10 @@ class Context(object):
         """
         self._init_pointer(pango.pango_context_new())
 
-    def _init_pointer(self, pointer: ctypes.c_void_p):
+    def _init_pointer(self, pointer: ffi.CData):
         self._pointer = ffi.gc(pointer, gobject.g_object_unref)
 
-    def get_pointer(self) -> ctypes.c_void_p:
+    def get_pointer(self) -> ffi.CData:
         """
         Returns the pointer to the context
 
@@ -36,7 +35,7 @@ class Context(object):
         return self._pointer
 
     @classmethod
-    def from_pointer(cls, pointer: ctypes.c_void_p) -> 'Context':
+    def from_pointer(cls, pointer: ffi.CData) -> 'Context':
         """
         Instantiates a :class:`Context` from a pointer.
 

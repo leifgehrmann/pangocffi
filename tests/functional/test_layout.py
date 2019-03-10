@@ -63,6 +63,10 @@ class TestLayout(unittest.TestCase):
         layout.set_height(400)
         assert layout.get_height() == 400
 
+        assert layout.get_spacing() == 0
+        layout.set_spacing(30)
+        assert layout.get_spacing() == 30
+
         layout.set_alignment(Alignment.CENTER)
         assert layout.get_alignment() is Alignment.CENTER
 
@@ -73,6 +77,12 @@ class TestLayout(unittest.TestCase):
         width, height = layout.get_size()
         assert width == 0
         assert height == 0
+
+        baseline = layout.get_baseline()
+        assert baseline == 0
+
+        line_count = layout.get_line_count()
+        assert line_count == 1
 
     @staticmethod
     def test_layout_setting_text():
