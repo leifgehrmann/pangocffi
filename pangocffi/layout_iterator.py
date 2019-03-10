@@ -1,6 +1,6 @@
-from typing import Tuple
+from typing import Tuple, Optional
 from . import pango, ffi
-from . import Layout, Rectangle
+from . import Layout, LayoutRun, Rectangle
 
 
 class LayoutIterator:
@@ -105,7 +105,23 @@ class LayoutIterator:
         """
         return pango.pango_layout_iter_get_baseline(self._pointer)
 
-    # def get_run(_readonly)
+    def get_run(self) -> Optional[LayoutRun]:
+        """
+        Returns the current run. When iterating by run, at the end of each
+        line, there's a position with a NULL run, so this function can return
+        None. The NULL run at the end of each line ensures that all lines have
+        at least one run, even lines consisting of only a newline.
+
+        Use the faster :meth:`get_run_readonly()` if you do not plan
+        to modify the contents of the run (glyphs, glyph widths, etc.).
+
+        :return:
+            the current run
+        """
+        run_pointer = pango.pango_layout_iter_get_run(self._pointer)
+        if run_pointer == ffi.NULL:
+            return None
+        return LayoutRun.from_pointer(run_pointer)
 
     # def get_line(_readonly)
 

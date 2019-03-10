@@ -46,3 +46,12 @@ class TestLayoutIterator(unittest.TestCase):
         layout_ink, layout_logical = layout_iter.get_layout_extents()
         assert isinstance(layout_ink, Rectangle)
         assert isinstance(layout_logical, Rectangle)
+
+    @staticmethod
+    def test_layout_iterator_run_returns_none():
+        context = Context()
+        layout = Layout(context)
+        layout_iter = LayoutIterator(layout)
+
+        assert layout_iter.get_run() is None
+

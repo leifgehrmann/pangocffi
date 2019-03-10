@@ -37,14 +37,25 @@ typedef ... PangoGlyphGeometry;
 typedef ... PangoGlyphVisAttr;
 typedef ... PangoGlyphInfo;
 typedef ... PangoGlyphString;
-typedef ... PangoGlyphItem;
-typedef ... PangoGlyphItemIter;
 typedef ... PangoAnalysis;
-typedef ... PangoItem;
+typedef struct
+{
+ gint offset;
+ gint length;
+ gint num_chars;
+ void * analysis;
+} PangoItem;
+
+typedef struct
+{
+ PangoItem *item;
+ PangoGlyphString *glyphs;
+} PangoGlyphItem;
+typedef ... PangoGlyphItemIter;
 typedef ... PangoLayout;
 typedef ... PangoLayoutClass;
 typedef ... PangoLayoutLine;
-typedef ... PangoLayoutRun;
+typedef PangoGlyphItem PangoLayoutRun;
 typedef ... PangoLayoutIter;
 typedef ... PangoLanguage;
 typedef ... PangoMatrix;

@@ -198,8 +198,31 @@ def generate(pango_git_dir):
 
     cdefs = typedefs_unknown + typedefs_enum + typedefs_other + source
 
-    cdefs = replace_unknown_typedef_with_struct(cdefs, 'PangoRectangle', pango_git_dir, 'pango-types.h', '_PangoRectangle')
+    cdefs = replace_unknown_typedef_with_struct(
+        cdefs,
+        'PangoRectangle',
+        pango_git_dir,
+        'pango-types.h',
+        '_PangoRectangle'
+    )
     cdefs = re.sub(r'const PangoRectangle', 'PangoRectangle', cdefs)
+    cdefs = replace_unknown_typedef_with_struct(
+        cdefs,
+        'PangoGlyphItem',
+        pango_git_dir,
+        'pango-glyph-item.h',
+        '_PangoGlyphItem'
+    )
+    cdefs = re.sub(r'const PangoGlyphItem', 'PangoGlyphItem', cdefs)
+    cdefs = replace_unknown_typedef_with_struct(
+        cdefs,
+        'PangoItem',
+        pango_git_dir,
+        'pango-glyph-item.h',
+        '_PangoItem'
+    )
+    cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis', cdefs)
+    cdefs = re.sub(r'const PangoItem', 'PangoItem', cdefs)
 
     cdefs = remove_multiple_blank_lines(cdefs)
     cdefs = remove_multiple_spaces(cdefs)
