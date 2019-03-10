@@ -192,6 +192,28 @@ class LayoutIterator:
         y1 = y1_pointer[0]
         return y0, y1
 
+    def get_line_extents(self) -> Tuple[Rectangle, Rectangle]:
+        """
+        Obtains the extents of the current line. Extents are in layout
+        coordinates (origin is the top-left corner of the entire
+        :class:`Layout`). Thus the extents returned by this function will be
+        the same width/height but not at the same x/y as the extents returned
+        from :meth:`LayoutLine.get_extents()`.
+
+        :return:
+            a tuple containing two :class:`Rectangle` objects.
+            The first is the extent of the line as drawn.
+            The second is the logical extent.
+        """
+        ink_rect = Rectangle()
+        logical_rect = Rectangle()
+        pango.pango_layout_iter_get_line_extents(
+            self._pointer,
+            ink_rect.get_pointer(),
+            logical_rect.get_pointer()
+        )
+        return ink_rect, logical_rect
+
     def get_layout_extents(self) -> Tuple[Rectangle, Rectangle]:
         """
         Returns the extents of the :class:`Layout` being iterated over.
