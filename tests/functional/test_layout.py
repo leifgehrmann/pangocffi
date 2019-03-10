@@ -78,6 +78,12 @@ class TestLayout(unittest.TestCase):
         assert width == 0
         assert height == 0
 
+        baseline = layout.get_baseline()
+        assert baseline == 0
+
+        line_count = layout.get_line_count()
+        assert line_count == 1
+
     @staticmethod
     def test_layout_setting_text():
         context = Context()

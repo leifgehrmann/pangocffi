@@ -263,3 +263,21 @@ class Layout(object):
         width = width_pointer[0]
         height = height_pointer[0]
         return width, height
+
+    def get_baseline(self) -> int:
+        """
+        Returns the Y position of baseline of the first line in the layout.
+
+        :return:
+            baseline of first line, from top of :class:`Layout`
+        """
+        return pango.pango_layout_get_baseline(self._pointer)
+
+    def get_line_count(self) -> int:
+        """
+        Returns the number of lines.
+
+        :return:
+            the line count
+        """
+        return pango.pango_layout_get_line_count(self._pointer)
