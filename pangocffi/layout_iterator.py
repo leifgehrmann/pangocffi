@@ -225,7 +225,7 @@ class LayoutIterator:
         """
         ink_rect = Rectangle()
         logical_rect = Rectangle()
-        pango.pango_layout_iter_get_run_extents(
+        pango.pango_layout_iter_get_layout_extents(
             self._pointer,
             ink_rect.get_pointer(),
             logical_rect.get_pointer()
