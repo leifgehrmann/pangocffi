@@ -1,7 +1,6 @@
 from . import pango, gobject, ffi
 from . import Context, FontDescription
 from . import Alignment, Rectangle
-import ctypes
 from typing import Tuple, Optional
 
 
@@ -25,11 +24,11 @@ class Layout(object):
         """
         self._init_pointer(pango.pango_layout_new(context.get_pointer()))
 
-    def _init_pointer(self, pointer: ctypes.c_void_p):
+    def _init_pointer(self, pointer: ffi.CData):
         self._pointer = ffi.gc(pointer, gobject.g_object_unref)
 
     @classmethod
-    def from_pointer(cls, pointer: ctypes.c_void_p) -> 'Layout':
+    def from_pointer(cls, pointer: ffi.CData) -> 'Layout':
         """
         Instantiates a :class:`Layout` from a pointer.
 
@@ -42,7 +41,7 @@ class Layout(object):
         cls._init_pointer(self, pointer)
         return self
 
-    def get_pointer(self) -> ctypes.c_void_p:
+    def get_pointer(self) -> ffi.CData:
         """
         Returns the pointer to this layout.
 
@@ -181,6 +180,25 @@ class Layout(object):
         """
         return pango.pango_layout_get_height(self._pointer)
 
+    def get_spacing(self) -> int:
+        """
+        Returns the amount of spacing between the lines of the layout.
+
+        :return:
+            the spacing in pango units.
+        """
+        return pango.pango_layout_get_spacing(self._pointer)
+
+    def set_spacing(self, spacing: int) -> None:
+        """
+        Sets the amount of spacing in Pango unit between the lines of
+        the layout.
+
+        :param spacing:
+            the amount of spacing
+        """
+        pango.pango_layout_set_spacing(self._pointer, spacing)
+
     def set_alignment(self, alignment: Alignment) -> None:
         """
         Sets the alignment for the layout: how partial lines are positioned
@@ -218,15 +236,13 @@ class Layout(object):
             The first is the extent of the layout as drawn.
             The second is the logical extent of the layout.
         """
-        ink_rect_pointer = ffi.new("PangoRectangle *")
-        logical_rect_pointer = ffi.new("PangoRectangle *")
+        ink_rect = Rectangle()
+        logical_rect = Rectangle()
         pango.pango_layout_get_extents(
             self._pointer,
-            ink_rect_pointer,
-            logical_rect_pointer
+            ink_rect.get_pointer(),
+            logical_rect.get_pointer()
         )
-        ink_rect = Rectangle.from_pointer(ink_rect_pointer)
-        logical_rect = Rectangle.from_pointer(logical_rect_pointer)
         return ink_rect, logical_rect
 
     def get_size(self) -> Tuple[int, int]:

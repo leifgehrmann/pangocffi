@@ -1,4 +1,5 @@
-import ctypes
+from typing import Optional
+from . import ffi
 
 
 class Rectangle:
@@ -7,14 +8,26 @@ class Rectangle:
     frequently used to represent the logical or ink extents of a single glyph
     or section of text.
     """
-    def __init__(self, x: int, y: int, width: int, height: int):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+    def __init__(
+            self,
+            pointer: Optional[ffi.CData] = None
+    ):
+        if pointer is None:
+            self.pointer = ffi.new("PangoRectangle *")
+        else:
+            self.pointer = pointer
+
+    def get_pointer(self) -> ffi.CData:
+        """
+        Returns a pointer to the :class:`Rectangle`.
+
+        :return:
+            a pointer to ``PangoRectangle``
+        """
+        return self.pointer
 
     @staticmethod
-    def from_pointer(pointer: ctypes.c_void_p) -> 'Rectangle':
+    def from_pointer(pointer: ffi.CData) -> 'Rectangle':
         """
         Returns an instance of a :class:`Rectangle` from a pointer.
 
@@ -22,8 +35,21 @@ class Rectangle:
             the :class:`Rectangle`.
         """
         return Rectangle(
-            x=pointer.x,
-            y=pointer.y,
-            width=pointer.width,
-            height=pointer.height
+            pointer=pointer
         )
+
+    @property
+    def x(self) -> int:
+        return self.pointer.x
+
+    @property
+    def y(self) -> int:
+        return self.pointer.y
+
+    @property
+    def width(self) -> int:
+        return self.pointer.width
+
+    @property
+    def height(self) -> int:
+        return self.pointer.height

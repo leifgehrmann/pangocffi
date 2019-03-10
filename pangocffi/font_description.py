@@ -1,4 +1,3 @@
-import ctypes
 from typing import Optional, Union
 from . import pango, ffi
 from . import Style, Variant, Weight, Stretch, Gravity
@@ -20,11 +19,11 @@ class FontDescription(object):
         """
         self._init_pointer(pango.pango_font_description_new())
 
-    def _init_pointer(self, pointer: ctypes.c_void_p):
+    def _init_pointer(self, pointer: ffi.CData):
         self._pointer = pointer
         # self._pointer = ffi.gc(pointer, pango.pango_font_description_free)
 
-    def get_pointer(self) -> ctypes.c_void_p:
+    def get_pointer(self) -> ffi.CData:
         """
         Returns the pointer to the font description
 
@@ -34,7 +33,7 @@ class FontDescription(object):
         return self._pointer
 
     @classmethod
-    def from_pointer(cls, pointer: ctypes.c_void_p) -> 'FontDescription':
+    def from_pointer(cls, pointer: ffi.CData) -> 'FontDescription':
         """
         Instantiates a :class:`FontDescription` from a pointer.
 

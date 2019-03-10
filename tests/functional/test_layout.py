@@ -63,6 +63,10 @@ class TestLayout(unittest.TestCase):
         layout.set_height(400)
         assert layout.get_height() == 400
 
+        assert layout.get_spacing() == 0
+        layout.set_spacing(30)
+        assert layout.get_spacing() == 30
+
         layout.set_alignment(Alignment.CENTER)
         assert layout.get_alignment() is Alignment.CENTER
 
