@@ -28,7 +28,7 @@ def remove_hard_to_regex_phrases(source: str) -> str:
     return source
 
 
-def extract_typedefs_unknown(source: str) -> str:
+def extract_typedefs_opaque(source: str) -> str:
     typedefs_unknown = ''
     matches = re.finditer(r'typedef \.\.\. [^;]*;\n', source, re.MULTILINE)
     for matchNum, match in enumerate(matches, start=1):
@@ -101,9 +101,8 @@ def remove_multiple_spaces(text: str) -> str:
     return re.sub(r'[\t ]{2,}', ' ', text, 0, re.MULTILINE)
 
 
-def replace_unknown_typedef_with_struct(
-        cdefs: str,
-        unknown_typedef_name: str,
+def get_struct_for_opaque_typedef(
+        opaque_typedef_name: str,
         pango_git_dir: str,
         header_file: str,
         private_struct_name: str
@@ -114,12 +113,13 @@ def replace_unknown_typedef_with_struct(
     private_struct_definition = matches.group()
     public_struct_definition = re.sub(r"%s" % private_struct_name, '', private_struct_definition)
     public_struct_definition = re.sub(r"struct ", 'typedef struct', public_struct_definition)
-    public_struct_definition = re.sub(r"};", '} %s;' % unknown_typedef_name, public_struct_definition)
-    return re.sub(
-        r"typedef \.\.\. %s;" % unknown_typedef_name,
-        public_struct_definition,
-        cdefs
-    )
+    public_struct_definition = re.sub(r"};", '} %s;' % opaque_typedef_name, public_struct_definition)
+
+    return public_struct_definition + '\n'
+
+
+def remove_opaque_typedef(cdefs: str, opaque_typedef_name: str):
+    return re.sub(r"typedef \.\.\. %s;" % opaque_typedef_name, '', cdefs)
 
 
 def read_pango_header(pango_git_dir, header_file):
@@ -149,13 +149,13 @@ def read_pango_header(pango_git_dir, header_file):
     source = remove_availability_flags(source)
     source = remove_glib_compiler_flags(source)
 
-    typedefs_unknown = extract_typedefs_unknown(source)
+    typedefs_opaque = extract_typedefs_opaque(source)
     typedefs_enum = extract_typedefs_enum(source)
     typedefs_other = extract_typedefs_other(source)
 
     source = remove_typedefs(source)
 
-    return source, typedefs_unknown, typedefs_enum, typedefs_other
+    return source, typedefs_opaque, typedefs_enum, typedefs_other
 
 
 def generate(pango_git_dir):
@@ -186,42 +186,57 @@ def generate(pango_git_dir):
         'pango-version-macros.h'
     ]
     source = ''
-    typedefs_unknown = ''
+    typedefs_opaque = ''
+    typedefs_struct = ''
     typedefs_enum = ''
     typedefs_other = ''
     for header_file in header_files:
-        (file_source, file_typedefs_unknown, file_typedefs_enum, file_typedefs_other) = read_pango_header(pango_git_dir, header_file)
+        (
+            file_source,
+            file_typedefs_opaque,
+            file_typedefs_enum,
+            file_typedefs_other
+        ) = read_pango_header(pango_git_dir, header_file)
         source += file_source
-        typedefs_unknown += file_typedefs_unknown
+        typedefs_opaque += file_typedefs_opaque
         typedefs_enum += file_typedefs_enum
         typedefs_other += file_typedefs_other
 
-    cdefs = typedefs_unknown + typedefs_enum + typedefs_other + source
-
-    cdefs = replace_unknown_typedef_with_struct(
-        cdefs,
+    typedefs_struct += get_struct_for_opaque_typedef(
         'PangoRectangle',
         pango_git_dir,
         'pango-types.h',
         '_PangoRectangle'
     )
-    cdefs = re.sub(r'const PangoRectangle', 'PangoRectangle', cdefs)
-    cdefs = replace_unknown_typedef_with_struct(
-        cdefs,
+    typedefs_struct += get_struct_for_opaque_typedef(
+        'PangoItem',
+        pango_git_dir,
+        'pango-item.h',
+        '_PangoItem'
+    )
+    typedefs_struct += get_struct_for_opaque_typedef(
         'PangoGlyphItem',
         pango_git_dir,
         'pango-glyph-item.h',
         '_PangoGlyphItem'
     )
+
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoRectangle')
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoItem')
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoGlyphItem')
+
+    typedefs_struct += 'typedef PangoGlyphItem PangoLayoutRun;\n'
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoLayoutRun')
+
+    cdefs = typedefs_opaque +\
+        typedefs_struct +\
+        typedefs_enum +\
+        typedefs_other +\
+        source
+
+    cdefs = re.sub(r'const PangoRectangle', 'PangoRectangle', cdefs)
     cdefs = re.sub(r'const PangoGlyphItem', 'PangoGlyphItem', cdefs)
-    cdefs = replace_unknown_typedef_with_struct(
-        cdefs,
-        'PangoItem',
-        pango_git_dir,
-        'pango-glyph-item.h',
-        '_PangoItem'
-    )
-    cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis', cdefs)
+    cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis;', cdefs)
     cdefs = re.sub(r'const PangoItem', 'PangoItem', cdefs)
 
     cdefs = remove_multiple_blank_lines(cdefs)
@@ -233,4 +248,4 @@ if __name__ == '__main__':
     if len(sys.argv) >= 2:
         generate(sys.argv[1])
     else:
-        print('Usage: %s path/to/cairo_source.git' % sys.argv[0])
+        print('Usage: %s path/to/pango_source.git' % sys.argv[0])
