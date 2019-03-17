@@ -1,6 +1,31 @@
 Changelog
 ---------
 
+Version 0.3.0
+.............
+
+Released on 2019-03-17.
+
+* Added the following new classes:
+    * ``GlyphItem``
+    * ``GlyphItemIter``
+    * ``Item``
+    * ``LayoutIter``
+    * ``LayoutRun``
+* Added new methods to ``Context``
+    * ``set/get_base_gravity``
+    * ``get_gravity``
+    * ``set/get_gravity_hint``
+* Added new methods to ``Layout``
+    * ``get_text``
+    * ``get_iter``
+    * ``get_baseline``
+    * ``get_line_count``
+    * ``get/set_spacing``
+* Added new method to ``Rectangle``
+    * ``get_pointer``
+* Corrected return types (``ffi.CData`` was previously ``ctypes.c_void_p``)
+
 Version 0.2.0
 .............
 
