@@ -1,4 +1,4 @@
-from pangocffi import Context, FontDescription, ffi
+from pangocffi import Context, FontDescription, Gravity, GravityHint, ffi
 import unittest
 
 
@@ -24,3 +24,10 @@ class TestContext(unittest.TestCase):
         desc.set_family('sans-serif')
         context.set_font_description(desc)
         assert context.get_font_description().get_family() == 'sans-serif'
+
+        context.set_base_gravity(Gravity.EAST)
+        assert context.get_base_gravity() == Gravity.EAST
+        assert context.get_gravity() == Gravity.EAST
+
+        context.set_gravity_hint(GravityHint.STRONG)
+        assert context.get_gravity_hint() == GravityHint.STRONG

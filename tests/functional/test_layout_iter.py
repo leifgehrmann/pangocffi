@@ -1,21 +1,25 @@
-from pangocffi import Context, Layout, LayoutIterator, Rectangle, ffi
+from pangocffi import Context, Layout, LayoutIter, Rectangle, ffi
 import unittest
 
 
-class TestLayoutIterator(unittest.TestCase):
+class TestLayoutIter(unittest.TestCase):
 
     @staticmethod
-    def test_layout_iterator_pointer():
+    def test_layout_iter_pointer():
         context = Context()
         layout = Layout(context)
-        layout_iter = LayoutIterator(layout)
+        layout_iter = layout.get_iter()
         assert isinstance(layout_iter.get_pointer(), ffi.CData)
 
+    def test_layout_iter_returns_null_from_null_pointer(self):
+        with self.assertRaises(ValueError):
+            LayoutIter.from_pointer(ffi.NULL)
+
     @staticmethod
-    def test_layout_iterator_properties():
+    def test_layout_iter_properties():
         context = Context()
         layout = Layout(context)
-        layout_iter = LayoutIterator(layout)
+        layout_iter = layout.get_iter()
 
         assert layout_iter.next_run() is False
         assert layout_iter.next_char() is False
@@ -51,7 +55,6 @@ class TestLayoutIterator(unittest.TestCase):
     def test_layout_iterator_run_returns_none():
         context = Context()
         layout = Layout(context)
-        layout_iter = LayoutIterator(layout)
+        layout_iter = layout.get_iter()
 
         assert layout_iter.get_run() is None
-
