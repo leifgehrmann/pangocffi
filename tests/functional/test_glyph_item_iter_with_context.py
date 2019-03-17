@@ -1,13 +1,20 @@
 from pangocffi import Layout, GlyphItemIter, GlyphItem, ffi
-from .context_creator import create_pango_context
+from .context_creator import ContextCreator
 import unittest
 
 
 class TestGlyphItemIter(unittest.TestCase):
 
+    def setUp(self):
+        self.pango_context = ContextCreator.get_pango_context()
+
+    def tearDown(self):
+        self.pango_context = None
+        ContextCreator.free()
+
     def test_glyph_item_iterator(self):
         text = 'Hi from Παν語'
-        layout = Layout(create_pango_context())
+        layout = Layout(self.pango_context)
         layout.set_text(text)
         layout_iter = layout.get_iter()
 
