@@ -128,5 +128,6 @@ class GlyphItem:
         """
         :return:
             corresponding :class:`Item`.
+        :type: Item
         """
         return Item.from_pointer(self._pointer.item)

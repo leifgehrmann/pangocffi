@@ -40,16 +40,36 @@ class Rectangle:
 
     @property
     def x(self) -> int:
+        """
+        :return:
+            X coordinate of the left side of the rectangle.
+        :type: int
+        """
         return self.pointer.x
 
     @property
     def y(self) -> int:
+        """
+        :return:
+            Y coordinate of the the top side of the rectangle.
+        :type: int
+        """
         return self.pointer.y
 
     @property
     def width(self) -> int:
+        """
+        :return:
+            width of the rectangle.
+        :type: int
+        """
         return self.pointer.width
 
     @property
     def height(self) -> int:
+        """
+        :return:
+            height of the rectangle.
+        :type: int
+        """
         return self.pointer.height

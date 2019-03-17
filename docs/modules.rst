@@ -22,6 +22,11 @@ ____________________
 
 .. autofunction:: pangocffi.units_from_double
 
+Rectangle
+_________
+
+.. autoclass:: Rectangle
+
 Matrix
 ______
 

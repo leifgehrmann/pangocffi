@@ -37,6 +37,7 @@ class Item:
         """
         :return:
             byte offset of the start of this item in text.
+        :type: int
         """
         return self._pointer.offset
 
@@ -45,6 +46,7 @@ class Item:
         """
         :return:
             length of this item in bytes.
+        :type: int
         """
         return self._pointer.length
 
@@ -53,5 +55,6 @@ class Item:
         """
         :return:
             number of Unicode characters in the item.
+        :type: int
         """
         return self._pointer.num_chars

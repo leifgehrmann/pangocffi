@@ -99,32 +99,64 @@ class GlyphItemIter:
 
     @property
     def glyph_item(self) -> GlyphItem:
+        """
+        :return:
+            the glyph item being iterated over
+        :type: GlyphItem
+        """
         return GlyphItem.from_pointer(self._pointer.glyph_item)
 
     @property
     def text(self) -> str:
+        """
+        :return:
+            the text for the layout
+        :type: str
+        """
         return ffi.string(self._pointer.text).decode('utf-8')
 
     @property
     def start_glyph(self) -> int:
+        """
+        :type: int
+        """
         return self._pointer.start_glyph
 
     @property
     def start_index(self) -> int:
+        """
+        :return:
+            the cluster start index within text
+        :type: int
+        """
         return self._pointer.start_index
 
     @property
     def start_char(self) -> int:
+        """
+        :type: int
+        """
         return self._pointer.start_char
 
     @property
     def end_glyph(self) -> int:
+        """
+        :type: int
+        """
         return self._pointer.end_glyph
 
     @property
     def end_index(self) -> int:
+        """
+        :return:
+            the cluster end index within text
+        :type: int
+        """
         return self._pointer.end_index
 
     @property
     def end_char(self) -> int:
+        """
+        :type: int
+        """
         return self._pointer.end_char
