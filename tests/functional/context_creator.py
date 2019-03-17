@@ -18,10 +18,10 @@ class ContextCreator(object):
             /* Cairo */
             typedef void cairo_t;
             typedef struct _cairo_surface cairo_surface_t;
-    
+
             typedef enum _cairo_status {
                 CAIRO_STATUS_SUCCESS = 0,
-    
+
                 CAIRO_STATUS_NO_MEMORY,
                 CAIRO_STATUS_INVALID_RESTORE,
                 CAIRO_STATUS_INVALID_POP_GROUP,
@@ -64,10 +64,10 @@ class ContextCreator(object):
                 CAIRO_STATUS_FREETYPE_ERROR,
                 CAIRO_STATUS_WIN32_GDI_ERROR,
                 CAIRO_STATUS_TAG_ERROR,
-    
+
                 CAIRO_STATUS_LAST_STATUS
             } cairo_status_t;
-    
+
             typedef cairo_status_t (*cairo_write_func_t) (
                 void * closure,
                 const unsigned char *data,
@@ -82,7 +82,7 @@ class ContextCreator(object):
             void cairo_surface_destroy (cairo_surface_t *surface);
             cairo_t * cairo_create (cairo_surface_t *target);
             void cairo_destroy (cairo_t *cr);
-    
+
             PangoContext * pango_cairo_create_context (cairo_t *cr);
         ''')
         ffi.set_source('pangocffi._generated.ffi', None)
@@ -95,17 +95,14 @@ class ContextCreator(object):
             10,
             10
         )
-        # cairo_surface_t = ffi.gc(cairo_surface_t, cairo.cairo_surface_destroy)
         cairo_t = cairo.cairo_create(cairo_surface_t)
 
         pango_pointer = pangocairo.pango_cairo_create_context(cairo_t)
         pango_pointer = pangocffi.ffi.cast('PangoContext *', pango_pointer)
-        pango_pointer = pangocffi.ffi.gc(pango_pointer, pangocffi.gobject.g_object_unref)
-
-        # if pango_pointer == pangocffi.ffi.NULL:
-        #     pango_pointer = pangocairo.pango_cairo_create_context(cairo_t)
-        #     pango_pointer = pangocffi.ffi.cast('PangoContext *', pango_pointer)
-        #     pango_pointer = pangocffi.ffi.gc(pango_pointer, pangocffi.gobject.g_object_unref)
+        pango_pointer = pangocffi.ffi.gc(
+            pango_pointer,
+            pangocffi.gobject.g_object_unref
+        )
 
         ContextCreator.cairo = cairo
         ContextCreator.cairo_surface_t = cairo_surface_t
@@ -118,4 +115,6 @@ class ContextCreator(object):
     def free():
         ContextCreator.pango_context = None
         ContextCreator.cairo.cairo_destroy(ContextCreator.cairo_t)
-        ContextCreator.cairo.cairo_surface_destroy(ContextCreator.cairo_surface_t)
+        ContextCreator.cairo.cairo_surface_destroy(
+            ContextCreator.cairo_surface_t
+        )
