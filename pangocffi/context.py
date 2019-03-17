@@ -1,4 +1,4 @@
-from . import pango, gobject, ffi, FontDescription
+from . import pango, gobject, ffi, FontDescription, Gravity, GravityHint
 
 
 class Context(object):
@@ -74,3 +74,66 @@ class Context(object):
         return FontDescription.from_pointer(
             pango.pango_context_get_font_description(self._pointer)
         )
+
+    def get_base_gravity(self) -> Gravity:
+        """
+        Retrieves the base gravity for the context.
+        See :meth:`set_base_gravity()`.
+
+        :return:
+            the base gravity for the context.
+        """
+        return Gravity(
+            pango.pango_context_get_base_gravity(self._pointer)
+        )
+
+    def set_base_gravity(self, gravity: Gravity):
+        """
+        Sets the base gravity for the context.
+
+        The base gravity is used in laying vertical text out.
+
+        :param gravity:
+            the new base gravity
+        """
+        pango.pango_context_set_base_gravity(self._pointer, gravity.value)
+
+    def get_gravity(self) -> Gravity:
+        """
+        Retrieves the gravity for the context. This is similar to
+        :meth:`get_base_gravity()`, except for when the base gravity is
+        :meth:`Gravity.AUTO` for which :meth:`get_for_matrix()` is used to
+        return the gravity from the current context matrix.
+
+        :return:
+            the resolved gravity for the context.
+        """
+        return Gravity(
+            pango.pango_context_get_gravity(self._pointer)
+        )
+
+    def get_gravity_hint(self) -> GravityHint:
+        """
+        Retrieves the gravity hint for the context.
+        See :meth:`set_gravity_hint()` for details.
+
+        :return:
+            the gravity hint for the context.
+        """
+        return GravityHint(
+            pango.pango_context_get_base_gravity(self._pointer)
+        )
+
+    def set_gravity_hint(self, hint: GravityHint):
+        """
+        Sets the gravity hint for the context.
+
+        The gravity hint is used in laying vertical text out, and is only
+        relevant if gravity of the context as returned by
+        :meth:`get_gravity()` is set :meth:`Gravity.EAST` or
+        :meth:`Gravity.WEST`.
+
+        :param hint:
+            the new gravity hint
+        """
+        pango.pango_context_set_gravity_hint(self._pointer, hint.value)

@@ -28,6 +28,10 @@ from .enums import *  # noqa
 from .convert import *  # noqa
 from .font_description import FontDescription  # noqa
 from .rectangle import Rectangle  # noqa
+from .item import Item  # noqa
 from .context import Context  # noqa
+from .glyph_item import GlyphItem  # noqa
+from .glyph_item_iter import GlyphItemIter  # noqa
+from .layout_run import LayoutRun  # noqa
+from .layout_iter import LayoutIter  # noqa
 from .layout import Layout  # noqa
-from .layout_iterator import LayoutIterator  # noqa

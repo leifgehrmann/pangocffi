@@ -1,22 +1,13 @@
-from typing import Tuple
+from typing import Tuple, Optional
 from . import pango, ffi
-from . import Layout, Rectangle
+from . import LayoutRun, Rectangle
 
 
-class LayoutIterator:
+class LayoutIter:
     """
-    A LayoutIterator can be used to iterate over the visual extents of a
+    A :class:`LayoutIter` can be used to iterate over the visual extents of a
     Pango :class:`Layout`.
     """
-
-    def __init__(self, layout: Layout):
-        """
-        Returns an iterator to iterate over the visual extents of the layout.
-
-        :param layout:
-            a Pango :class:`Layout`
-        """
-        self._init_pointer(pango.pango_layout_get_iter(layout.get_pointer()))
 
     def _init_pointer(self, pointer: ffi.CData):
         self._pointer = ffi.gc(pointer, pango.pango_layout_iter_free)
@@ -29,6 +20,20 @@ class LayoutIterator:
             a pointer to the iterator.
         """
         return self._pointer
+
+    @classmethod
+    def from_pointer(cls, pointer: ffi.CData) -> 'LayoutIter':
+        """
+        Instantiates a :class:`LayoutIter` from a pointer.
+
+        :return:
+            the layout iterator.
+        """
+        if pointer == ffi.NULL:
+            raise ValueError('Null pointer')
+        self = object.__new__(cls)
+        cls._init_pointer(self, pointer)
+        return self
 
     def next_run(self) -> bool:
         """
@@ -105,7 +110,23 @@ class LayoutIterator:
         """
         return pango.pango_layout_iter_get_baseline(self._pointer)
 
-    # def get_run(_readonly)
+    def get_run(self) -> Optional[LayoutRun]:
+        """
+        Returns the current run. When iterating by run, at the end of each
+        line, there's a position with a NULL run, so this function can return
+        None. The NULL run at the end of each line ensures that all lines have
+        at least one run, even lines consisting of only a newline.
+
+        Use the faster :meth:`get_run_readonly()` if you do not plan
+        to modify the contents of the run (glyphs, glyph widths, etc.).
+
+        :return:
+            the current run
+        """
+        run_pointer = pango.pango_layout_iter_get_run(self._pointer)
+        if run_pointer == ffi.NULL:
+            return None
+        return LayoutRun.from_pointer(run_pointer)
 
     # def get_line(_readonly)
 
@@ -130,8 +151,8 @@ class LayoutIterator:
 
     def get_cluster_extents(self) -> Tuple[Rectangle, Rectangle]:
         """
-        Returns the extents of the current cluster, in layout coordinates (origin
-        is the top left of the entire layout).
+        Returns the extents of the current cluster, in layout coordinates
+        (origin is the top left of the entire layout).
 
         :return:
             a tuple containing two :class:`Rectangle` objects.

@@ -13,4 +13,3 @@ def test_rectangle_pointers():
     rect = Rectangle()
     same_rect = rect.from_pointer(rect.get_pointer())
     assert same_rect.x == 0
-

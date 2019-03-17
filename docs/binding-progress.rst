@@ -26,11 +26,11 @@ ______________________
 * pango_context_set_language ()
 * pango_context_get_base_dir ()
 * pango_context_set_base_dir ()
-* pango_context_get_base_gravity ()
-* pango_context_set_base_gravity ()
-* pango_context_get_gravity ()
-* pango_context_get_gravity_hint ()
-* pango_context_set_gravity_hint ()
+* ✔︎ pango_context_get_base_gravity ()
+* ✔︎ pango_context_set_base_gravity ()
+* ✔︎ pango_context_get_gravity ()
+* ✔︎ pango_context_get_gravity_hint ()
+* ✔︎ pango_context_set_gravity_hint ()
 * pango_context_get_matrix ()
 * pango_context_set_matrix ()
 * pango_context_load_font ()
@@ -44,7 +44,7 @@ ______________________
 * pango_shape ()
 * pango_shape_full ()
 * ✔︎ PangoContext
-* PangoItem
+* ✔︎ PangoItem
 * PangoAnalysis
 * PANGO_ANALYSIS_FLAG_CENTERED_BASELINE
 * PANGO_ANALYSIS_FLAG_IS_ELLIPSIS
@@ -84,18 +84,18 @@ ______________________
 * pango_glyph_string_index_to_x ()
 * pango_glyph_string_x_to_index ()
 * pango_glyph_string_get_logical_widths ()
-* pango_glyph_item_copy ()
-* pango_glyph_item_free ()
-* pango_glyph_item_split ()
+* ✔︎ pango_glyph_item_copy ()
+* ✔︎ pango_glyph_item_free ()
+* ✔︎ pango_glyph_item_split ()
 * pango_glyph_item_apply_attrs ()
 * pango_glyph_item_letter_space ()
-* pango_glyph_item_get_logical_widths ()
+* ✔︎ pango_glyph_item_get_logical_widths ()
 * pango_glyph_item_iter_copy ()
 * pango_glyph_item_iter_free ()
-* pango_glyph_item_iter_init_start ()
-* pango_glyph_item_iter_init_end ()
-* pango_glyph_item_iter_next_cluster ()
-* pango_glyph_item_iter_prev_cluster ()
+* ✔︎ pango_glyph_item_iter_init_start ()
+* ✔︎ pango_glyph_item_iter_init_end ()
+* ✔︎ pango_glyph_item_iter_next_cluster ()
+* ✔︎ pango_glyph_item_iter_prev_cluster ()
 * PANGO_SCALE
 * ✔︎ PangoRectangle
 * PangoMatrix
@@ -331,7 +331,7 @@ ______________________
 * pango_layout_context_changed ()
 * pango_layout_get_serial ()
 * ✔︎ pango_layout_set_text ()
-* pango_layout_get_text ()
+* ✔︎ pango_layout_get_text ()
 * pango_layout_get_character_count ()
 * ✔︎ pango_layout_set_markup ()
 * pango_layout_set_markup_with_accel ()
@@ -391,7 +391,7 @@ ______________________
 * ✔︎ pango_layout_iter_at_last_line ()
 * ✔︎ pango_layout_iter_get_index ()
 * ✔︎ pango_layout_iter_get_baseline ()
-* pango_layout_iter_get_run ()
+* ✔︎ pango_layout_iter_get_run ()
 * pango_layout_iter_get_run_readonly ()
 * pango_layout_iter_get_line ()
 * pango_layout_iter_get_line_readonly ()
@@ -459,7 +459,7 @@ _______________________
 * PANGO_VERSION_CHECK()
 * ✔︎ pango_version ()
 * ✔︎ pango_version_string ()
-* ✔︎ pango_version_check ()
+* pango_version_check ()
 * PANGO_VERSION
 * PANGO_VERSION_MAJOR
 * PANGO_VERSION_MINOR

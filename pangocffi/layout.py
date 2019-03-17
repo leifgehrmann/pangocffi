@@ -1,6 +1,7 @@
 from . import pango, gobject, ffi
 from . import Context, FontDescription
 from . import Alignment, Rectangle
+from pangocffi import LayoutIter
 from typing import Tuple, Optional
 
 
@@ -75,6 +76,16 @@ class Layout(object):
         """
         text_pointer = ffi.new('char[]', text.encode('utf8'))
         pango.pango_layout_set_text(self._pointer, text_pointer, -1)
+
+    def get_text(self) -> str:
+        """
+        Returns the text in the layout.
+
+        :return:
+            the text in the layout.
+        """
+        text_pointer = pango.pango_layout_get_text(self._pointer)
+        return ffi.string(text_pointer).decode("utf-8")
 
     def set_markup(self, markup: str) -> None:
         """
@@ -281,3 +292,13 @@ class Layout(object):
             the line count
         """
         return pango.pango_layout_get_line_count(self._pointer)
+
+    def get_iter(self) -> LayoutIter:
+        """
+        Returns an iterator to iterate over the visual extents of the layout.
+
+        :return:
+            the layout iterator
+        """
+        layout_iterator_pointer = pango.pango_layout_get_iter(self._pointer)
+        return LayoutIter.from_pointer(layout_iterator_pointer)

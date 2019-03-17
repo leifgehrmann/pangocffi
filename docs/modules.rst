@@ -35,7 +35,17 @@ API not implemented yet.
 Glyph Item
 __________
 
-API not implemented yet.
+.. autoclass:: GlyphItem
+
+Glyph Item Iterator
+___________________
+
+.. autoclass:: GlyphItemIter
+
+Item
+____
+
+.. autoclass:: Item
 
 Fonts
 =====
@@ -122,12 +132,17 @@ ______
 Layout Iterator
 _______________
 
-.. autoclass:: LayoutIterator
+.. autoclass:: LayoutIter
 
 Layout Line
 ___________
 
 API not implemented yet.
+
+Layout Run
+__________
+
+.. autoclass:: LayoutRun
 
 Layout Modes
 ____________
