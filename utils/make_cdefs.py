@@ -202,29 +202,44 @@ def generate(pango_git_dir):
         typedefs_enum += file_typedefs_enum
         typedefs_other += file_typedefs_other
 
+    # Extract opaque typedefs and insert them into a string containing all the
+    # structs. Then remove the opaque typedefs that have been extracted
     typedefs_struct += get_struct_for_opaque_typedef(
         'PangoRectangle',
         pango_git_dir,
         'pango-types.h',
         '_PangoRectangle'
     )
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoRectangle')
+
     typedefs_struct += get_struct_for_opaque_typedef(
         'PangoItem',
         pango_git_dir,
         'pango-item.h',
         '_PangoItem'
     )
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoItem')
+
     typedefs_struct += get_struct_for_opaque_typedef(
         'PangoGlyphItem',
         pango_git_dir,
         'pango-glyph-item.h',
         '_PangoGlyphItem'
     )
-
-    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoRectangle')
-    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoItem')
     typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoGlyphItem')
 
+    typedefs_struct += get_struct_for_opaque_typedef(
+        'PangoGlyphItemIter',
+        pango_git_dir,
+        'pango-glyph-item.h',
+        '_PangoGlyphItemIter'
+    )
+    typedefs_opaque = remove_opaque_typedef(
+        typedefs_opaque,
+        'PangoGlyphItemIter'
+    )
+
+    # Remove and replace the aliased opaque typedefs
     typedefs_struct += 'typedef PangoGlyphItem PangoLayoutRun;\n'
     typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoLayoutRun')
 
@@ -234,10 +249,14 @@ def generate(pango_git_dir):
         typedefs_other +\
         source
 
+    # Replace function parameter arguments with non-consts
+    # Todo: Is this really needed?
     cdefs = re.sub(r'const PangoRectangle', 'PangoRectangle', cdefs)
     cdefs = re.sub(r'const PangoGlyphItem', 'PangoGlyphItem', cdefs)
-    cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis;', cdefs)
     cdefs = re.sub(r'const PangoItem', 'PangoItem', cdefs)
+
+    # Convert PangoAnalysis (util we make PangoAnalysis non-opaque)
+    cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis;', cdefs)
 
     cdefs = remove_multiple_blank_lines(cdefs)
     cdefs = remove_multiple_spaces(cdefs)

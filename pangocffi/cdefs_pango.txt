@@ -37,7 +37,6 @@ typedef ... PangoGlyphGeometry;
 typedef ... PangoGlyphVisAttr;
 typedef ... PangoGlyphInfo;
 typedef ... PangoGlyphString;
-typedef ... PangoGlyphItemIter;
 typedef ... PangoAnalysis;
 typedef ... PangoLayout;
 typedef ... PangoLayoutClass;
@@ -74,6 +73,17 @@ typedef struct
  PangoItem *item;
  PangoGlyphString *glyphs;
 } PangoGlyphItem;
+typedef struct
+{
+ PangoGlyphItem *glyph_item;
+ const gchar *text;
+ int start_glyph;
+ int start_index;
+ int start_char;
+ int end_glyph;
+ int end_index;
+ int end_char;
+} PangoGlyphItemIter;
 typedef PangoGlyphItem PangoLayoutRun;
 typedef enum {
  PANGO_UNDERLINE_NONE,
