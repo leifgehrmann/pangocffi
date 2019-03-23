@@ -1,6 +1,14 @@
 Changelog
 ---------
 
+Version 0.4.0
+.............
+
+Released on 2019-03-23.
+
+* Added ``FFIInstanceBuilder`` to separate C FFI build logic from the actual
+  C FFI builder.
+
 Version 0.3.0
 .............
 
