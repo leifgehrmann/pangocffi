@@ -53,8 +53,8 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-generate-cdefs: ## generate pango cdefs (requires a working copy of pango)
-	python utils/make_cdefs.py ../pango/ > pangocffi/cdefs_pango.txt
+generate-cdefs: ## generate pango c definitions (requires a cloned copy of pango)
+	python utils/make_c_definitions.py ../pango/ > pangocffi/c_definitions_pango.txt
 
 lint: ## check style with flake8
 	flake8 pangocffi tests --exclude pangocffi/_generated/ffi.py
