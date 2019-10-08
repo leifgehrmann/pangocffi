@@ -20,10 +20,15 @@ pangocffi depends on Pango_, GLib_, and libffi_ being installed.
     brew install pango
     brew install glib
 
-Feel free to contribute a guide for how to install these dependencies on other
-systems.
+* On Linux, these packages are usually installed as part of the base OS.
+
+* On Windows, if you are using a 64-bit Python, you can use `this binary installer`_ to install GTK 3. Use ``python --version --version`` to check whether you're running 32-bit or 64-bit Python.
 
 .. _homebrew: https://brew.sh
+.. _`this binary installer`: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer
+
+Feel free to contribute a guide for how to install these dependencies on other
+systems.
 
 Installing pangocffi
 ____________________
