@@ -16,8 +16,8 @@ def _dlopen(generated_ffi, *names):
     raise OSError("dlopen() failed to load a library: %s" % ' / '.join(names))
 
 
-pango = _dlopen(ffi, 'pango', 'pango-1', 'pango-1.0')
-gobject = _dlopen(ffi, 'gobject-2.0')
+pango = _dlopen(ffi, 'pango', 'pango-1', 'pango-1.0', 'pango-1.0-0')
+gobject = _dlopen(ffi, 'gobject-2.0', 'gobject-2.0-0')
 
 
 # Imports are normally always put at the top of the file.
