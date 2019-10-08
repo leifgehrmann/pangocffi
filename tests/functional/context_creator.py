@@ -2,6 +2,21 @@ import pangocffi
 from pangocffi import Context
 from pangocffi.ffi_build import ffi as ffi_builder
 from cffi import FFI
+import ctypes
+
+
+def _dlopen(ffi, *names):
+    """Try various names for the same library, for different platforms."""
+    for name in names:
+        for lib_name in (name, 'lib' + name):
+            try:
+                path = ctypes.util.find_library(lib_name)
+                lib = ffi.dlopen(path or lib_name)
+                if lib:
+                    return lib
+            except OSError:
+                pass
+    raise OSError("dlopen() failed to load a library: %s" % ' / '.join(names))
 
 
 class ContextCreator(object):
@@ -86,8 +101,9 @@ class ContextCreator(object):
             PangoContext * pango_cairo_create_context (cairo_t *cr);
         ''')
         ffi.set_source('pangocffi._generated.ffi', None)
-        cairo = ffi.dlopen('cairo')
-        pangocairo = ffi.dlopen('pangocairo-1.0')
+        cairo = _dlopen(ffi, 'cairo', 'cairo-2', 'cairo-gobject-2',
+                        'cairo.so.2')
+        pangocairo = _dlopen(ffi, 'pangocairo-1.0', 'pangocairo-1.0-0')
 
         cairo_surface_t = cairo.cairo_pdf_surface_create_for_stream(
             ffi.NULL,
