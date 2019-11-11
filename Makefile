@@ -59,8 +59,15 @@ generate-cdefs: ## generate pango c definitions (requires a cloned copy of pango
 lint: ## check style with flake8
 	flake8 pangocffi tests --exclude pangocffi/_generated/ffi.py
 
+.PHONY: tests
 tests: ## run tests quickly with the default Python
 	python setup.py test
+
+tests-all-setup:
+	pyenv install 3.5.9
+	pyenv install 3.6.9
+	pyenv install 3.7.5
+	pyenv install 3.8.0
 
 tests-all: clean ## run tests on all minor python versions
 	tox
