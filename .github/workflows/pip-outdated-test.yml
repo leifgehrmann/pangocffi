@@ -1,0 +1,19 @@
+name: pip - List outdated
+
+on: [push, pull_request]
+
+jobs:
+  outdated:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Use Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.x
+      - name: Install and check for outdated
+        run: |
+          pip install -r requirements.txt
+          pip list --outdated
