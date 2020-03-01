@@ -1,2 +1,18 @@
-cffi >= 1.14.0
-pytest
+# Dependencies
+cffi==1.1.0
+
+# Dev-Dependencies
+## Setup
+setuptools==45.2.0
+pip==20.0.2
+## Testing
+pytest==4.3.0
+coverage==4.5.2
+codecov==2.0.16
+tox==3.6.1
+## Linting
+flake8==3.7.6
+## Documentation
+Sphinx==1.6.0
+## Deployment
+twine==1.13.0
