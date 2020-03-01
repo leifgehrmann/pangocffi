@@ -13,6 +13,6 @@ tox==3.6.1
 ## Linting
 flake8==3.7.6
 ## Documentation
-Sphinx==1.6.0
+Sphinx==1.8.4
 ## Deployment
 twine==1.13.0
