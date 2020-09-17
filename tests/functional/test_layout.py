@@ -1,9 +1,9 @@
-from pangocffi import Context, FontDescription, Layout, Alignment, ffi
+from pangocffi import Context, FontDescription, Layout, Alignment, ffi,\
+    EllipsizeMode
 import unittest
 
 
 class TestLayout(unittest.TestCase):
-
     @staticmethod
     def test_layout_returns_identical_context():
         context = Context()
@@ -69,6 +69,9 @@ class TestLayout(unittest.TestCase):
 
         layout.set_alignment(Alignment.CENTER)
         assert layout.get_alignment() is Alignment.CENTER
+
+        layout.set_ellipsize(EllipsizeMode.MIDDLE)
+        assert layout.get_ellipsize() is EllipsizeMode.MIDDLE
 
         ink_rect, logical_rect = layout.get_extents()
         assert logical_rect.width == 0
