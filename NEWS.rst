@@ -1,6 +1,15 @@
 Changelog
 ---------
 
+Version 0.6.0
+.............
+
+Released on 2020-09-17.
+
+* Added new methods to ``Layout``
+    * ``set_ellipsize``
+    * ``get_ellipsize``
+
 Version 0.5.0
 .............
 
