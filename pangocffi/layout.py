@@ -1,6 +1,6 @@
 from . import pango, gobject, ffi
 from . import Context, FontDescription
-from . import Alignment, Rectangle
+from . import Alignment, Rectangle, EllipsizeMode
 from pangocffi import LayoutIter
 from typing import Tuple, Optional
 
@@ -229,6 +229,25 @@ class Layout(object):
             the alignment.
         """
         return Alignment(pango.pango_layout_get_alignment(self._pointer))
+
+    def set_ellipsize(self, ellipsize: EllipsizeMode) -> None:
+        """
+        Sets the ellipsize mode for the layout.
+
+        :param ellipsize:
+            the ellipsize mode.
+        """
+
+        pango.pango_layout_set_ellipsize(self._pointer, ellipsize.value)
+
+    def get_ellipsize(self) -> EllipsizeMode:
+        """
+        Returns the ellipsize mode of the layout.
+
+        :return:
+            the the ellipsize mode.
+        """
+        return EllipsizeMode(pango.pango_layout_get_ellipsize(self._pointer))
 
     def get_extents(self) -> Tuple[Rectangle, Rectangle]:
         """
