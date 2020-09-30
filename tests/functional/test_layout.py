@@ -1,5 +1,12 @@
-from pangocffi import Context, FontDescription, Layout, Alignment, ffi,\
-    EllipsizeMode
+from pangocffi import (
+    Context,
+    FontDescription,
+    Layout,
+    Alignment,
+    ffi,
+    EllipsizeMode,
+    WrapMode,
+)
 import unittest
 
 
@@ -72,6 +79,9 @@ class TestLayout(unittest.TestCase):
 
         layout.set_ellipsize(EllipsizeMode.MIDDLE)
         assert layout.get_ellipsize() is EllipsizeMode.MIDDLE
+
+        layout.set_wrap(WrapMode.WORD_CHAR)
+        assert layout.get_wrap() is WrapMode.WORD_CHAR
 
         ink_rect, logical_rect = layout.get_extents()
         assert logical_rect.width == 0

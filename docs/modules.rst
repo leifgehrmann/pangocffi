@@ -157,7 +157,7 @@ API not implemented yet.
 Wrap Mode
 ---------
 
-API not implemented yet.
+.. autoclass:: WrapMode
 
 Ellipsize Mode
 --------------

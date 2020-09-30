@@ -1,6 +1,6 @@
 from . import pango, gobject, ffi
 from . import Context, FontDescription
-from . import Alignment, Rectangle, EllipsizeMode
+from . import Alignment, Rectangle, EllipsizeMode, WrapMode
 from pangocffi import LayoutIter
 from typing import Tuple, Optional
 
@@ -245,9 +245,28 @@ class Layout(object):
         Returns the ellipsize mode of the layout.
 
         :return:
-            the the ellipsize mode.
+            the ellipsize mode.
         """
         return EllipsizeMode(pango.pango_layout_get_ellipsize(self._pointer))
+
+    def set_wrap(self, wrap: WrapMode) -> None:
+        """
+        Sets the wrap mode for the layout.
+
+        :param wrap:
+            the wrap mode.
+        """
+
+        pango.pango_layout_set_wrap(self._pointer, wrap.value)
+
+    def get_wrap(self) -> WrapMode:
+        """
+        Returns the wrap mode of the layout.
+
+        :return:
+            the wrap mode.
+        """
+        return WrapMode(pango.pango_layout_get_wrap(self._pointer))
 
     def get_extents(self) -> Tuple[Rectangle, Rectangle]:
         """

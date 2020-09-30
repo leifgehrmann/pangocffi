@@ -136,6 +136,19 @@ class EllipsizeMode(Enum):
     """Omit characters at the end of the text"""
 
 
+class WrapMode(Enum):
+    """
+    :class:`WrapMode` describes how to wrap the lines of a Pango layout 
+    to the desired width.
+    """
+    WORD = pango.PANGO_WRAP_WORD
+    """Wrap lines at word boundaries"""
+    CHAR = pango.PANGO_WRAP_CHAR
+    """Wrap lines at character boundaries"""
+    WORD_CHAR = pango.PANGO_WRAP_WORD_CHAR
+    """Wrap lines at word boundaries, but fall back to character 
+    boundaries if there is not enough space for a full word."""
+
 class Gravity(Enum):
     """
     :class:`Gravity` represents the orientation of glyphs in a segment of text.
