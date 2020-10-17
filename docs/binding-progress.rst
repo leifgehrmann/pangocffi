@@ -343,11 +343,11 @@ ______________________
 * ✔︎ pango_layout_get_width ()
 * ✔︎ pango_layout_set_height ()
 * ✔︎ pango_layout_get_height ()
-* pango_layout_set_wrap ()
-* pango_layout_get_wrap ()
+* ✔︎ pango_layout_set_wrap ()
+* ✔︎ pango_layout_get_wrap ()
 * pango_layout_is_wrapped ()
-* pango_layout_set_ellipsize ()
-* pango_layout_get_ellipsize ()
+* ✔︎ pango_layout_set_ellipsize ()
+* ✔︎ pango_layout_get_ellipsize ()
 * pango_layout_is_ellipsized ()
 * pango_layout_set_indent ()
 * pango_layout_get_indent ()
@@ -411,8 +411,8 @@ ______________________
 * pango_layout_line_get_x_ranges ()
 * PangoLayout
 * PangoLayoutIter
-* PangoWrapMode
-* PANGO_TYPE_WRAP_MODE
+* ✔︎ PangoWrapMode
+* ✔︎ PANGO_TYPE_WRAP_MODE
 * ✔︎ PangoEllipsizeMode
 * PANGO_TYPE_ELLIPSIZE_MODE
 * ✔︎ PangoAlignment
