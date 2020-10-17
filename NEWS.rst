@@ -1,6 +1,15 @@
 Changelog
 ---------
 
+Version 0.7.0
+ .............
+
+ Released on 2020-10-17.
+
+ * Added new methods to ``Layout``
+     * ``set_wrap``
+     * ``get_wrap``
+
 Version 0.6.0
 .............
 
