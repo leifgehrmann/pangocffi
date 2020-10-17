@@ -138,7 +138,7 @@ class EllipsizeMode(Enum):
 
 class WrapMode(Enum):
     """
-    :class:`WrapMode` describes how to wrap the lines of a Pango layout 
+    :class:`WrapMode` describes how to wrap the lines of a Pango layout
     to the desired width.
     """
     WORD = pango.PANGO_WRAP_WORD
@@ -146,8 +146,9 @@ class WrapMode(Enum):
     CHAR = pango.PANGO_WRAP_CHAR
     """Wrap lines at character boundaries"""
     WORD_CHAR = pango.PANGO_WRAP_WORD_CHAR
-    """Wrap lines at word boundaries, but fall back to character 
+    """Wrap lines at word boundaries, but fall back to character
     boundaries if there is not enough space for a full word."""
+
 
 class Gravity(Enum):
     """
