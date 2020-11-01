@@ -2,15 +2,13 @@ import ctypes.util
 from .ffi_build import ffi
 import logging
 
-fmtstr = " Name: %(user_name)s : %(asctime)s: (%(filename)s): %(levelname)s: " \
+fmtstr = "%(asctime)s: (%(filename)s): %(levelname)s: " \
          "%(funcName)s Line: %(lineno)d - %(message)s"
-datestr = "%Y-%m-%d %H:%M:%S "
 logging.basicConfig(
         filename="/tmp/pangocffi.log",
         level=logging.DEBUG,
         filemode="a",
         format=fmtstr,
-        datefmt=datestr,
     )
 logging.debug("__init__.py called from pangocffi")
 
