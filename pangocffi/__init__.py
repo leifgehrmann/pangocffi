@@ -1,16 +1,5 @@
 import ctypes.util
 from .ffi_build import ffi
-import logging
-
-fmtstr = "%(asctime)s: (%(filename)s): %(levelname)s: " \
-         "%(funcName)s Line: %(lineno)d - %(message)s"
-logging.basicConfig(
-        filename="/tmp/pangocffi.log",
-        level=logging.DEBUG,
-        filemode="a",
-        format=fmtstr,
-    )
-logging.debug("__init__.py called from pangocffi")
 
 
 def _dlopen(generated_ffi, *names):
