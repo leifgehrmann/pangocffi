@@ -1,2 +1,0 @@
-recursive-include pangocffi VERSION
-recursive-include pangocffi c_definitions_*.txt
