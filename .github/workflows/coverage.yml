@@ -27,7 +27,9 @@ jobs:
           python setup.py sdist
       - name: Generate coverage report
         run: |
-          coverage run --source pangocffi -m pytest
+          coverage run --source pangocffi setup.py test
+          coverage report -m
+          coverage xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
