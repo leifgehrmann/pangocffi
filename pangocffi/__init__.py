@@ -1,5 +1,5 @@
 import ctypes.util
-from ._generated.ffi import ffi
+from .ffi_build import ffi
 
 
 def _dlopen(generated_ffi, *names):
