@@ -1,14 +1,33 @@
 Changelog
 ---------
 
+Version 0.8.0
+.............
+
+Released on 2020-11-13.
+
+* C-FFI bindings are now generated at runtime, rather than at installation.
+  This was done to avoid common installation issues like
+  ``ModuleNotFoundError: No module named 'pangocffi._generated'``. This change
+  does mean the bindings are re-compiled the first time ``import pangocffi`` is
+  called in a python session, but it takes less than a second to do this. If
+  there are any issues with this change, please raise an issue in the issue
+  tracker.
+* Because of the aforementioned change, modules that depend on pangocffi's
+  bindings being generated upon installation rather than at runtime, like
+  pangocairocffi, will break. Either lock your version of pangocffi to 0.7.0
+  or upgrade the module to the latest version which is compatible with 0.8.0 of
+  pangocffi.
+* Support for Python 3.5 has been dropped because it has reached end-of-life.
+
 Version 0.7.0
- .............
+.............
 
- Released on 2020-10-17.
+Released on 2020-10-17.
 
- * Added new methods to ``Layout``
-     * ``set_wrap``
-     * ``get_wrap``
+* Added new methods to ``Layout``
+    * ``set_wrap``
+    * ``get_wrap``
 
 Version 0.6.0
 .............
