@@ -59,14 +59,14 @@ generate-cdefs: ## generate pango c definitions (requires a cloned copy of pango
 lint: ## check style with flake8
 	flake8 pangocffi tests --exclude pangocffi/_generated/ffi.py
 
-tests: ## run tests quickly with the default Python
-	python setup.py test
+test: ## run tests quickly with the default Python
+	pytest
 
-tests-all: clean ## run tests on all minor python versions
+test-all: clean ## run tests on all minor python versions
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source pangocffi setup.py test
+	coverage run --source pangocffi -m pytest
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
