@@ -1,4 +1,4 @@
-name: Tests
+name: Coverage
 
 on:
   push:
@@ -21,6 +21,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: Build project
+        run: |
+          python setup.py build
+          python setup.py sdist
       - name: Generate coverage report
         run: |
           coverage run --source pangocffi -m pytest
