@@ -1,14 +1,5 @@
-from . import (
-    FontDescription,
-    Stretch,
-    Style,
-    Underline,
-    Variant,
-    Weight,
-    ffi,
-    gobject,
-    pango,
-)
+from . import (FontDescription, Stretch, Style, Underline, Variant, Weight,
+               ffi, pango)
 
 
 class Attribute:
@@ -45,7 +36,10 @@ class Attribute:
     def __eq__(self, other: "Attribute") -> bool:
         if isinstance(other, Attribute):
             return bool(
-                pango.pango_attribute_equal(self.get_pointer(), other.get_pointer())
+                pango.pango_attribute_equal(
+                    self.get_pointer(),
+                    other.get_pointer(),
+                )
             )
         return NotImplemented
 
@@ -76,7 +70,8 @@ class Attribute:
         Set's the End Index of a Attribute.
 
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this index
+            is not included in the range.
         """
         assert end_index >= 0
         self._start_index = end_index
@@ -105,9 +100,11 @@ class Attribute:
         :param family:
             the font family
         :param start_index:
-            the start index of the range. Should be >=0.
+            the start index of the range.
+            Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character
+            at this index is not included in the range.
         """
         temp = cls.from_pointer(pango.pango_attr_family_new(family))
         temp.start_index = start_index
@@ -126,7 +123,8 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at
+            this index is not included in the range.
         """
         temp = cls.from_pointer(pango.pango_attr_style_new(style.value))
         temp.start_index = start_index
@@ -145,7 +143,8 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at
+            this index is not included in the range.
         """
         temp = cls.from_pointer(pango.pango_attr_variant_new(variant.value))
         temp.start_index = start_index
@@ -164,7 +163,8 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this
+            index is not included in the range.
         """
         temp = cls.from_pointer(pango.pango_attr_stretch_new(stretch.value))
         temp.start_index = start_index
@@ -183,7 +183,8 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this
+            index is not included in the range.
         """
         temp = cls.from_pointer(pango.pango_attr_weight_new(weight.value))
         temp.start_index = start_index
@@ -202,7 +203,8 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this
+            index is not included in the range.
         """
         temp = cls.from_pointer(pango.pango_attr_size_new(size))
         temp.start_index = start_index
@@ -221,28 +223,43 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this index
+            is not included in the range.
         """
-        temp = cls.from_pointer(pango.pango_attr_size_new_absolute(size))
+        temp = cls.from_pointer(
+            pango.pango_attr_size_new_absolute(
+                absolute_size,
+            ),
+        )
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
 
     @classmethod
     def from_font_desc(
-        cls, font_desc: FontDescription, start_index: int = 0, end_index: int = 1
+        cls,
+        font_desc: FontDescription,
+        start_index: int = 0,
+        end_index: int = 1,
     ) -> "Attribute":
         """
-        Create a new font description attribute. This attribute allows setting family, style, weight, variant, stretch, and size simultaneously.
+        Create a new font description attribute. This attribute
+        allows setting family, style, weight, variant,
+        stretch, and size simultaneously.
 
         :param font_desc:
             the font description
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this index
+            is not included in the range.
         """
-        temp = cls.from_pointer(pango.pango_attr_font_desc_new(font_desc._pointer))
+        temp = cls.from_pointer(
+            pango.pango_attr_font_desc_new(
+                font_desc._pointer,
+            )
+        )
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -268,12 +285,19 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this
+            index is not included in the range.
         """
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
-        temp = cls.from_pointer(pango.pango_attr_foreground_new(red, green, blue))
+        temp = cls.from_pointer(
+            pango.pango_attr_foreground_new(
+                red,
+                green,
+                blue,
+            ),
+        )
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -299,12 +323,19 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this
+            index is not included in the range.
         """
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
-        temp = cls.from_pointer(pango.pango_attr_background_new(red, green, blue))
+        temp = cls.from_pointer(
+            pango.pango_attr_background_new(
+                red,
+                green,
+                blue,
+            ),
+        )
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -321,10 +352,15 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this index
+            is not included in the range.
         """
         strikethrough = ffi.cast("gboolean", strikethrough)
-        temp = cls.from_pointer(pango.pango_attr_strikethrough_new(strikethrough))
+        temp = cls.from_pointer(
+            pango.pango_attr_strikethrough_new(
+                strikethrough,
+            ),
+        )
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -339,7 +375,8 @@ class Attribute:
         end_index: int = 1,
     ) -> "Attribute":
         """
-        Create a new strikethrough color attribute. This attribute modifies the color of strikethrough lines.
+        Create a new strikethrough color attribute. This attribute
+        modifies the color of strikethrough lines.
         If not set, strikethrough lines will use the foreground color.
 
         :param red:
@@ -351,13 +388,18 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this
+            index is not included in the range.
         """
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
         temp = cls.from_pointer(
-            pango.pango_attr_strikethrough_color_new(red, green, blue)
+            pango.pango_attr_strikethrough_color_new(
+                red,
+                green,
+                blue,
+            )
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -365,7 +407,10 @@ class Attribute:
 
     @classmethod
     def from_underline(
-        cls, underline: Underline, start_index: int = 0, end_index: int = 1
+        cls,
+        underline: Underline,
+        start_index: int = 0,
+        end_index: int = 1,
     ) -> "Attribute":
         """
         Create a new underline-style attribute.
@@ -375,19 +420,30 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this
+            index is not included in the range.
         """
-        temp = cls.from_pointer(pango.pango_attr_underline_new(underline))
+        temp = cls.from_pointer(
+            pango.pango_attr_underline_new(
+                underline,
+            ),
+        )
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
 
     @classmethod
     def from_underline_color(
-        cls, red: int, green: int, blue: int, start_index: int = 0, end_index: int = 1
+        cls,
+        red: int,
+        green: int,
+        blue: int,
+        start_index: int = 0,
+        end_index: int = 1,
     ) -> "Attribute":
         """
-        Create a new underline color attribute. This attribute modifies the color of underlines.
+        Create a new underline color attribute.
+        This attribute modifies the color of underlines.
         If not set, underlines will use the foreground color.
 
         :param red:
@@ -399,12 +455,19 @@ class Attribute:
         :param start_index:
             the start index of the range. Should be >=0.
         :param end_index:
-            end index of the range. The character at this index is not included in the range.
+            end index of the range. The character at this
+            index is not included in the range.
         """
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
-        temp = cls.from_pointer(pango.pango_attr_underline_color_new(red, green, blue))
+        temp = cls.from_pointer(
+            pango.pango_attr_underline_color_new(
+                red,
+                green,
+                blue,
+            ),
+        )
         temp.start_index = start_index
         temp.end_index = end_index
         return temp

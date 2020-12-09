@@ -226,25 +226,29 @@ class Underline(Enum):
     """
     LOW = pango.PANGO_UNDERLINE_LOW
     """
-    A single underline should be drawn at a position beneath the ink extents
-    of the text being underlined. This should be used only for underlining
-    single characters, such as for keyboard accelerators. PANGO_UNDERLINE_SINGLE
+    A single underline should be drawn at a position beneath
+    the ink extents of the text being underlined. This should
+    be used only for underlining single characters, such as
+    for keyboard accelerators. PANGO_UNDERLINE_SINGLE
     should be used for extended portions of text.
     """
     ERROR = pango.PANGO_UNDERLINE_ERROR
     """
-    a wavy underline should be drawn below. This underline is typically used
-    to indicate an error such as a possible mispelling; in some cases a contrasting
-    color may automatically be used. This type of underlining is available 
+    a wavy underline should be drawn below. This underline
+    is typically used to indicate an error such as a possible
+    mispelling; in some cases a contrasting color may
+    automatically be used. This type of underlining is available
     since Pango 1.4."""
     SINGLE_LINE = pango.PANGO_UNDERLINE_SINGLE_LINE
     """
-    Like ``PANGO_UNDERLINE_SINGLE``, but drawn continuously across multiple runs.
+    Like ``PANGO_UNDERLINE_SINGLE``, but drawn continuously
+    across multiple runs.
     This type of underlining is available since Pango 1.46.
     """
     DOUBLE_LINE = pango.PANGO_UNDERLINE_DOUBLE_LINE
     """
-    Like ``PANGO_UNDERLINE_DOUBLE`` , but drawn continuously across multiple runs.
+    Like ``PANGO_UNDERLINE_DOUBLE`` , but drawn continuously
+    across multiple runs.
     This type of underlining is available since Pango 1.46.
     """
     ERROR_LINE = pango.PANGO_UNDERLINE_ERROR_LINE
