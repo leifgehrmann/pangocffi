@@ -6,6 +6,7 @@ class Style(Enum):
     """
     An enumeration specifying the various slant styles possible for a font.
     """
+
     NORMAL = pango.PANGO_STYLE_NORMAL
     """the font is upright."""
     OBLIQUE = pango.PANGO_STYLE_OBLIQUE
@@ -20,6 +21,7 @@ class Weight(Enum):
     numerical value ranging from 100 to 1000, but there are some predefined
     values.
     """
+
     THIN = pango.PANGO_WEIGHT_THIN
     """the thin weight( = 100; Since: 1.24)"""
     ULTRALIGHT = pango.PANGO_WEIGHT_ULTRALIGHT
@@ -50,6 +52,7 @@ class Variant(Enum):
     """
     An enumeration specifying capitalization variant of the font.
     """
+
     NORMAL = pango.PANGO_VARIANT_NORMAL
     """A normal font."""
     SMALL_CAPS = pango.PANGO_VARIANT_SMALL_CAPS
@@ -64,6 +67,7 @@ class Stretch(Enum):
     An enumeration specifying the width of the font relative to other designs
     within a family.
     """
+
     ULTRA_CONDENSED = pango.PANGO_STRETCH_ULTRA_CONDENSED
     """Ultra Condensed width"""
     EXTRA_CONDENSED = pango.PANGO_STRETCH_EXTRA_CONDENSED
@@ -89,6 +93,7 @@ class FontMask(Enum):
     The bits in a :class:`FontMask` correspond to fields in a
     :class:`FontDescription` that have been set.
     """
+
     FAMILY = pango.PANGO_FONT_MASK_FAMILY
     """the font family is specified."""
     STYLE = pango.PANGO_FONT_MASK_STYLE
@@ -111,6 +116,7 @@ class Alignment(Enum):
     within the available space. If the :class:`Layout` is set to justify using
     :meth:`set_justify()`, this only has effect for partial lines.
     """
+
     LEFT = pango.PANGO_ALIGN_LEFT
     """Put all available space on the right"""
     CENTER = pango.PANGO_ALIGN_CENTER
@@ -126,6 +132,7 @@ class EllipsizeMode(Enum):
     characters are removed from the text in order to make it fit to a given
     width and replaced with an ellipsis.
     """
+
     NONE = pango.PANGO_ELLIPSIZE_NONE
     """No ellipsization"""
     START = pango.PANGO_ELLIPSIZE_START
@@ -141,6 +148,7 @@ class WrapMode(Enum):
     :class:`WrapMode` describes how to wrap the lines of a Pango layout
     to the desired width.
     """
+
     WORD = pango.PANGO_WRAP_WORD
     """Wrap lines at word boundaries"""
     CHAR = pango.PANGO_WRAP_CHAR
@@ -160,6 +168,7 @@ class Gravity(Enum):
     ``Gravity.AUTO`` only can be passed to ``Context.set_base_gravity()`` and
     can only be returned by ``Context.get_base_gravity()``.
     """
+
     SOUTH = pango.PANGO_GRAVITY_SOUTH
     """Glyphs stand upright (default)"""
     EAST = pango.PANGO_GRAVITY_EAST
@@ -180,6 +189,7 @@ class GravityHint(Enum):
 
     See :class:`Gravity`.
     """
+
     NATURAL = pango.PANGO_GRAVITY_HINT_NATURAL
     """
     scripts will take their natural gravity based on the base gravity and the
@@ -193,4 +203,52 @@ class GravityHint(Enum):
     choose per-script gravity such that every script respects the line
     progression. This means, Latin and Arabic will take opposite gravities and
     both flow top-to-bottom for example.
+    """
+
+
+class Underline(Enum):
+    """
+    :class:`Underline` is used to specify whether text should be underlined,
+    and if so, the type of underlining.
+    """
+
+    NONE = pango.PANGO_UNDERLINE_NONE
+    """
+    no underline should be drawn
+    """
+    SINGLE = pango.PANGO_UNDERLINE_SINGLE
+    """
+    a single underline should be drawn
+    """
+    DOUBLE = pango.PANGO_UNDERLINE_DOUBLE
+    """
+    a double underline should be drawn
+    """
+    LOW = pango.PANGO_UNDERLINE_LOW
+    """
+    A single underline should be drawn at a position beneath the ink extents
+    of the text being underlined. This should be used only for underlining
+    single characters, such as for keyboard accelerators. PANGO_UNDERLINE_SINGLE
+    should be used for extended portions of text.
+    """
+    ERROR = pango.PANGO_UNDERLINE_ERROR
+    """
+    a wavy underline should be drawn below. This underline is typically used
+    to indicate an error such as a possible mispelling; in some cases a contrasting
+    color may automatically be used. This type of underlining is available 
+    since Pango 1.4."""
+    SINGLE_LINE = pango.PANGO_UNDERLINE_SINGLE_LINE
+    """
+    Like ``PANGO_UNDERLINE_SINGLE``, but drawn continuously across multiple runs.
+    This type of underlining is available since Pango 1.46.
+    """
+    DOUBLE_LINE = pango.PANGO_UNDERLINE_DOUBLE_LINE
+    """
+    Like ``PANGO_UNDERLINE_DOUBLE`` , but drawn continuously across multiple runs.
+    This type of underlining is available since Pango 1.46.
+    """
+    ERROR_LINE = pango.PANGO_UNDERLINE_ERROR_LINE
+    """
+    Like PANGO_UNDERLINE_ERROR , but drawn continuously across multiple runs.
+    This type of underlining is available since Pango 1.46.
     """

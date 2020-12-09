@@ -44,7 +44,7 @@ autodoc_member_order = 'bysource'
 autodoc_default_flags = ['members']
 intersphinx_mapping = {
     'http://docs.python.org/': None,
-    'http://cairographics.org/documentation/pycairo/2/': None}
+    'https://pycairo.readthedocs.io/en/latest/': None}
 
 sys.path.insert(0, os.path.abspath('..'))
 

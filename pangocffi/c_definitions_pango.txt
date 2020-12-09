@@ -1,5 +1,5 @@
 typedef ... PangoColor;
-typedef ... PangoAttribute;
+
 typedef ... PangoAttrClass;
 typedef ... PangoAttrString;
 typedef ... PangoAttrLanguage;
@@ -54,6 +54,11 @@ typedef ... PangoEngineLang;
 typedef ... PangoEngineShape;
 typedef ... PangoFont;
 typedef ... PangoFontMap;
+typedef struct{
+  const PangoAttrClass *klass;
+  guint start_index;
+  guint end_index;
+} PangoAttribute;
 typedef struct
 {
  int x;

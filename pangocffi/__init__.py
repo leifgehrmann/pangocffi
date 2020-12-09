@@ -35,3 +35,4 @@ from .glyph_item_iter import GlyphItemIter  # noqa
 from .layout_run import LayoutRun  # noqa
 from .layout_iter import LayoutIter  # noqa
 from .layout import Layout  # noqa
+from .attributes import Attribute  # noqa
