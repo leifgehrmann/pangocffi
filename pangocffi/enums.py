@@ -239,20 +239,4 @@ class Underline(Enum):
     mispelling; in some cases a contrasting color may
     automatically be used. This type of underlining is available
     since Pango 1.4."""
-    SINGLE_LINE = pango.PANGO_UNDERLINE_SINGLE_LINE
-    """
-    Like ``PANGO_UNDERLINE_SINGLE``, but drawn continuously
-    across multiple runs.
-    This type of underlining is available since Pango 1.46.
-    """
-    DOUBLE_LINE = pango.PANGO_UNDERLINE_DOUBLE_LINE
-    """
-    Like ``PANGO_UNDERLINE_DOUBLE`` , but drawn continuously
-    across multiple runs.
-    This type of underlining is available since Pango 1.46.
-    """
-    ERROR_LINE = pango.PANGO_UNDERLINE_ERROR_LINE
-    """
-    Like PANGO_UNDERLINE_ERROR , but drawn continuously across multiple runs.
-    This type of underlining is available since Pango 1.46.
-    """
+
