@@ -239,4 +239,3 @@ class Underline(Enum):
     mispelling; in some cases a contrasting color may
     automatically be used. This type of underlining is available
     since Pango 1.4."""
-
