@@ -729,6 +729,7 @@ class Attribute:
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
+
     @classmethod
     def from_background_alpha(
         cls,
@@ -754,6 +755,7 @@ class Attribute:
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
+
 
 class Language:
     def __init__(self) -> None:

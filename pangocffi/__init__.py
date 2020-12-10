@@ -36,4 +36,4 @@ from .layout_run import LayoutRun  # noqa
 from .layout_iter import LayoutIter  # noqa
 from .layout import Layout  # noqa
 from .attributes import Attribute  # noqa
-from .color import Color
+from .color import Color # noqa
