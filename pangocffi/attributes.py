@@ -1,10 +1,16 @@
-from . import (FontDescription, Stretch, Style, Underline, Variant, Weight,
-               ffi, pango)
+from . import FontDescription, Underline, ffi, pango
+from .enums import Gravity, GravityHint, Stretch, Style, Variant, Weight
+from .rectangle import Rectangle
 
 
 class Attribute:
     """
-    The :class:`Attributes` — Font and other attributes for annotating text
+    The :class:`Attributes` — Font and other attributes for annotating text.
+    Attributed text is used in a number of places in Pango.
+    It is used as the input to the itemization process and also
+    when creating a PangoLayout. The data types and functions in
+    this section are used to represent and manipulate sets of
+    attributes applied to a portion of text.
     """
 
     def _init_pointer(self, pointer: ffi.CData):
@@ -472,6 +478,282 @@ class Attribute:
         temp.end_index = end_index
         return temp
 
+    @classmethod
+    def from_shape(
+        cls,
+        ink_rect: Rectangle,
+        logical_rectangle: Rectangle,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new shape attribute. A shape is used to impose
+        a particular ink and logical rectangle on the result of
+        shaping a particular glyph. This might be used, for
+        instance, for embedding a picture or a widget inside a
+        PangoLayout.
+
+        :param ink_rect:
+            ink rectangle to assign to each character
+        :param logical_rectangle:
+            logical rectangle to assign to each character
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        temp = cls.from_pointer(
+            pango.pango_attr_shape_new(
+                ink_rect.get_pointer(), logical_rectangle.get_pointer()
+            ),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+
+    # TODO: pango_attr_shape_new_with_data with data?
+    @classmethod
+    def from_scale(
+        cls,
+        scale_factor: int,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new font size scale attribute.
+        The base font for the affected text will
+        have its size multiplied by ``scale_factor``.
+
+        :param scale_factor:
+            factor to scale the font
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        scale_factor = ffi.cast("double", scale_factor)
+        temp = cls.from_pointer(
+            pango.pango_attr_scale_new(scale_factor),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+
+    @classmethod
+    def from_rise(
+        cls,
+        rise: int,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new baseline displacement attribute.
+
+        :param rise:
+            the amount that the text should be displaced vertically,
+            in Pango units. Positive values displace the text
+            upwards.
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        rise = ffi.cast("int", rise)
+        temp = cls.from_pointer(
+            pango.pango_attr_rise_new(rise),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+
+    @classmethod
+    def from_letter_spacing_new(
+        cls,
+        letter_spacing: str,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new letter-spacing attribute.
+
+        :param letter_spacing:
+            amount of extra space to add between graphemes
+            of the text, in Pango units.
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        letter_spacing = ffi.cast("int", letter_spacing)
+        temp = cls.from_pointer(
+            pango.pango_attr_letter_spacing_new(letter_spacing),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+
+    @classmethod
+    def from_fallback(
+        cls,
+        enable_fallback: bool,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new font fallback attribute.
+
+        If fallback is disabled, characters will only be used
+        from the closest matching font on the system.
+        No fallback will be done to other fonts on the system
+        that might contain the characters in the text.
+
+        :param enable_fallback:
+            True if we should fall back on other fonts for
+            characters the active font is missing.
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        enable_fallback = ffi.cast("gboolean", enable_fallback)
+        temp = cls.from_pointer(
+            pango.pango_attr_fallback_new(enable_fallback),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+
+    @classmethod
+    def from_gravity(
+        cls,
+        gravity: Gravity,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new gravity attribute.
+
+        :param gravity:
+            the gravity value; should not be :class:`PANGO_GRAVITY_AUTO`.
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        temp = cls.from_pointer(
+            pango.pango_attr_gravity_new(gravity.value()),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+
+    @classmethod
+    def from_gravity_hints(
+        cls,
+        hint: GravityHint,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new gravity hint attribute.
+
+        :param hint:
+            the gravity hint value from :class:`GravityHint`
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        temp = cls.from_pointer(
+            pango.pango_attr_gravity_hint_new(hint.value()),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+
+    @classmethod
+    def from_font_features(
+        cls,
+        features: str,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new font features tag attribute.
+
+        :param features:
+            a string with OpenType font features, in CSS syntax
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        features = ffi.new("char[]", features.encode("utf8"))
+        temp = cls.from_pointer(
+            pango.pango_attr_font_features_new(features),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+
+    @classmethod
+    def from_foreground_alpha(
+        cls,
+        alpha: int,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new foreground alpha attribute.
+
+        :param alpha:
+            the alpha value, between 1 and 65536
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        alpha = ffi.cast("guint16", alpha)
+        temp = cls.from_pointer(
+            pango.pango_attr_foreground_alpha_new(alpha),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
+    @classmethod
+    def from_background_alpha(
+        cls,
+        alpha: int,
+        start_index: int = 0,
+        end_index: int = 1,
+    ) -> "Attribute":
+        """
+        Create a new background alpha attribute.
+
+        :param alpha:
+            the alpha value, between 1 and 65536
+        :param start_index:
+            the start index of the range. Should be >=0.
+        :param end_index:
+            end index of the range. The character at this
+            index is not included in the range.
+        """
+        alpha = ffi.cast("guint16", alpha)
+        temp = cls.from_pointer(
+            pango.pango_attr_background_alpha_new(alpha),
+        )
+        temp.start_index = start_index
+        temp.end_index = end_index
+        return temp
 
 class Language:
     def __init__(self) -> None:
