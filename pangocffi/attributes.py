@@ -84,17 +84,17 @@ class Attribute:
         end = ffi.cast("guint", end_index)
         self._pointer.start_index = end
 
-    @classmethod
-    def from_language(
-        cls, language, start_index: int = 0, end_index: int = 1
-    ) -> "Attribute":
-        """
-        API not implemented
-        """
-        temp = cls.from_pointer(pango.pango_attr_language_new(language))
-        temp.start_index = start_index
-        temp.end_index = end_index
-        return temp
+    # @classmethod
+    # def from_language(
+    #    cls, language, start_index: int = 0, end_index: int = 1
+    # ) -> "Attribute":
+    #    """
+    #    API not implemented
+    #    """
+    #    temp = cls.from_pointer(pango.pango_attr_language_new(language))
+    #    temp.start_index = start_index
+    #    temp.end_index = end_index
+    #    return temp
 
     @classmethod
     def from_family(
@@ -111,6 +111,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character
             at this index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(pango.pango_attr_family_new(family))
         temp.start_index = start_index
@@ -131,6 +133,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at
             this index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(pango.pango_attr_style_new(style.value))
         temp.start_index = start_index
@@ -151,6 +155,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at
             this index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(pango.pango_attr_variant_new(variant.value))
         temp.start_index = start_index
@@ -171,6 +177,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(pango.pango_attr_stretch_new(stretch.value))
         temp.start_index = start_index
@@ -191,6 +199,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(pango.pango_attr_weight_new(weight.value))
         temp.start_index = start_index
@@ -211,6 +221,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(pango.pango_attr_size_new(size))
         temp.start_index = start_index
@@ -231,6 +243,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this index
             is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(
             pango.pango_attr_size_new_absolute(
@@ -260,6 +274,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this index
             is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(
             pango.pango_attr_font_desc_new(
@@ -293,6 +309,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
@@ -331,6 +349,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
@@ -360,6 +380,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this index
             is not included in the range.
+        :return:
+            the Attribute.
         """
         strikethrough = ffi.cast("gboolean", strikethrough)
         temp = cls.from_pointer(
@@ -396,6 +418,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
@@ -428,6 +452,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(
             pango.pango_attr_underline_new(
@@ -463,6 +489,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
@@ -502,6 +530,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(
             pango.pango_attr_shape_new(
@@ -532,6 +562,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         scale_factor = ffi.cast("double", scale_factor)
         temp = cls.from_pointer(
@@ -560,6 +592,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         rise = ffi.cast("int", rise)
         temp = cls.from_pointer(
@@ -587,6 +621,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         letter_spacing = ffi.cast("int", letter_spacing)
         temp = cls.from_pointer(
@@ -619,6 +655,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         enable_fallback = ffi.cast("gboolean", enable_fallback)
         temp = cls.from_pointer(
@@ -645,6 +683,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(
             pango.pango_attr_gravity_new(gravity.value()),
@@ -670,6 +710,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         temp = cls.from_pointer(
             pango.pango_attr_gravity_hint_new(hint.value()),
@@ -695,6 +737,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         features = ffi.new("char[]", features.encode("utf8"))
         temp = cls.from_pointer(
@@ -721,6 +765,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         alpha = ffi.cast("guint16", alpha)
         temp = cls.from_pointer(
@@ -747,6 +793,8 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this
             index is not included in the range.
+        :return:
+            the Attribute.
         """
         alpha = ffi.cast("guint16", alpha)
         temp = cls.from_pointer(
@@ -755,6 +803,157 @@ class Attribute:
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
+
+    def copy(self) -> "Attribute":
+        """
+        Make a copy of an attribute.
+
+        :return:
+            the Attribute.
+        """
+        return Attribute.from_pointer(pango.pango_attribute_copy(self._pointer))
+
+    def __copy__(self) -> "Attribute":
+        return self.copy()
+
+    def __deepcopy__(self) -> "Attribute":
+        return self.copy()
+
+
+class AttrList:
+    """
+    The :class:`AttrList` represents a list of attributes(:class:`Attribute`)
+    that apply to a section of text. The attributes are, in general, allowed
+    to overlap in an arbitrary fashion, however, if the attributes are
+    manipulated only through :func:`AttrList.change()`, the overlap between
+    properties will meet stricter criteria.
+
+    In general, you should not use a single :class:`AttrList` for more than
+    one paragraph of text due to internal structures.
+    """
+
+    def __init__(self) -> None:
+        self._init_pointer(pango.pango_attr_list_new())
+
+    def _init_pointer(self, pointer: ffi.CData):
+        self._pointer = ffi.gc(pointer, pango.pango_attr_list_unref)
+
+    def get_pointer(self) -> ffi.CData:
+        """
+        Returns the pointer to the AttrList
+
+        :return:
+            the pointer to the AttrList.
+        """
+        return self._pointer
+
+    @classmethod
+    def from_pointer(cls, pointer: ffi.CData) -> "AttrList":
+        """
+        Instantiates a :class:`AttrList` from a pointer.
+
+        :return:
+            the AttrList.
+        """
+        if pointer == ffi.NULL:
+            raise ValueError("Null pointer")
+        self = object.__new__(cls)
+        cls._init_pointer(self, pointer)
+        return self
+
+    def ref(self) -> None:
+        """
+        Increase the reference count of the given attribute list by one.
+        """
+        self._pointer = pango.pango_attr_list_ref(self._pointer)
+
+    def unref(self) -> None:
+        """
+        Decrease the reference count of the given attribute list by one.
+        If the result is zero, free the attribute list and the attributes
+        it contains.
+        """
+        pango.pango_attr_list_unref(self._pointer)
+
+    def copy(self) -> "AttrList":
+        """
+        Copy :class:`AttrList` and return an identical new.
+        """
+        return AttrList.from_pointer(pango.pango_attr_list_copy(self._pointer))
+
+    def __copy__(self) -> "AttrList":
+        return self.copy()
+
+    def __deepcopy__(self) -> "AttrList":
+        return self.copy()
+
+    def insert(self, attr: Attribute) -> None:
+        """
+        Insert the given attribute into the PangoAttrList. It will be inserted
+        after all other attributes with a matching ``start_index``.
+
+        :param attr:
+            The :class:`Attribute` to insert.
+        """
+        pango.pango_attr_list_insert(self._pointer, attr._pointer)
+
+    def insert_before(self, attr: Attribute) -> None:
+        """
+        Insert the given attribute into the PangoAttrList. It will be inserted
+        before all other attributes with a matching ``start_index``.
+
+        :param attr:
+            The :class:`Attribute` to insert.
+        """
+        pango.pango_attr_list_insert_before(self._pointer, attr._pointer)
+
+    def change(self, attr: Attribute) -> None:
+        """
+        Insert the given attribute into the :class:`AttrList`. It will replace
+        any attributes of the same type on that segment and be merged with any
+        adjoining attributes that are identical.
+
+        This function is slower than :py:meth:`AttrList.insert` for creating
+        an attribute list in order (potentially much slower for large lists).
+        However, :py:meth:`AttrList.insert` is not suitable for continually
+        changing a set of attributes since it never removes or combines existing
+        attributes.
+
+        :param attr:
+            The :class:`Attribute` to insert.
+        """
+        pango.pango_attr_list_change(self._pointer, attr._pointer)
+
+    def splice(self, attr_list: "AttrList", pos: int, length: int):
+        """This function opens up a hole in self , fills it in with attributes
+        from the left, and then merges other on top of the hole.
+        This operation is equivalent to stretching every attribute that applies
+        at position pos in list by an amount len , and then calling
+        :py:meth:`AttrList.change` with a copy of each attribute in other in
+        sequence (offset in position by pos ).
+
+        This operation proves useful for, for instance, inserting a pre-edit
+        string in the middle of an edit buffer.
+        :param attr_list: another :class:`AttrList`
+        :type attr_list: AttrList
+        :param pos: the position in ``self`` at which to insert other
+        :type pos: int
+        :param length:
+            the length of the spliced segment. (Note that this must be
+            specified since the attributes in other may only be present
+            at some subsection of this range)
+        :type length: int
+        """
+        leng = ffi.cast("gint", length)
+        pos = ffi.cast("gint", pos)
+        pango.pango_attr_list_splice(
+            self._pointer,
+            attr_list._pointer,
+            pos,
+            leng,
+        )
+    # TODO: pango_attr_list_filter (),pango_attr_list_equal ()
+    
 
 
 class Language:
