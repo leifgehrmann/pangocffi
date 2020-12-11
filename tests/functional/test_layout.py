@@ -6,6 +6,8 @@ from pangocffi import (
     ffi,
     EllipsizeMode,
     WrapMode,
+    Attribute,
+    AttrList
 )
 import unittest
 
@@ -106,3 +108,14 @@ class TestLayout(unittest.TestCase):
 
         layout.set_text('Hi from Pango')
         layout.set_markup('<span font="italic 30">Hi from Παν語</span>')
+
+    def test_set_attributes(self):
+        context = Context()
+        layout = Layout(context)
+
+        attr = Attribute.from_size(5,1,4)
+        attr_list = AttrList()
+        attr_list.insert(attr)
+
+        layout.set_attributes(attr_list)
+        layout.get_attributes()
