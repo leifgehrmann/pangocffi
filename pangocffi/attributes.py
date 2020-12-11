@@ -811,7 +811,9 @@ class Attribute:
         :return:
             the Attribute.
         """
-        return Attribute.from_pointer(pango.pango_attribute_copy(self._pointer))
+        return Attribute.from_pointer(
+            pango.pango_attribute_copy(self._pointer),
+        )
 
     def __copy__(self) -> "Attribute":
         return self.copy()
@@ -916,8 +918,8 @@ class AttrList:
         This function is slower than :py:meth:`AttrList.insert` for creating
         an attribute list in order (potentially much slower for large lists).
         However, :py:meth:`AttrList.insert` is not suitable for continually
-        changing a set of attributes since it never removes or combines existing
-        attributes.
+        changing a set of attributes since it never removes or combines
+        existing attributes.
 
         :param attr:
             The :class:`Attribute` to insert.
@@ -952,8 +954,8 @@ class AttrList:
             pos,
             leng,
         )
+
     # TODO: pango_attr_list_filter (),pango_attr_list_equal ()
-    
 
 
 class Language:

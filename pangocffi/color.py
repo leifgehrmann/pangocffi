@@ -38,10 +38,13 @@ class Color:
         new_one = pango.pango_color_copy(self._pointer)
         pointer = ffi.gc(new_one, pango.pango_color_free)
         return Color.from_pointer(pointer)
+
     def __copy__(self) -> "Color":
         return self.copy()
+
     def __deepcopy__(self) -> "Color":
         return self.copy()
+
     @property
     def red(self):
         return self._red

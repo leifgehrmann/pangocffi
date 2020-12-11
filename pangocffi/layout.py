@@ -5,6 +5,7 @@ from pangocffi import LayoutIter
 from typing import Tuple, Optional
 from .attributes import AttrList
 
+
 class Layout(object):
     """
     A Pango :class:`Layout` represents an entire paragraph of text. It is
@@ -29,7 +30,7 @@ class Layout(object):
         self._pointer = ffi.gc(pointer, gobject.g_object_unref)
 
     @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> 'Layout':
+    def from_pointer(cls, pointer: ffi.CData) -> "Layout":
         """
         Instantiates a :class:`Layout` from a pointer.
 
@@ -37,7 +38,7 @@ class Layout(object):
             the layout.
         """
         if pointer == ffi.NULL:
-            raise ValueError('Null pointer')
+            raise ValueError("Null pointer")
         self = object.__new__(cls)
         cls._init_pointer(self, pointer)
         return self
@@ -59,7 +60,7 @@ class Layout(object):
             the :class:`Context` for the layout.
         """
         return Context.from_pointer(
-            pango.pango_layout_get_context(self._pointer)
+            pango.pango_layout_get_context(self._pointer),
         )
 
     def set_text(self, text: str) -> None:
@@ -74,7 +75,7 @@ class Layout(object):
         :param text:
             a valid UTF-8 string
         """
-        text_pointer = ffi.new('char[]', text.encode('utf8'))
+        text_pointer = ffi.new("char[]", text.encode("utf8"))
         pango.pango_layout_set_text(self._pointer, text_pointer, -1)
 
     def get_text(self) -> str:
@@ -95,7 +96,7 @@ class Layout(object):
         :param markup:
             marked-up text
         """
-        markup_pointer = ffi.new('char[]', markup.encode('utf8'))
+        markup_pointer = ffi.new("char[]", markup.encode("utf8"))
         pango.pango_layout_set_markup(self._pointer, markup_pointer, -1)
 
     def set_font_description(self, desc: Optional[FontDescription]) -> None:
@@ -113,7 +114,7 @@ class Layout(object):
         else:
             pango.pango_layout_set_font_description(
                 self._pointer,
-                desc.get_pointer()
+                desc.get_pointer(),
             )
 
     def get_font_description(self) -> Optional[FontDescription]:
@@ -288,9 +289,7 @@ class Layout(object):
         ink_rect = Rectangle()
         logical_rect = Rectangle()
         pango.pango_layout_get_extents(
-            self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            self._pointer, ink_rect.get_pointer(), logical_rect.get_pointer()
         )
         return ink_rect, logical_rect
 
@@ -307,7 +306,7 @@ class Layout(object):
         pango.pango_layout_get_size(
             self._pointer,
             width_pointer,
-            height_pointer
+            height_pointer,
         )
         width = width_pointer[0]
         height = height_pointer[0]
@@ -340,16 +339,20 @@ class Layout(object):
         """
         layout_iterator_pointer = pango.pango_layout_get_iter(self._pointer)
         return LayoutIter.from_pointer(layout_iterator_pointer)
-    def set_attributes(self,attrs:AttrList) -> None:
+
+    def set_attributes(self, attrs: AttrList) -> None:
         """
         Sets the text attributes for a layout object.
 
         :param attrs: a :class:`AttrList`
         :type attrs: AttrList
         """
-        pango.pango_layout_set_attributes (self._pointer,attrs._pointer)
+        pango.pango_layout_set_attributes(self._pointer, attrs._pointer)
+
     def get_attributes(self) -> None:
         """
         Gets the attribute list for the layout, if any.
         """
-        return AttrList.from_pointer(pango.pango_layout_get_attributes(self._pointer))
+        return AttrList.from_pointer(
+            pango.pango_layout_get_attributes(self._pointer),
+        )
