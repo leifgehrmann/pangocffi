@@ -115,7 +115,7 @@ class TestLayout(unittest.TestCase):
         layout.set_text("Working?")
         attr = Attribute.from_size(5,1,4)
         attr_list = AttrList()
-        
+        attr_list.ref()
         attr_list.insert(attr)
         attr_list.ref()
         layout.set_attributes(attr_list)
