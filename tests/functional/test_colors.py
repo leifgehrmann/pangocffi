@@ -1,7 +1,7 @@
 import copy
 import unittest
 
-from pangocffi import Color
+from pangocffi import Color, ffi
 
 
 class TestLayout(unittest.TestCase):
@@ -29,3 +29,12 @@ class TestLayout(unittest.TestCase):
         b = Color(0, 0, 0)
         b.parse_color("#123")
         assert b.to_string() == "#111122223333"
+
+    def test_context_returns_null_from_null_pointer(self):
+        with self.assertRaises(ValueError):
+            Color.from_pointer(ffi.NULL)
+
+    def test_equal(self):
+        a = Color(0, 0, 0)
+        with self.assertRaises(NotImplementedError):
+            a == 1

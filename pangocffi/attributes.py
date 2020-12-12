@@ -1051,8 +1051,3 @@ class AttrList:
         )
 
     # TODO: pango_attr_list_filter (),pango_attr_list_equal ()
-
-
-class Language:
-    def __init__(self) -> None:
-        pass
