@@ -2,7 +2,7 @@ import copy
 import warnings
 import unittest
 
-from pangocffi import AttrList
+from pangocffi import AttrList, ffi
 from pangocffi.attributes import Attribute
 from pangocffi.enums import Stretch
 
@@ -12,6 +12,10 @@ class TestLayout(unittest.TestCase):
         a = AttrList()
         a.get_pointer()
 
+    def test_attr_list_returns_null_from_null_pointer(self):
+        with self.assertRaises(ValueError):
+            Attribute.from_pointer(ffi.NULL)
+
     def test_from_pointer(self):
         a = AttrList()
         a.copy()
@@ -19,7 +23,13 @@ class TestLayout(unittest.TestCase):
         try:
             assert a == b
         except AttributeError:
-            warnings.warn("AttrList can't be compared. Pango version more that 1.46.0 is required.")
+            warnings.warn(
+                (
+                    "AttrList can't be compared."
+                    "Pango version more that 1.46.0 is required."
+                )
+            )
+
     def test_ref_and_unref(self):
         a = AttrList()
         a._ref()
@@ -31,12 +41,22 @@ class TestLayout(unittest.TestCase):
         try:
             assert a == b
         except AttributeError:
-            warnings.warn("AttrList can't be compared. Pango version more that 1.46.0 is required.")
+            warnings.warn(
+                (
+                    "AttrList can't be compared."
+                    "Pango version more that 1.46.0 is required."
+                )
+            )
         c = copy.deepcopy(a)
         try:
             assert a == c
         except AttributeError:
-            warnings.warn("AttrList can't be compared. Pango version more that 1.46.0 is required.")
+            warnings.warn(
+                (
+                    "AttrList can't be compared."
+                    "Pango version more that 1.46.0 is required."
+                )
+            )
 
     def test_equal(self):
         a = AttrList()
@@ -44,7 +64,12 @@ class TestLayout(unittest.TestCase):
         try:
             assert a == b
         except AttributeError:
-            warnings.warn("AttrList can't be compared. Pango version more that 1.46.0 is required.")
+            warnings.warn(
+                (
+                    "AttrList can't be compared."
+                    "Pango version more that 1.46.0 is required."
+                )
+            )
         with self.assertRaises(NotImplementedError):
             a == 2
 
