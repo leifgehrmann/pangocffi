@@ -1,4 +1,5 @@
 import copy
+import warnings
 import unittest
 
 from pangocffi import AttrList
@@ -15,8 +16,10 @@ class TestLayout(unittest.TestCase):
         a = AttrList()
         a.copy()
         b = AttrList.from_pointer(a.get_pointer())
-        assert a == b
-
+        try:
+            assert a == b
+        except AttributeError:
+            warnings.warn("AttrList can't be compared. Pango version more that 1.46.0 is required.")
     def test_ref_and_unref(self):
         a = AttrList()
         a._ref()
@@ -25,14 +28,23 @@ class TestLayout(unittest.TestCase):
     def test_copy(self):
         a = AttrList()
         b = copy.copy(a)
-        assert a == b
+        try:
+            assert a == b
+        except AttributeError:
+            warnings.warn("AttrList can't be compared. Pango version more that 1.46.0 is required.")
         c = copy.deepcopy(a)
-        assert a == c
+        try:
+            assert a == c
+        except AttributeError:
+            warnings.warn("AttrList can't be compared. Pango version more that 1.46.0 is required.")
 
     def test_equal(self):
         a = AttrList()
         b = a.copy()
-        assert a == b
+        try:
+            assert a == b
+        except AttributeError:
+            warnings.warn("AttrList can't be compared. Pango version more that 1.46.0 is required.")
         with self.assertRaises(NotImplementedError):
             a == 2
 
