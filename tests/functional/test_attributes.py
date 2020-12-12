@@ -1,8 +1,9 @@
 import unittest
-
-from pangocffi import Attribute, ffi, FontDescription, Underline
-from pangocffi.enums import Stretch, Style, Variant, Weight
+import copy
+from pangocffi import ffi, FontDescription, Underline, GravityHint
+from pangocffi.enums import Stretch, Style, Variant, Weight, Gravity
 from pangocffi.rectangle import Rectangle
+from pangocffi.attributes import Attribute
 
 
 class TestLayout(unittest.TestCase):
@@ -205,3 +206,61 @@ class TestLayout(unittest.TestCase):
         assert a.start_index == 5
         assert a.end_index == 9
         assert a == b
+
+    def test_from_letter_spacing(self):
+        a = Attribute.from_letter_spacing(3, 5, 9)
+        b = Attribute.from_letter_spacing(3, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_fallback(self):
+        a = Attribute.from_fallback(True, 5, 9)
+        b = Attribute.from_fallback(True, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_gravity(self):
+        a = Attribute.from_gravity(Gravity.EAST, 5, 9)
+        b = Attribute.from_gravity(Gravity.EAST, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_gravity_hints(self):
+        a = Attribute.from_gravity_hints(GravityHint.STRONG, 5, 9)
+        b = Attribute.from_gravity_hints(GravityHint.STRONG, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_font_features(self):
+        a = Attribute.from_font_features("liga=0", 5, 9)
+        b = Attribute.from_font_features("liga=0", 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_foreground_alpha(self):
+        a = Attribute.from_foreground_alpha(56, 5, 9)
+        b = Attribute.from_foreground_alpha(56, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_background_alpha(self):
+        a = Attribute.from_background_alpha(56, 5, 9)
+        b = Attribute.from_background_alpha(56, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_copy(self):
+        a = Attribute.from_background_alpha(56, 5, 9)
+        b = copy.copy(a)
+        assert a == b
+        c = copy.deepcopy(a)
+        assert a == c
+        with self.assertRaises(NotImplementedError):
+            a == 6

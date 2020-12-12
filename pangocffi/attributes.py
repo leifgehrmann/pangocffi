@@ -12,6 +12,7 @@ class Attribute:
     this section are used to represent and manipulate sets of
     attributes applied to a portion of text.
     """
+
     @classmethod
     def _init_pointer(cls, pointer: ffi.CData) -> "Attribute":
         self = object.__new__(cls)
@@ -49,7 +50,7 @@ class Attribute:
                     other.get_pointer(),
                 )
             )
-        return NotImplemented
+        raise NotImplementedError
 
     @property
     def start_index(self):
@@ -87,7 +88,7 @@ class Attribute:
             When ``end_index`` isn't a :class:`int`.
         """
         assert isinstance(end_index, int), "end_index isn't a int"
-        assert end_index >= 0
+        # assert end_index >= 0
         self._end_index = end_index
         end = ffi.cast("guint", end_index)
         self._pointer.start_index = end
@@ -770,7 +771,7 @@ class Attribute:
         """
         assert isinstance(gravity, Gravity), "gravity isn't a Gravity"
         temp = cls._init_pointer(
-            pango.pango_attr_gravity_new(gravity.value()),
+            pango.pango_attr_gravity_new(gravity.value),
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -800,7 +801,7 @@ class Attribute:
         """
         assert isinstance(hint, GravityHint), "hint isn't a GravityHint"
         temp = cls._init_pointer(
-            pango.pango_attr_gravity_hint_new(hint.value()),
+            pango.pango_attr_gravity_hint_new(hint.value),
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -913,7 +914,7 @@ class Attribute:
     def __copy__(self) -> "Attribute":
         return self.copy()
 
-    def __deepcopy__(self) -> "Attribute":
+    def __deepcopy__(self, memo) -> "Attribute":
         return self.copy()
 
 
@@ -955,16 +956,16 @@ class AttrList:
         if pointer == ffi.NULL:
             raise ValueError("Null pointer")
         self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
+        self._pointer = pointer
         return self
 
-    def ref(self) -> None:
+    def _ref(self) -> None:
         """
         Increase the reference count of the given attribute list by one.
         """
         self._pointer = pango.pango_attr_list_ref(self._pointer)
 
-    def unref(self) -> None:
+    def _unref(self) -> None:
         """
         Decrease the reference count of the given attribute list by one.
         If the result is zero, free the attribute list and the attributes
@@ -981,7 +982,7 @@ class AttrList:
     def __copy__(self) -> "AttrList":
         return self.copy()
 
-    def __deepcopy__(self) -> "AttrList":
+    def __deepcopy__(self, memo) -> "AttrList":
         return self.copy()
 
     def insert(self, attr: Attribute) -> None:
@@ -991,7 +992,11 @@ class AttrList:
 
         :param attr:
             The :class:`Attribute` to insert.
+        :raises: AssetionError
+            When ``attr`` isn't a :class:`Attribute`.
         """
+        assert isinstance(attr, Attribute), "attr isn't a Attribute"
+        self._ref()
         pango.pango_attr_list_insert(self._pointer, attr._pointer)
 
     def insert_before(self, attr: Attribute) -> None:
@@ -1001,7 +1006,11 @@ class AttrList:
 
         :param attr:
             The :class:`Attribute` to insert.
+        :raises: AssetionError
+            When ``attr`` isn't a :class:`Attribute`.
         """
+        assert isinstance(attr, Attribute), "attr isn't a Attribute"
+        self._ref()
         pango.pango_attr_list_insert_before(self._pointer, attr._pointer)
 
     def change(self, attr: Attribute) -> None:
@@ -1018,11 +1027,15 @@ class AttrList:
 
         :param attr:
             The :class:`Attribute` to insert.
+        :raises: AssetionError
+            When ``attr`` isn't a :class:`Attribute`.
         """
+        assert isinstance(attr, Attribute), "attr isn't a Attribute"
+        self._ref()
         pango.pango_attr_list_change(self._pointer, attr._pointer)
 
     def splice(self, attr_list: "AttrList", pos: int, length: int):
-        """This function opens up a hole in self , fills it in with attributes
+        """This function opens up a hole in ``self``, fills it in with attributes
         from the left, and then merges other on top of the hole.
         This operation is equivalent to stretching every attribute that applies
         at position pos in list by an amount len , and then calling
@@ -1042,7 +1055,14 @@ class AttrList:
             specified since the attributes in other may only be present
             at some subsection of this range)
         :type length: int
+        :raises: AssetionError
+            When ``attr_list`` isn't a :class:`AttrList`.
+            When ``pos`` isn't a :class:`int`
+            When ``length`` isn't a :class:`int`
         """
+        assert isinstance(attr_list, AttrList), "attr_list isn't a AttrList"
+        assert isinstance(pos, int), "pos isn't a int"
+        assert isinstance(length, int), "pos isn't a int"
         leng = ffi.cast("gint", length)
         pos = ffi.cast("gint", pos)
         pango.pango_attr_list_splice(
@@ -1052,4 +1072,14 @@ class AttrList:
             leng,
         )
 
-    # TODO: pango_attr_list_filter (),pango_attr_list_equal ()
+    def __eq__(self, other: "AttrList") -> bool:
+        if isinstance(other, AttrList):
+            return bool(
+                pango.pango_attr_list_equal(
+                    self.get_pointer(),
+                    other.get_pointer(),
+                )
+            )
+        raise NotImplementedError
+
+    # TODO: pango_attr_list_filter ()

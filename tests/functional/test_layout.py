@@ -7,7 +7,7 @@ from pangocffi import (
     EllipsizeMode,
     WrapMode,
     Attribute,
-    AttrList
+    AttrList,
 )
 import unittest
 
@@ -30,7 +30,7 @@ class TestLayout(unittest.TestCase):
     def test_layout_not_implemented_equality(self):
         context = Context()
         layout = Layout(context)
-        assert ('not an object' != layout)
+        assert "not an object" != layout
 
     def test_layout_returns_null_from_null_pointer(self):
         with self.assertRaises(ValueError):
@@ -46,7 +46,7 @@ class TestLayout(unittest.TestCase):
 
         # Creating the font description
         desc = FontDescription()
-        desc.set_family('sans-serif')
+        desc.set_family("sans-serif")
         layout.set_font_description(desc)
 
         # Verifying the font description was set
@@ -54,7 +54,7 @@ class TestLayout(unittest.TestCase):
         assert same_desc.get_family() == desc.get_family()
 
         # Changing the font description
-        desc.set_family('serif')
+        desc.set_family("serif")
         assert same_desc.get_family() != desc.get_family()
 
         # Resetting the font description
@@ -106,7 +106,7 @@ class TestLayout(unittest.TestCase):
 
         layout.set_width(300)
 
-        layout.set_text('Hi from Pango')
+        layout.set_text("Hi from Pango")
         layout.set_markup('<span font="italic 30">Hi from Παν語</span>')
 
     def test_set_attributes(self):
@@ -115,8 +115,8 @@ class TestLayout(unittest.TestCase):
         layout.set_text("Working?")
         attr = Attribute.from_size(5, 1, 4)
         attr_list = AttrList()
-        attr_list.ref()
+
         attr_list.insert(attr)
-        attr_list.ref()
+
         layout.set_attributes(attr_list)
         layout.get_attributes()
