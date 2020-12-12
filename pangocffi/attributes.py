@@ -27,7 +27,7 @@ class Attribute:
         if pointer == ffi.NULL:
             raise ValueError("Null pointer")
         self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
+        self._pointer = pointer
         return self
 
     def get_pointer(self) -> ffi.CData:
@@ -60,7 +60,10 @@ class Attribute:
 
         :param start_index:
             the start index of the range. Should be >=0.
+        :raises: AssetionError
+            When ``start_index`` isn't a :class:`int`.
         """
+        assert isinstance(start_index, int), "start_index isn't a int"
         assert start_index >= 0
         self._start_index = start_index
         start = ffi.cast("guint", start_index)
@@ -78,9 +81,12 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this index
             is not included in the range.
+        :raises: AssetionError
+            When ``end_index`` isn't a :class:`int`.
         """
+        assert isinstance(end_index, int), "end_index isn't a int"
         assert end_index >= 0
-        self._start_index = end_index
+        self._end_index = end_index
         end = ffi.cast("guint", end_index)
         self._pointer.start_index = end
 
@@ -114,6 +120,7 @@ class Attribute:
         :return:
             the Attribute.
         """
+        family = ffi.new("char[]", family.encode("utf-8"))
         temp = cls.from_pointer(pango.pango_attr_family_new(family))
         temp.start_index = start_index
         temp.end_index = end_index
@@ -135,7 +142,10 @@ class Attribute:
             this index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``style`` isn't a :class:`Style`.
         """
+        assert isinstance(style, Style), "style isn't a Style"
         temp = cls.from_pointer(pango.pango_attr_style_new(style.value))
         temp.start_index = start_index
         temp.end_index = end_index
@@ -157,7 +167,10 @@ class Attribute:
             this index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``variant`` isn't a :class:`Variant`.
         """
+        assert isinstance(variant, Variant), "variant isn't a Variant"
         temp = cls.from_pointer(pango.pango_attr_variant_new(variant.value))
         temp.start_index = start_index
         temp.end_index = end_index
@@ -179,7 +192,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``stretch`` isn't a :class:`Stretch`.
         """
+        assert isinstance(stretch, Stretch), "stretch isn't a Stretch"
         temp = cls.from_pointer(pango.pango_attr_stretch_new(stretch.value))
         temp.start_index = start_index
         temp.end_index = end_index
@@ -201,7 +217,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``weight`` isn't a :class:`Weight`.
         """
+        assert isinstance(weight, Weight), "weight isn't a Weight"
         temp = cls.from_pointer(pango.pango_attr_weight_new(weight.value))
         temp.start_index = start_index
         temp.end_index = end_index
@@ -223,7 +242,11 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``size`` isn't a :class:`int`.
         """
+        assert isinstance(size, int), "size isn't int"
+        size = ffi.cast("int", size)
         temp = cls.from_pointer(pango.pango_attr_size_new(size))
         temp.start_index = start_index
         temp.end_index = end_index
@@ -245,7 +268,11 @@ class Attribute:
             is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``absolute_size`` isn't a :class:`int`.
         """
+        assert isinstance(absolute_size, int), "absolute_size isn't int"
+        absolute_size = ffi.cast("int", absolute_size)
         temp = cls.from_pointer(
             pango.pango_attr_size_new_absolute(
                 absolute_size,
@@ -276,7 +303,12 @@ class Attribute:
             is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``font_desc`` isn't a :class:`FontDescription`.
         """
+        assert isinstance(
+            font_desc, FontDescription
+        ), "font_desc isn't a FontDescription"
         temp = cls.from_pointer(
             pango.pango_attr_font_desc_new(
                 font_desc._pointer,
@@ -311,7 +343,12 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``red`` or ``blue`` or ``green`` isn't a :class:`int`.
         """
+        assert isinstance(red, int), "red isn't a int"
+        assert isinstance(green, int), "green isn't a int"
+        assert isinstance(blue, int), "blue isn't a int"
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
@@ -351,7 +388,12 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``red`` or ``blue`` or ``green`` isn't a :class:`int`.
         """
+        assert isinstance(red, int), "red isn't a int"
+        assert isinstance(green, int), "green isn't a int"
+        assert isinstance(blue, int), "blue isn't a int"
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
@@ -382,7 +424,10 @@ class Attribute:
             is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``strikethrough`` isn't a :class:`bool`.
         """
+        assert isinstance(strikethrough, int), "strikethrough isn't a bool"
         strikethrough = ffi.cast("gboolean", strikethrough)
         temp = cls.from_pointer(
             pango.pango_attr_strikethrough_new(
@@ -420,7 +465,12 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``red`` or ``blue`` or ``green`` isn't a :class:`int`.
         """
+        assert isinstance(red, int), "red isn't a int"
+        assert isinstance(green, int), "green isn't a int"
+        assert isinstance(blue, int), "blue isn't a int"
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
@@ -454,7 +504,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``underline`` isn't a :class:`Underline`.
         """
+        assert isinstance(underline, Underline), "underline isn't a Underline"
         temp = cls.from_pointer(
             pango.pango_attr_underline_new(
                 underline,
@@ -491,7 +544,12 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``red`` or ``blue`` or ``green`` isn't a :class:`int`.
         """
+        assert isinstance(red, int), "red isn't a int"
+        assert isinstance(green, int), "green isn't a int"
+        assert isinstance(blue, int), "blue isn't a int"
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
@@ -532,7 +590,14 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``ink_rect`` or ``logical_rectangle`` isn't a
+            :class:`Rectangle`.
         """
+        assert isinstance(ink_rect, Rectangle), "ink_rect isn't a Rectangle"
+        assert isinstance(
+            logical_rectangle, Rectangle
+        ), "logical_rectangle isn't a Rectangle"
         temp = cls.from_pointer(
             pango.pango_attr_shape_new(
                 ink_rect.get_pointer(), logical_rectangle.get_pointer()
@@ -564,7 +629,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``scale_factor`` isn't a :class:`int`.
         """
+        assert isinstance(scale_factor, int), "scale_factor isn't a int"
         scale_factor = ffi.cast("double", scale_factor)
         temp = cls.from_pointer(
             pango.pango_attr_scale_new(scale_factor),
@@ -594,7 +662,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``rise`` isn't a :class:`int`.
         """
+        assert isinstance(rise, int), "rise isn't a int"
         rise = ffi.cast("int", rise)
         temp = cls.from_pointer(
             pango.pango_attr_rise_new(rise),
@@ -604,9 +675,9 @@ class Attribute:
         return temp
 
     @classmethod
-    def from_letter_spacing_new(
+    def from_letter_spacing(
         cls,
-        letter_spacing: str,
+        letter_spacing: int,
         start_index: int = 0,
         end_index: int = 1,
     ) -> "Attribute":
@@ -623,7 +694,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``letter_spacing`` isn't a :class:`int`.
         """
+        assert isinstance(letter_spacing, int), "rise isn't a int"
         letter_spacing = ffi.cast("int", letter_spacing)
         temp = cls.from_pointer(
             pango.pango_attr_letter_spacing_new(letter_spacing),
@@ -657,7 +731,11 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``enable_fallback`` isn't a :class:`bool`.
         """
+        assert isinstance(enable_fallback, bool),\
+            "enable_fallback isn't a bool"
         enable_fallback = ffi.cast("gboolean", enable_fallback)
         temp = cls.from_pointer(
             pango.pango_attr_fallback_new(enable_fallback),
@@ -685,7 +763,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``gravity`` isn't a :class:`Gravity`.
         """
+        assert isinstance(gravity, Gravity), "gravity isn't a Gravity"
         temp = cls.from_pointer(
             pango.pango_attr_gravity_new(gravity.value()),
         )
@@ -712,7 +793,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``hint`` isn't a :class:`GravityHint`.
         """
+        assert isinstance(hint, GravityHint), "hint isn't a GravityHint"
         temp = cls.from_pointer(
             pango.pango_attr_gravity_hint_new(hint.value()),
         )
@@ -739,7 +823,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``features`` isn't a :class:`str`.
         """
+        assert isinstance(features, str), "features isn't a str"
         features = ffi.new("char[]", features.encode("utf8"))
         temp = cls.from_pointer(
             pango.pango_attr_font_features_new(features),
@@ -767,7 +854,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``alpha`` isn't a :class:`int`.
         """
+        assert isinstance(alpha, int), "alpha isn't a int"
         alpha = ffi.cast("guint16", alpha)
         temp = cls.from_pointer(
             pango.pango_attr_foreground_alpha_new(alpha),
@@ -795,7 +885,10 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
+        :raises: AssetionError
+            When ``alpha`` isn't a :class:`int`.
         """
+        assert isinstance(alpha, int), "alpha isn't a int"
         alpha = ffi.cast("guint16", alpha)
         temp = cls.from_pointer(
             pango.pango_attr_background_alpha_new(alpha),
@@ -936,6 +1029,8 @@ class AttrList:
 
         This operation proves useful for, for instance, inserting a pre-edit
         string in the middle of an edit buffer.
+
+
         :param attr_list: another :class:`AttrList`
         :type attr_list: AttrList
         :param pos: the position in ``self`` at which to insert other

@@ -108,13 +108,12 @@ Text Attributes
 Font and other attributes for annotating text.
 
 Attribute
----------
-
+_________
 .. autoclass:: Attribute
 
-AttrList
---------
 
+AttrList
+________
 .. autoclass:: AttrList
 
 Tab Stops
