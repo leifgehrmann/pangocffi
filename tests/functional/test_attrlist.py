@@ -14,7 +14,7 @@ class TestLayout(unittest.TestCase):
 
     def test_attr_list_returns_null_from_null_pointer(self):
         with self.assertRaises(ValueError):
-            Attribute.from_pointer(ffi.NULL)
+            AttrList.from_pointer(ffi.NULL)
 
     def test_from_pointer(self):
         a = AttrList()
