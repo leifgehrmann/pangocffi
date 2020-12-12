@@ -1,6 +1,6 @@
 import unittest
 
-from pangocffi import Attribute, ffi
+from pangocffi import Attribute, ffi, FontDescription, Underline
 from pangocffi.enums import Stretch, Style, Variant, Weight
 from pangocffi.rectangle import Rectangle
 
@@ -110,4 +110,98 @@ class TestLayout(unittest.TestCase):
         b = Attribute.from_stretch(Stretch.SEMI_CONDENSED)
         assert a.start_index == 9
         assert a.end_index == 10
+        assert a == b
+
+    def test_from_weight(self):
+        a = Attribute.from_weight(Weight.BOOK, 9, 10)
+        b = Attribute.from_weight(Weight.BOOK, 9, 10)
+        assert a.start_index == 9
+        assert a.end_index == 10
+        assert a == b
+
+    def test_from_size(self):
+        a = Attribute.from_size(5, 9, 10)
+        b = Attribute.from_size(5, 9, 10)
+        assert a.start_index == 9
+        assert a.end_index == 10
+        assert a == b
+
+    def test_from_size_absolute(self):
+        a = Attribute.from_size_absolute(5, 9, 10)
+        b = Attribute.from_size_absolute(5, 9, 10)
+        assert a.start_index == 9
+        assert a.end_index == 10
+        assert a == b
+
+    def test_from_font_desc(self):
+        font_desc = FontDescription()
+        a = Attribute.from_font_desc(font_desc, 1, 10)
+        b = Attribute.from_font_desc(font_desc, 1, 10)
+        assert a.start_index == 1
+        assert a.end_index == 10
+        assert a == b
+
+    def test_from_foreground_color(self):
+        a = Attribute.from_foreground_color(5, 1, 10, 5, 6)
+        b = Attribute.from_foreground_color(5, 1, 10, 5, 6)
+        assert a.start_index == 5
+        assert a.end_index == 6
+        assert a == b
+
+    def test_from_background_color(self):
+        a = Attribute.from_background_color(5, 1, 10, 5, 6)
+        b = Attribute.from_background_color(5, 1, 10, 5, 6)
+        assert a.start_index == 5
+        assert a.end_index == 6
+        assert a == b
+
+    def test_from_strikethrough(self):
+        a = Attribute.from_strikethrough(True, 5, 6)
+        b = Attribute.from_strikethrough(True, 5, 6)
+        assert a.start_index == 5
+        assert a.end_index == 6
+        assert a == b
+
+    def test_from_strikethrough_color(self):
+        a = Attribute.from_strikethrough_color(1, 2, 3, 5, 6)
+        b = Attribute.from_strikethrough_color(1, 2, 3, 5, 6)
+        assert a.start_index == 5
+        assert a.end_index == 6
+        assert a == b
+
+    def test_from_underline(self):
+        a = Attribute.from_underline(Underline.DOUBLE, 5, 6)
+        b = Attribute.from_underline(Underline.DOUBLE, 5, 6)
+        assert a.start_index == 5
+        assert a.end_index == 6
+        assert a == b
+
+    def test_from_underline_color(self):
+        a = Attribute.from_underline_color(1, 2, 3, 5, 9)
+        b = Attribute.from_underline_color(1, 2, 3, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_shape(self):
+        d = Rectangle()
+        e = Rectangle()
+        a = Attribute.from_shape(d, e, 5, 9)
+        b = Attribute.from_shape(d, e, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_scale(self):
+        a = Attribute.from_scale(3, 5, 9)
+        b = Attribute.from_scale(3, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
+        assert a == b
+
+    def test_from_rise(self):
+        a = Attribute.from_rise(3, 5, 9)
+        b = Attribute.from_rise(3, 5, 9)
+        assert a.start_index == 5
+        assert a.end_index == 9
         assert a == b
