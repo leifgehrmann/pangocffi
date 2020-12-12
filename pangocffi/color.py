@@ -1,4 +1,4 @@
-from . import ffi, pango, glib
+from . import ffi, glib, pango
 
 
 class Color:
@@ -26,6 +26,9 @@ class Color:
             raise ValueError("Null pointer")
         self = object.__new__(cls)
         cls._init_pointer(self, pointer)
+        self.red = pointer.red
+        self.green = pointer.green
+        self.blue = pointer.blue
         return self
 
     def copy(self):
@@ -42,7 +45,7 @@ class Color:
     def __copy__(self) -> "Color":
         return self.copy()
 
-    def __deepcopy__(self) -> "Color":
+    def __deepcopy__(self, memo) -> "Color":
         return self.copy()
 
     @property
@@ -117,3 +120,15 @@ class Color:
             glib.g_free,
         )
         return ffi.string(string).decode("utf-8")
+
+    def __eq__(self, col: "Color") -> bool:
+        if isinstance(col, Color):
+            return (
+                self.red == col.red
+                and self.green == col.green
+                and self.red == self.red
+            )
+        raise NotImplementedError
+
+    def __repr__(self) -> str:
+        return f"<Color(red={self.red},blue={self.blue},green={self.green})>"
