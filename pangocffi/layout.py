@@ -350,7 +350,10 @@ class Layout(object):
         if attrs is None:
             pango.pango_layout_set_attributes(self._pointer, ffi.NULL)
         else:
-            pango.pango_layout_set_attributes(self._pointer, attrs.get_pointer())
+            pango.pango_layout_set_attributes(
+                self._pointer,
+                attrs.get_pointer()
+            )
 
     def get_attributes(self) -> AttrList:
         """

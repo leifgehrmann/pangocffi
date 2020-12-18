@@ -274,11 +274,11 @@ class Attribute:
         :raises: AssetionError
             When ``absolute_size`` isn't a :class:`int`.
         """
-        assert isinstance(absolute_size, int), "absolute_size isn't int"
-        absolute_size = ffi.cast("int", absolute_size)
+        assert isinstance(size, int), "size isn't int"
+        size = ffi.cast("int", size)
         temp = cls._init_pointer(
             pango.pango_attr_size_new_absolute(
-                absolute_size,
+                size,
             ),
         )
         temp.start_index = start_index
@@ -1069,7 +1069,7 @@ class AttrList:
             self._pointer,
             attr_list._pointer,
             pos,
-            leng,
+            length,
         )
 
     def __eq__(self, other: "AttrList") -> bool:
