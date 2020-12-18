@@ -71,7 +71,7 @@ class TestLayout(unittest.TestCase):
                 )
             )
         with self.assertRaises(NotImplementedError):
-            a == 2
+            assert a == 2
 
     def test_insert(self):
         a = AttrList()

@@ -21,9 +21,9 @@ class TestLayout(unittest.TestCase):
         b = Color(0, 0, 0)
         b.parse_color("#123")
         assert str(b) == "<Color(red=572657937,blue=0,green=13107)>"
-        b.red == 572657937
-        b.blue == 0
-        b.green == 13107
+        assert b.red == 572657937
+        assert b.blue == 0
+        assert b.green == 13107
 
     def test_to_string(self):
         b = Color(0, 0, 0)
@@ -37,4 +37,4 @@ class TestLayout(unittest.TestCase):
     def test_equal(self):
         a = Color(0, 0, 0)
         with self.assertRaises(NotImplementedError):
-            a == 1
+            assert a == 1

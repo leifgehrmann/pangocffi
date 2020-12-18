@@ -9,7 +9,6 @@ from pangocffi.attributes import Attribute
 class TestLayout(unittest.TestCase):
     def test_different_layout_equality(self):
         a = Attribute.from_size(4)
-        # del a
         b = Attribute.from_size(4)
         c = Attribute.from_family("aaaa")
         assert not c == b

@@ -340,16 +340,19 @@ class Layout(object):
         layout_iterator_pointer = pango.pango_layout_get_iter(self._pointer)
         return LayoutIter.from_pointer(layout_iterator_pointer)
 
-    def set_attributes(self, attrs: AttrList) -> None:
+    def set_attributes(self, attrs: Optional[AttrList]) -> None:
         """
         Sets the text attributes for a layout object.
 
         :param attrs: a :class:`AttrList`
         :type attrs: AttrList
         """
-        pango.pango_layout_set_attributes(self._pointer, attrs._pointer)
+        if attrs is None:
+            pango.pango_layout_set_attributes(self._pointer, ffi.NULL)
+        else:
+            pango.pango_layout_set_attributes(self._pointer, attrs.get_pointer())
 
-    def get_attributes(self) -> None:
+    def get_attributes(self) -> AttrList:
         """
         Gets the attribute list for the layout, if any.
         """

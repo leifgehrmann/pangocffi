@@ -63,7 +63,7 @@ class Attribute:
 
         :param start_index:
             the start index of the range. Should be >=0.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``start_index`` isn't a :class:`int`.
         """
         assert isinstance(start_index, int), "start_index isn't a int"
@@ -257,7 +257,7 @@ class Attribute:
 
     @classmethod
     def from_size_absolute(
-        cls, absolute_size: int, start_index: int = 0, end_index: int = 1
+        cls, size: int, start_index: int = 0, end_index: int = 1
     ):
         """
         Create a new font-size attribute in device units.
@@ -1062,8 +1062,8 @@ class AttrList:
         """
         assert isinstance(attr_list, AttrList), "attr_list isn't a AttrList"
         assert isinstance(pos, int), "pos isn't a int"
-        assert isinstance(length, int), "pos isn't a int"
-        leng = ffi.cast("gint", length)
+        assert isinstance(length, int), "length isn't a int"
+        length = ffi.cast("gint", length)
         pos = ffi.cast("gint", pos)
         pango.pango_attr_list_splice(
             self._pointer,
