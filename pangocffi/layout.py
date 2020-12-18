@@ -1,9 +1,8 @@
 from . import pango, gobject, ffi
-from . import Context, FontDescription
+from . import Context, FontDescription, AttrList
 from . import Alignment, Rectangle, EllipsizeMode, WrapMode
 from pangocffi import LayoutIter
 from typing import Tuple, Optional
-from .attributes import AttrList
 
 
 class Layout(object):
@@ -355,10 +354,11 @@ class Layout(object):
                 attrs.get_pointer()
             )
 
-    def get_attributes(self) -> AttrList:
+    def get_attributes(self) -> Optional[AttrList]:
         """
         Gets the attribute list for the layout, if any.
         """
-        return AttrList.from_pointer(
-            pango.pango_layout_get_attributes(self._pointer),
-        )
+        attrs_pointer = pango.pango_layout_get_attributes(self._pointer)
+        if attrs_pointer == ffi.NULL:
+            return None
+        return AttrList.from_pointer(attrs_pointer)

@@ -1,3 +1,5 @@
+const guint PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING = 0;
+const guint PANGO_ATTR_INDEX_TO_TEXT_END = 65535;
 typedef ... PangoAttrClass;
 typedef ... PangoAttrString;
 typedef ... PangoAttrLanguage;

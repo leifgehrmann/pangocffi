@@ -120,3 +120,7 @@ class TestLayout(unittest.TestCase):
 
         layout.set_attributes(attr_list)
         layout.get_attributes()
+
+        # Resetting the attributes
+        layout.set_attributes(None)
+        layout.get_attributes()

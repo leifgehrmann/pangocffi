@@ -13,6 +13,11 @@ class Attribute:
     attributes applied to a portion of text.
     """
 
+    def __init__(self):
+        self._pointer = None
+        self._start_index = None
+        self._end_index = None
+
     @classmethod
     def _init_pointer(cls, pointer: ffi.CData) -> "Attribute":
         self = object.__new__(cls)
@@ -67,7 +72,10 @@ class Attribute:
             When ``start_index`` isn't a :class:`int`.
         """
         assert isinstance(start_index, int), "start_index isn't a int"
-        assert start_index >= 0
+        assert start_index >= pango.PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING, \
+            "start_index is too low"
+        assert start_index < pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
+            "start_index is too high"
         self._start_index = start_index
         start = ffi.cast("guint", start_index)
         self._pointer.start_index = start
@@ -84,11 +92,12 @@ class Attribute:
         :param end_index:
             end index of the range. The character at this index
             is not included in the range.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``end_index`` isn't a :class:`int`.
         """
         assert isinstance(end_index, int), "end_index isn't a int"
-        # assert end_index >= 0
+        assert end_index <= pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
+            "end_index is too high"
         self._end_index = end_index
         end = ffi.cast("guint", end_index)
         self._pointer.start_index = end
@@ -145,7 +154,7 @@ class Attribute:
             this index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``style`` isn't a :class:`Style`.
         """
         assert isinstance(style, Style), "style isn't a Style"
@@ -170,7 +179,7 @@ class Attribute:
             this index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``variant`` isn't a :class:`Variant`.
         """
         assert isinstance(variant, Variant), "variant isn't a Variant"
@@ -195,7 +204,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``stretch`` isn't a :class:`Stretch`.
         """
         assert isinstance(stretch, Stretch), "stretch isn't a Stretch"
@@ -220,7 +229,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``weight`` isn't a :class:`Weight`.
         """
         assert isinstance(weight, Weight), "weight isn't a Weight"
@@ -245,7 +254,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``size`` isn't a :class:`int`.
         """
         assert isinstance(size, int), "size isn't int"
@@ -271,7 +280,7 @@ class Attribute:
             is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``absolute_size`` isn't a :class:`int`.
         """
         assert isinstance(size, int), "size isn't int"
@@ -306,7 +315,7 @@ class Attribute:
             is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``font_desc`` isn't a :class:`FontDescription`.
         """
         assert isinstance(
@@ -346,7 +355,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``red`` or ``blue`` or ``green`` isn't a :class:`int`.
         """
         assert isinstance(red, int), "red isn't a int"
@@ -391,7 +400,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``red`` or ``blue`` or ``green`` isn't a :class:`int`.
         """
         assert isinstance(red, int), "red isn't a int"
@@ -427,7 +436,7 @@ class Attribute:
             is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``strikethrough`` isn't a :class:`bool`.
         """
         assert isinstance(strikethrough, int), "strikethrough isn't a bool"
@@ -468,7 +477,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``red`` or ``blue`` or ``green`` isn't a :class:`int`.
         """
         assert isinstance(red, int), "red isn't a int"
@@ -507,7 +516,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``underline`` isn't a :class:`Underline`.
         """
         assert isinstance(underline, Underline), "underline isn't a Underline"
@@ -547,7 +556,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``red`` or ``blue`` or ``green`` isn't a :class:`int`.
         """
         assert isinstance(red, int), "red isn't a int"
@@ -593,7 +602,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``ink_rect`` or ``logical_rectangle`` isn't a
             :class:`Rectangle`.
         """
@@ -632,7 +641,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``scale_factor`` isn't a :class:`int`.
         """
         assert isinstance(scale_factor, int), "scale_factor isn't a int"
@@ -665,7 +674,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``rise`` isn't a :class:`int`.
         """
         assert isinstance(rise, int), "rise isn't a int"
@@ -697,7 +706,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``letter_spacing`` isn't a :class:`int`.
         """
         assert isinstance(letter_spacing, int), "rise isn't a int"
@@ -734,7 +743,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``enable_fallback`` isn't a :class:`bool`.
         """
         assert isinstance(enable_fallback, bool),\
@@ -766,7 +775,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``gravity`` isn't a :class:`Gravity`.
         """
         assert isinstance(gravity, Gravity), "gravity isn't a Gravity"
@@ -796,7 +805,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``hint`` isn't a :class:`GravityHint`.
         """
         assert isinstance(hint, GravityHint), "hint isn't a GravityHint"
@@ -826,7 +835,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``features`` isn't a :class:`str`.
         """
         assert isinstance(features, str), "features isn't a str"
@@ -857,7 +866,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``alpha`` isn't a :class:`int`.
         """
         assert isinstance(alpha, int), "alpha isn't a int"
@@ -888,7 +897,7 @@ class Attribute:
             index is not included in the range.
         :return:
             the Attribute.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``alpha`` isn't a :class:`int`.
         """
         assert isinstance(alpha, int), "alpha isn't a int"
@@ -992,7 +1001,7 @@ class AttrList:
 
         :param attr:
             The :class:`Attribute` to insert.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``attr`` isn't a :class:`Attribute`.
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
@@ -1006,7 +1015,7 @@ class AttrList:
 
         :param attr:
             The :class:`Attribute` to insert.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``attr`` isn't a :class:`Attribute`.
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
@@ -1027,7 +1036,7 @@ class AttrList:
 
         :param attr:
             The :class:`Attribute` to insert.
-        :raises: AssetionError
+        :raises: AssertionError
             When ``attr`` isn't a :class:`Attribute`.
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
@@ -1055,7 +1064,7 @@ class AttrList:
             specified since the attributes in other may only be present
             at some subsection of this range)
         :type length: int
-        :raises: AssetionError
+        :raises: AssertionError
             When ``attr_list`` isn't a :class:`AttrList`.
             When ``pos`` isn't a :class:`int`
             When ``length`` isn't a :class:`int`

@@ -2,8 +2,7 @@ import copy
 import warnings
 import unittest
 
-from pangocffi import AttrList, ffi
-from pangocffi.attributes import Attribute
+from pangocffi import Attribute, AttrList, ffi
 from pangocffi.enums import Stretch
 
 
