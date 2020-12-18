@@ -32,8 +32,9 @@ from .item import Item  # noqa
 from .context import Context  # noqa
 from .glyph_item import GlyphItem  # noqa
 from .glyph_item_iter import GlyphItemIter  # noqa
+from .attribute import Attribute  # noqa
+from .attr_list import AttrList  # noqa
 from .layout_run import LayoutRun  # noqa
 from .layout_iter import LayoutIter  # noqa
 from .layout import Layout  # noqa
-from .attributes import Attribute,AttrList  # noqa
-from .color import Color # noqa
+from .color import Color  # noqa

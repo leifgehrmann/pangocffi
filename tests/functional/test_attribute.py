@@ -3,7 +3,7 @@ import copy
 from pangocffi import ffi, FontDescription, Underline, GravityHint
 from pangocffi.enums import Stretch, Style, Variant, Weight, Gravity
 from pangocffi.rectangle import Rectangle
-from pangocffi.attributes import Attribute
+from pangocffi.attribute import Attribute
 
 
 class TestLayout(unittest.TestCase):
