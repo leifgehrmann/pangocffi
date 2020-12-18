@@ -18,7 +18,7 @@ def _dlopen(generated_ffi, *names):
 
 pango = _dlopen(ffi, 'pango', 'pango-1', 'pango-1.0', 'pango-1.0-0')
 gobject = _dlopen(ffi, 'gobject-2.0', 'gobject-2.0-0')
-
+glib = _dlopen(ffi, 'glib-2.0', 'glib-2.0-0')
 
 # Imports are normally always put at the top of the file.
 # But the wrapper API requires that the pango library be loaded first.
@@ -35,3 +35,5 @@ from .glyph_item_iter import GlyphItemIter  # noqa
 from .layout_run import LayoutRun  # noqa
 from .layout_iter import LayoutIter  # noqa
 from .layout import Layout  # noqa
+from .attributes import Attribute,AttrList  # noqa
+from .color import Color # noqa

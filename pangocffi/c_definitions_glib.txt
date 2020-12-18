@@ -22,3 +22,4 @@ typedef ... GMarkupParseContext;
 typedef ... GTypeModule;
 
 void g_object_unref (gpointer object);
+void g_free (gpointer mem);

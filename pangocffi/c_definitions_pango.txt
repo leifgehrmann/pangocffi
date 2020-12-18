@@ -1,5 +1,3 @@
-typedef ... PangoColor;
-typedef ... PangoAttribute;
 typedef ... PangoAttrClass;
 typedef ... PangoAttrString;
 typedef ... PangoAttrLanguage;
@@ -54,6 +52,16 @@ typedef ... PangoEngineLang;
 typedef ... PangoEngineShape;
 typedef ... PangoFont;
 typedef ... PangoFontMap;
+typedef struct{
+  guint16 red;
+  guint16 green;
+  guint16 blue;
+} PangoColor;
+typedef struct{
+  const PangoAttrClass *klass;
+  guint start_index;
+  guint end_index;
+} PangoAttribute;
 typedef struct
 {
  int x;
@@ -432,6 +440,8 @@ PangoAttrIterator *pango_attr_list_get_iterator (PangoAttrList *list);
 void pango_attr_iterator_range (PangoAttrIterator *iterator,
  gint *start,
  gint *end);
+gboolean pango_attr_list_equal (PangoAttrList *list,
+                       PangoAttrList *other_list);
 gboolean pango_attr_iterator_next (PangoAttrIterator *iterator);
 PangoAttrIterator *pango_attr_iterator_copy (PangoAttrIterator *iterator);
 void pango_attr_iterator_destroy (PangoAttrIterator *iterator);

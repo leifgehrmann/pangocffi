@@ -107,7 +107,14 @@ Text Attributes
 
 Font and other attributes for annotating text.
 
-API not implemented yet.
+Attribute
+_________
+.. autoclass:: Attribute
+
+
+AttrList
+________
+.. autoclass:: AttrList
 
 Tab Stops
 =========
