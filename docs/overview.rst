@@ -22,7 +22,9 @@ pangocffi depends on Pango_, GLib_, and libffi_ being installed.
 
 * On Linux, these packages are usually installed as part of the base OS.
 
-* On Windows, if you are using a 64-bit Python, you can use `this binary installer`_ to install GTK 3. Use ``python --version --version`` to check whether you're running 32-bit or 64-bit Python.
+* On Windows, if you are using a 64-bit Python, you can use
+  `this binary installer`_ to install GTK 3. Use ``python --version --version``
+  to check whether you're running 32-bit or 64-bit Python.
 
 .. _homebrew: https://brew.sh
 .. _`this binary installer`: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer
@@ -49,11 +51,14 @@ the module as ``pango``::
 
     import pangocffi as pango
 
-pangocffi will dynamically load Pango as a shared library upon importing.
-If it fails to find it, you will see an exception like this::
+pangocffi will dynamically load Pango, GLib, and GObject as a shared library
+upon importing. If it fails to find it, you will see an exception like this::
 
-    OSError: library not found: 'pango'
+    OSError: dlopen() failed to load pango: pango / pango-1 / ...
 
+If Pango, GLib, or GObject are not installed as a shared library, pangocffi
+supports specifying a path via environment variables respectively:
+``PANGO_LOCATION``, ``GLIB_LOCATION``, ``GOBJECT_LOCATION``.
 
 Basic usage
 -----------
