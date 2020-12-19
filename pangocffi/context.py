@@ -121,7 +121,7 @@ class Context(object):
             the gravity hint for the context.
         """
         return GravityHint(
-            pango.pango_context_get_base_gravity(self._pointer)
+            pango.pango_context_get_gravity_hint(self._pointer)
         )
 
     def set_gravity_hint(self, hint: GravityHint):
