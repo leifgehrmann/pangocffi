@@ -1,6 +1,38 @@
 Changelog
 ---------
 
+Version 0.9.0
+.............
+
+Released on 2020-12-19.
+
+* pangocffi now depends on GLib 2.0. It's very likely GLib is already installed
+  since pangocffi already depended on GObject, but if not, pangocffi will raise
+  an error on import.
+
+* Added the following new classes
+
+    * ``Attribute``
+    * ``AttrList``
+    * ``Color``
+
+* Added new methods to ``Layout``
+
+    * ``set_attributes``
+    * ``get_attributes``
+
+* Added new enum ``Underline``.
+
+* Fixed issue with ``Context.get_gravity_hint`` calling the wrong pango
+  function.
+
+* Added the ability to configure loading a specific library via the following
+  environment variables:
+
+    * ``PANGO_LOCATION``
+    * ``GLIB_LOCATION``
+    * ``GOBJECT_LOCATION``
+
 Version 0.8.0
 .............
 
@@ -25,7 +57,8 @@ Version 0.7.0
 
 Released on 2020-10-17.
 
-* Added new methods to ``Layout``
+* Added new methods to ``Layout``:
+
     * ``set_wrap``
     * ``get_wrap``
 
@@ -34,7 +67,8 @@ Version 0.6.0
 
 Released on 2020-09-17.
 
-* Added new methods to ``Layout``
+* Added new methods to ``Layout``:
+
     * ``set_ellipsize``
     * ``get_ellipsize``
 
@@ -59,23 +93,31 @@ Version 0.3.0
 Released on 2019-03-17.
 
 * Added the following new classes:
+
     * ``GlyphItem``
     * ``GlyphItemIter``
     * ``Item``
     * ``LayoutIter``
     * ``LayoutRun``
-* Added new methods to ``Context``
+
+* Added new methods to ``Context``:
+
     * ``set/get_base_gravity``
     * ``get_gravity``
     * ``set/get_gravity_hint``
-* Added new methods to ``Layout``
+
+* Added new methods to ``Layout``:
+
     * ``get_text``
     * ``get_iter``
     * ``get_baseline``
     * ``get_line_count``
     * ``get/set_spacing``
-* Added new method to ``Rectangle``
+
+* Added new method to ``Rectangle``:
+
     * ``get_pointer``
+
 * Corrected return types (``ffi.CData`` was previously ``ctypes.c_void_p``)
 
 Version 0.2.0

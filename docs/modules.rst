@@ -111,10 +111,13 @@ Attribute
 _________
 .. autoclass:: Attribute
 
-
 AttrList
 ________
 .. autoclass:: AttrList
+
+Underline
+---------
+.. autoclass:: Underline
 
 Tab Stops
 =========
