@@ -39,7 +39,9 @@ def _dlopen(dl_name: str, generated_ffi, names: List[str]):
                     return lib
             except OSError:
                 pass
-    raise OSError(f"dlopen() failed to load {dl_name} library: {' / '.join(names)}")
+    raise OSError(
+        f"dlopen() failed to load {dl_name} library: {' / '.join(names)}"
+    )
 
 
 pango = _dlopen('pango', ffi, ['pango', 'pango-1', 'pango-1.0', 'pango-1.0-0'])
