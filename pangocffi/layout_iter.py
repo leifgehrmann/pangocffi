@@ -9,8 +9,11 @@ class LayoutIter:
     Pango :class:`Layout`.
     """
 
-    def _init_pointer(self, pointer: ffi.CData):
-        self._pointer = ffi.gc(pointer, pango.pango_layout_iter_free)
+    def _init_pointer(self, pointer: ffi.CData, gc: bool):
+        if gc:
+            self._pointer = ffi.gc(pointer, pango.pango_layout_iter_free)
+        else:
+            self._pointer = pointer
 
     def get_pointer(self) -> ffi.CData:
         """
@@ -22,17 +25,25 @@ class LayoutIter:
         return self._pointer
 
     @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> 'LayoutIter':
+    def from_pointer(
+            cls,
+            pointer: ffi.CData,
+            gc: bool = False
+    ) -> 'LayoutIter':
         """
         Instantiates a :class:`LayoutIter` from a pointer.
 
+        :param pointer:
+            a pointer to a Pango Layout Iter.
+        :param gc:
+            whether to garbage collect the pointer. Defaults to ``False``.
         :return:
             the layout iterator.
         """
         if pointer == ffi.NULL:
             raise ValueError('Null pointer')
         self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
+        cls._init_pointer(self, pointer, gc)
         return self
 
     def next_run(self) -> bool:

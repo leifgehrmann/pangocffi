@@ -6,7 +6,7 @@ from pangocffi.rectangle import Rectangle
 from pangocffi.attribute import Attribute
 
 
-class TestLayout(unittest.TestCase):
+class TestAttribute(unittest.TestCase):
     def test_different_layout_equality(self):
         a = Attribute.from_size(4)
         b = Attribute.from_size(4)
@@ -19,7 +19,6 @@ class TestLayout(unittest.TestCase):
         b = a._pointer
         c = Attribute.from_pointer(b)
         assert a == c
-        print(type(c))
 
     def test_start_index_end_index(self):
         a = Attribute().from_size(8, 5, 9)

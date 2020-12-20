@@ -2,7 +2,7 @@ import pangocffi
 from pangocffi import Context
 from pangocffi.ffi_build import ffi as ffi_builder
 from cffi import FFI
-import ctypes
+import ctypes.util
 
 
 def _dlopen(ffi, *names):
@@ -115,15 +115,14 @@ class ContextCreator(object):
 
         pango_pointer = pangocairo.pango_cairo_create_context(cairo_t)
         pango_pointer = pangocffi.ffi.cast('PangoContext *', pango_pointer)
-        pango_pointer = pangocffi.ffi.gc(
-            pango_pointer,
-            pangocffi.gobject.g_object_unref
-        )
 
         ContextCreator.cairo = cairo
         ContextCreator.cairo_surface_t = cairo_surface_t
         ContextCreator.cairo_t = cairo_t
-        ContextCreator.pango_context = Context.from_pointer(pango_pointer)
+        ContextCreator.pango_context = Context.from_pointer(
+            pango_pointer,
+            gc=True
+        )
 
         return ContextCreator.pango_context
 

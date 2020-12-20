@@ -20,10 +20,13 @@ class Context(object):
         may have it's own way of create a :class:`Context`. For instance, the
         PangoCairo toolkit has pango_cairo_create_context(). Use those instead.
         """
-        self._init_pointer(pango.pango_context_new())
+        self._init_pointer(pango.pango_context_new(), gc=True)
 
-    def _init_pointer(self, pointer: ffi.CData):
-        self._pointer = ffi.gc(pointer, gobject.g_object_unref)
+    def _init_pointer(self, pointer: ffi.CData, gc: bool):
+        if gc:
+            self._pointer = ffi.gc(pointer, gobject.g_object_unref)
+        else:
+            self._pointer = pointer
 
     def get_pointer(self) -> ffi.CData:
         """
@@ -35,17 +38,21 @@ class Context(object):
         return self._pointer
 
     @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> 'Context':
+    def from_pointer(cls, pointer: ffi.CData, gc: bool = False) -> 'Context':
         """
         Instantiates a :class:`Context` from a pointer.
 
+        :param pointer:
+            a pointer to a Pango Context.
+        :param gc:
+            whether to garbage collect the pointer. Defaults to ``False``.
         :return:
             the context.
         """
         if pointer == ffi.NULL:
             raise ValueError('Null pointer')
         self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
+        cls._init_pointer(self, pointer, gc)
         return self
 
     def __eq__(self, other):
