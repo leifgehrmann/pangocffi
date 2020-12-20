@@ -23,23 +23,33 @@ class Layout(object):
         :param context:
             the Pango :class:`Context`
         """
-        self._init_pointer(pango.pango_layout_new(context.get_pointer()))
+        self._init_pointer(
+            pango.pango_layout_new(context.get_pointer()),
+            gc=True
+        )
 
-    def _init_pointer(self, pointer: ffi.CData):
-        self._pointer = ffi.gc(pointer, gobject.g_object_unref)
+    def _init_pointer(self, pointer: ffi.CData, gc: bool):
+        if gc:
+            self._pointer = ffi.gc(pointer, gobject.g_object_unref)
+        else:
+            self._pointer = pointer
 
     @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> "Layout":
+    def from_pointer(cls, pointer: ffi.CData, gc: bool = False) -> "Layout":
         """
         Instantiates a :class:`Layout` from a pointer.
 
+        :param pointer:
+            a pointer to a Pango Layout.
+        :param gc:
+            whether to garbage collect the pointer. Defaults to ``False``.
         :return:
             the layout.
         """
         if pointer == ffi.NULL:
             raise ValueError("Null pointer")
         self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
+        cls._init_pointer(self, pointer, gc)
         return self
 
     def get_pointer(self) -> ffi.CData:
