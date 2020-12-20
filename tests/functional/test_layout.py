@@ -2,10 +2,7 @@ from pangocffi import (
     Context,
     FontDescription,
     Layout,
-    Alignment,
     ffi,
-    EllipsizeMode,
-    WrapMode,
     Attribute,
     AttrList,
 )
@@ -60,44 +57,6 @@ class TestLayout(unittest.TestCase):
         # Resetting the font description
         layout.set_font_description(None)
         assert layout.get_font_description() is None
-
-    @staticmethod
-    def test_layout_setting_properties():
-        context = Context()
-        layout = Layout(context)
-
-        layout.set_width(300)
-        assert layout.get_width() == 300
-
-        layout.set_height(400)
-        assert layout.get_height() == 400
-
-        assert layout.get_spacing() == 0
-        layout.set_spacing(30)
-        assert layout.get_spacing() == 30
-
-        layout.set_alignment(Alignment.CENTER)
-        assert layout.get_alignment() is Alignment.CENTER
-
-        layout.set_ellipsize(EllipsizeMode.MIDDLE)
-        assert layout.get_ellipsize() is EllipsizeMode.MIDDLE
-
-        layout.set_wrap(WrapMode.WORD_CHAR)
-        assert layout.get_wrap() is WrapMode.WORD_CHAR
-
-        ink_rect, logical_rect = layout.get_extents()
-        assert logical_rect.width == 0
-        assert logical_rect.height == 0
-
-        width, height = layout.get_size()
-        assert width == 0
-        assert height == 0
-
-        baseline = layout.get_baseline()
-        assert baseline == 0
-
-        line_count = layout.get_line_count()
-        assert line_count == 1
 
     @staticmethod
     def test_layout_setting_text():
