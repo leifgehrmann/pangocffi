@@ -4,7 +4,7 @@ import unittest
 from pangocffi import Color, ffi
 
 
-class TestLayout(unittest.TestCase):
+class TestColor(unittest.TestCase):
     def test_init(self):
         Color(5, 5, 5)
 
