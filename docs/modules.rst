@@ -115,10 +115,6 @@ AttrList
 ________
 .. autoclass:: AttrList
 
-Underline
----------
-.. autoclass:: Underline
-
 Tab Stops
 =========
 
@@ -191,6 +187,13 @@ Language
 ________
 
 API not implemented yet.
+
+Underlined Text
+===============
+
+Enum used by Text Attributes for underlining text.
+
+.. autoclass:: Underline
 
 Bidirectional Text
 ==================
