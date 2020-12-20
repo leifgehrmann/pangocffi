@@ -17,7 +17,7 @@ version = ".".join(release.split(".")[:2])
 exclude_patterns = ["_build"]
 autodoc_member_order = "bysource"
 autodoc_default_options = {
-    'members': True
+    'members': None  # Set to True when readthedocs.org updates sphinx to v2.0
 }
 intersphinx_mapping = {
     "http://docs.python.org/": None,
