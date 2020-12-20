@@ -347,7 +347,7 @@ class Layout(object):
             the layout iterator
         """
         layout_iterator_pointer = pango.pango_layout_get_iter(self._pointer)
-        return LayoutIter.from_pointer(layout_iterator_pointer)
+        return LayoutIter.from_pointer(layout_iterator_pointer, gc=True)
 
     def set_attributes(self, attrs: Optional[AttrList]) -> None:
         """
