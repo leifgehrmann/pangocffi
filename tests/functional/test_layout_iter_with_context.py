@@ -1,16 +1,17 @@
 from pangocffi import Layout, LayoutIter, Rectangle, ffi
-from .context_creator import ContextCreator
+from ..context_creator import ContextCreator
 import unittest
 
 
 class TestLayoutIterWithContext(unittest.TestCase):
 
     def setUp(self):
-        self.pango_context = ContextCreator.get_pango_context()
+        self.context = ContextCreator.create_surface_without_output()
+        self.pango_context = self.context.get_pango_context_as_class()
 
     def tearDown(self):
         self.pango_context = None
-        ContextCreator.free()
+        self.context.close()
 
     def test_layout_iter_pointer(self):
         layout = Layout(self.pango_context)

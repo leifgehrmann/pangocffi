@@ -22,23 +22,79 @@ def _dlopen(ffi, *names):
 
 
 class ContextCreator(object):
+
+    # CFFIs
     cairo = None
-    cairo_surface_t = None
-    cairo_t = None
+    pangocairo = None
+
+    # Surface pointers
+    cairo_surface = None
+
+    # Context pointers (Note: These are CFFI pointers, NOT python classes!)
+    cairo_context = None
     pango_context = None
 
-    def __init__(self, filename: str):
-        self.cairo = None
-        self.cairo_surface_t = None
-        self.cairo_t = None
-        self.pango_context = None
-
+    def __init__(self):
         self.ffi = FFI()
-
         self._setup_ffi()
-        self._create_surface(filename)
+
+    @staticmethod
+    def create_pdf(
+            filename: str,
+            width_in_mm: int,
+            height_in_mm: int
+    ) -> 'ContextCreator':
+        """
+        Generally used for acceptance tests
+
+        :param filename:
+            Where to put the pdf, relative to where the test is being executed.
+        :param width_in_mm:
+            The width of the PDF in millimeters
+        :param height_in_mm:
+            The height of the PDF in millimeters
+        """
+        cc = ContextCreator()
+        filename = filename.encode(sys.getfilesystemencoding())
+        filename_pointer = cc.ffi.new('char[]', filename)
+
+        # Convert millimeters to points.
+        points_per_inch = 72
+        mm_per_inch = 25.4
+        points_per_mm = points_per_inch / mm_per_inch
+        width_in_pts = width_in_mm * points_per_mm
+        height_in_pts = height_in_mm * points_per_mm
+
+        cc.cairo_surface = cc.cairo.cairo_pdf_surface_create(
+            filename_pointer,
+            width_in_pts,
+            height_in_pts
+        )
+        cc.cairo_context = cc.cairo.cairo_create(cc.cairo_surface)
+        cc.pango_context = cc._create_pango_context()
+        return cc
+
+    @staticmethod
+    def create_surface_without_output() -> 'ContextCreator':
+        """Generally used for functional tests where output is not checked"""
+        cc = ContextCreator()
+        cc.cairo_surface = cc.cairo.cairo_pdf_surface_create_for_stream(
+            cc.ffi.NULL,
+            cc.ffi.NULL,
+            10,
+            10
+        )
+        cc.cairo_context = cc.cairo.cairo_create(cc.cairo_surface)
+        cc.pango_context = cc._create_pango_context()
+        return cc
 
     def _setup_ffi(self):
+        """
+        Responsible to creating the Cairo and PangoCairo CFFIs. While we could
+        use libraries like cairocffi and pangocairocffi directly, this might be
+        problematic when managing dependencies. Therefore, we implement a small
+        part of these libraries into this codebase.
+        """
         self.ffi.include(ffi_builder)
         self.ffi.cdef('''
             /* Cairo */
@@ -107,9 +163,19 @@ class ContextCreator(object):
             );
             void cairo_surface_destroy (cairo_surface_t *surface);
             cairo_t * cairo_create (cairo_surface_t *target);
+            void cairo_surface_finish (cairo_surface_t *surface);
             void cairo_destroy (cairo_t *cr);
 
+            cairo_surface_t * cairo_pdf_surface_create (
+                const char *filename,
+                double width_in_points,
+                double height_in_points
+            );
+            void cairo_translate (cairo_t *cr, double tx, double ty);
+
             PangoContext * pango_cairo_create_context (cairo_t *cr);
+            PangoLayout * pango_cairo_create_layout (cairo_t *cr);
+            void pango_cairo_show_layout (cairo_t *cr, PangoLayout *layout);
         ''')
         self.ffi.set_source('pangocffi._generated.ffi', None)
         self.cairo = _dlopen(
@@ -124,31 +190,21 @@ class ContextCreator(object):
             'pangocairo-1.0-0'
         )
 
-    def _create_cairo_context(self, filename: str):
-        filename = filename.encode(sys.getfilesystemencoding())
-        self.ffi.new('char[]', filename)
-
-        cairo_surface_t = self.cairo.cairo_pdf_surface_create(
-            '',
-            100,
-            100
+    def _create_pango_context(self):
+        pango_context = self.pangocairo.pango_cairo_create_context(
+            self.cairo_context
         )
-        self.cairo_t = self.cairo.cairo_create(cairo_surface_t)
+        pango_context = pangocffi.ffi.cast('PangoContext *', pango_context)
+        return pango_context
 
-    def _create_pango_context(self) -> Context:
-
-        pango_pointer = self.pangocairo.pango_cairo_create_context(self.cairo_t)
-        pango_pointer = pangocffi.ffi.cast('PangoContext *', pango_pointer)
-        pango_pointer = pangocffi.ffi.gc(
-            pango_pointer,
-            pangocffi.gobject.g_object_unref
-        )
-
-        return Context.from_pointer(pango_pointer)
+    def get_pango_context_as_class(self) -> Context:
+        return Context.from_pointer(self.pango_context, gc=True)
 
     def close(self) -> None:
+        if self.cairo_surface is not None:
+            self.cairo.cairo_surface_finish(self.cairo_surface)
         self.pango_context = None
-        self.cairo.cairo_destroy(self.cairo_t)
+        self.cairo.cairo_destroy(self.cairo_context)
         self.cairo.cairo_surface_destroy(
-            self.cairo_surface_t
+            self.cairo_surface
         )
