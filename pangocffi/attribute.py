@@ -21,7 +21,7 @@ class Attribute:
     @classmethod
     def _init_pointer(cls, pointer: ffi.CData) -> "Attribute":
         self = object.__new__(cls)
-        self._pointer = ffi.gc(pointer, pango.pango_attribute_destroy)
+        self._pointer = pointer
         return self
 
     @classmethod
