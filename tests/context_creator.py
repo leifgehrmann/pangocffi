@@ -24,6 +24,7 @@ def _dlopen(ffi, *names):
 class ContextCreator(object):
 
     # CFFIs
+    ffi = None
     cairo = None
     pangocairo = None
 
@@ -34,12 +35,9 @@ class ContextCreator(object):
     cairo_context = None
     pango_context = None
 
-    def __init__(self):
-        self.ffi = FFI()
-        self._setup_ffi()
-
-    @staticmethod
+    @classmethod
     def create_pdf(
+            cls,
             filename: str,
             width_in_mm: int,
             height_in_mm: int
@@ -54,6 +52,7 @@ class ContextCreator(object):
         :param height_in_mm:
             The height of the PDF in millimeters
         """
+        cls.initialise_ffi()
         cc = ContextCreator()
         filename = filename.encode(sys.getfilesystemencoding())
         filename_pointer = cc.ffi.new('char[]', filename)
@@ -74,10 +73,12 @@ class ContextCreator(object):
         cc.pango_context = cc._create_pango_context()
         return cc
 
-    @staticmethod
-    def create_surface_without_output() -> 'ContextCreator':
+    @classmethod
+    def create_surface_without_output(cls) -> 'ContextCreator':
         """Generally used for functional tests where output is not checked"""
+        cls.initialise_ffi()
         cc = ContextCreator()
+        cc.ffi, cc.cairo, cc.pangocairo = cls.ffi, cls.cairo, cls.pangocairo
         cc.cairo_surface = cc.cairo.cairo_pdf_surface_create_for_stream(
             cc.ffi.NULL,
             cc.ffi.NULL,
@@ -88,15 +89,20 @@ class ContextCreator(object):
         cc.pango_context = cc._create_pango_context()
         return cc
 
-    def _setup_ffi(self):
+    @classmethod
+    def initialise_ffi(cls):
         """
         Responsible to creating the Cairo and PangoCairo CFFIs. While we could
         use libraries like cairocffi and pangocairocffi directly, this might be
         problematic when managing dependencies. Therefore, we implement a small
         part of these libraries into this codebase.
         """
-        self.ffi.include(ffi_builder)
-        self.ffi.cdef('''
+        if cls.ffi is not None:
+            return
+
+        cls.ffi = FFI()
+        cls.ffi.include(ffi_builder)
+        cls.ffi.cdef('''
             /* Cairo */
             typedef void cairo_t;
             typedef struct _cairo_surface cairo_surface_t;
@@ -177,15 +183,15 @@ class ContextCreator(object):
             PangoLayout * pango_cairo_create_layout (cairo_t *cr);
             void pango_cairo_show_layout (cairo_t *cr, PangoLayout *layout);
         ''')
-        self.ffi.set_source('pangocffi._generated.ffi', None)
-        self.cairo = _dlopen(
-            self.ffi,
+        cls.ffi.set_source('pangocffi._generated.ffi', None)
+        cls.cairo = _dlopen(
+            cls.ffi,
             'cairo',
             'cairo-2',
             'cairo-gobject-2',
             'cairo.so.2')
-        self.pangocairo = _dlopen(
-            self.ffi,
+        cls.pangocairo = _dlopen(
+            cls.ffi,
             'pangocairo-1.0',
             'pangocairo-1.0-0'
         )
