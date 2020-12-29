@@ -10,12 +10,25 @@ class Rectangle:
     """
     def __init__(
             self,
-            pointer: Optional[ffi.CData] = None
+            pointer: Optional[ffi.CData] = None,
+            width: Optional[int] = None,
+            height: Optional[int] = None,
+            x: Optional[int] = None,
+            y: Optional[int] = None
     ):
         if pointer is None:
             self.pointer = ffi.new("PangoRectangle *")
         else:
             self.pointer = pointer
+
+        if width is not None:
+            self.pointer.width = width
+        if height is not None:
+            self.pointer.height = height
+        if x is not None:
+            self.pointer.x = x
+        if y is not None:
+            self.pointer.y = y
 
     def get_pointer(self) -> ffi.CData:
         """
@@ -47,6 +60,14 @@ class Rectangle:
         """
         return self.pointer.x
 
+    @x.setter
+    def x(self, value: int):
+        """
+        :param value:
+            Sets the X coordinate of the left side of the rectangle.
+        """
+        self.pointer.x = value
+
     @property
     def y(self) -> int:
         """
@@ -55,6 +76,14 @@ class Rectangle:
         :type: int
         """
         return self.pointer.y
+
+    @y.setter
+    def y(self, value: int):
+        """
+        :param value:
+            Sets the Y coordinate of the the top side of the rectangle.
+        """
+        self.pointer.y = value
 
     @property
     def width(self) -> int:
@@ -65,6 +94,14 @@ class Rectangle:
         """
         return self.pointer.width
 
+    @width.setter
+    def width(self, value: int):
+        """
+        :param value:
+            Sets the width of the rectangle.
+        """
+        self.pointer.width = value
+
     @property
     def height(self) -> int:
         """
@@ -73,3 +110,11 @@ class Rectangle:
         :type: int
         """
         return self.pointer.height
+
+    @height.setter
+    def height(self, value: int):
+        """
+        :param value:
+            Sets the height of the rectangle.
+        """
+        self.pointer.height = value
