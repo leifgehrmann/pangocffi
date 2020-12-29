@@ -15,13 +15,11 @@ class Attribute:
 
     def __init__(self):
         self._pointer = None
-        self._start_index = None
-        self._end_index = None
 
     @classmethod
     def _init_pointer(cls, pointer: ffi.CData) -> "Attribute":
         self = object.__new__(cls)
-        self._pointer = ffi.gc(pointer, pango.pango_attribute_destroy)
+        self._pointer = pointer
         return self
 
     @classmethod
@@ -59,7 +57,7 @@ class Attribute:
 
     @property
     def start_index(self):
-        return self._start_index
+        return self._pointer.start_index
 
     @start_index.setter
     def start_index(self, start_index: int):
@@ -76,13 +74,12 @@ class Attribute:
             "start_index is too low"
         assert start_index < pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
             "start_index is too high"
-        self._start_index = start_index
         start = ffi.cast("guint", start_index)
         self._pointer.start_index = start
 
     @property
     def end_index(self):
-        return self._end_index
+        return self._pointer.end_index
 
     @end_index.setter
     def end_index(self, end_index: int):
@@ -98,9 +95,8 @@ class Attribute:
         assert isinstance(end_index, int), "end_index isn't a int"
         assert end_index <= pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
             "end_index is too high"
-        self._end_index = end_index
         end = ffi.cast("guint", end_index)
-        self._pointer.start_index = end
+        self._pointer.end_index = end
 
     # @classmethod
     # def from_language(
