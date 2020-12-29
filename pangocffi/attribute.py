@@ -100,7 +100,7 @@ class Attribute:
             "end_index is too high"
         self._end_index = end_index
         end = ffi.cast("guint", end_index)
-        self._pointer.start_index = end
+        self._pointer.end_index = end
 
     # @classmethod
     # def from_language(
