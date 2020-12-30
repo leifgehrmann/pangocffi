@@ -1,6 +1,33 @@
 Changelog
 ---------
 
+Version 0.10.0
+..............
+
+Released on 2020-12-30.
+
+* All ``from_pointer()`` methods in pangocffi by default will not apply a
+  garbage collection callback. **If you are using pangocairocffi, you will need
+  to update to the latest version (v0.6.0) to avoid any potential issues.**
+  This change is done mainly for consistency. If the original functionality is
+  desired, adding ``gc=True`` should be enough (In other words,
+  ``from_pointer(pointer, gc=True)``). This affects the following methods:
+
+    * ``Context.from_pointer()``
+    * ``Layout.from_pointer()``
+
+* Fixed an issue with ``Attribute`` in an ``AttrList`` causing segmentation
+  faults when the list was being copied because the attribute was improperly
+  being garbage collected. This was solved by simply removing the call to
+  ``ffi.gc(pointer, pango.pango_attribute_destroy)``. If there are any issues
+  with this change, please raise an issue in the issue tracker.
+
+* Fixed a mistake with ``Attribute`` where the ``end_index`` was incorrectly
+  being set against the ``start_index``.
+
+* Added setter methods for the properties of ``Rectangle`` and adds arguments
+  to ``__init__()`` for setting the properties individually.
+
 Version 0.9.0
 .............
 
