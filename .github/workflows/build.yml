@@ -32,36 +32,9 @@ jobs:
       - name: Install System Dependencies (Windows)
         if: runner.os == 'windows'
         run: |
-          curl -L https://github.com/naveen521kk/pango-build/releases/download/v1.50.10/pango-build-win64.zip -o pango.zip
-          7z x pango.zip -oD:\Cache
-          $env:PATH += ";" + "D:\Cache\bin"
-          # As a temporary measure, manually rename all the CORE_MANIM DLLs. I
-          # Windows' `ren` command should accept wildcards, but in practice it
-          # does not, so we have to rename them all individually.
-          ren D:\Cache\bin\CORE_MANIM_cairo-2.dll D:\Cache\bin\cairo-2.dll
-          ren D:\Cache\bin\CORE_MANIM_cairo-gobject-2.dll D:\Cache\bin\cairo-gobject-2.dll
-          ren D:\Cache\bin\CORE_MANIM_cairo-script-interpreter-2.dll D:\Cache\bin\cairo-script-interpreter-2.dll
-          ren D:\Cache\bin\CORE_MANIM_expat.dll D:\Cache\bin\expat.dll
-          ren D:\Cache\bin\CORE_MANIM_ffi-7.dll D:\Cache\bin\ffi-7.dll
-          ren D:\Cache\bin\CORE_MANIM_fontconfig-1.dll D:\Cache\bin\fontconfig-1.dll
-          ren D:\Cache\bin\CORE_MANIM_freetype-6.dll D:\Cache\bin\freetype-6.dll
-          ren D:\Cache\bin\CORE_MANIM_fribidi-0.dll D:\Cache\bin\fribidi-0.dll
-          ren D:\Cache\bin\CORE_MANIM_gio-2.0-0.dll D:\Cache\bin\gio-2.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_glib-2.0-0.dll D:\Cache\bin\glib-2.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_gmodule-2.0-0.dll D:\Cache\bin\gmodule-2.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_gobject-2.0-0.dll D:\Cache\bin\gobject-2.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_gthread-2.0-0.dll D:\Cache\bin\gthread-2.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_harfbuzz-gobject.dll D:\Cache\bin\harfbuzz-gobject.dll
-          ren D:\Cache\bin\CORE_MANIM_harfbuzz-subset.dll D:\Cache\bin\harfbuzz-subset.dll
-          ren D:\Cache\bin\CORE_MANIM_harfbuzz.dll D:\Cache\bin\harfbuzz.dll
-          ren D:\Cache\bin\CORE_MANIM_intl-8.dll D:\Cache\bin\intl-8.dll
-          ren D:\Cache\bin\CORE_MANIM_pango-1.0-0.dll D:\Cache\bin\pango-1.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_pangocairo-1.0-0.dll D:\Cache\bin\pangocairo-1.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_pangoft2-1.0-0.dll D:\Cache\bin\pangoft2-1.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_pangowin32-1.0-0.dll D:\Cache\bin\pangowin32-1.0-0.dll
-          ren D:\Cache\bin\CORE_MANIM_pixman-1-0.dll D:\Cache\bin\pixman-1-0.dll
-          ren D:\Cache\bin\CORE_MANIM_png16-16.dll D:\Cache\bin\png16-16.dll
-          ren D:\Cache\bin\CORE_MANIM_z.dll D:\Cache\bin\z.dll
-          echo "$env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          C:\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-ttf-dejavu mingw-w64-x86_64-gtk3 --noconfirm'
+          xcopy "C:\msys64\mingw64\share\fonts\TTF" "C:\Users\runneradmin\.fonts" /e /i
+          echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH
+          rm C:\msys64\mingw64\bin\python.exe
       - name: Test with tox
         run: tox
