@@ -4,14 +4,14 @@ from . import ffi
 class PangoObject(ABC):
     """An abstract base class for every object used by Pango."""
 
-    _INIT_METHOD: ffi
-    _INIT_CLASS: str
-    _GC_METHOD: ffi
-    _COPY_METHOD: ffi
-    _EQ_METHOD: ffi
+    _INIT_METHOD: ffi = None
+    _INIT_CLASS: str = None
+    _GC_METHOD: ffi = None
+    _COPY_METHOD: ffi = None
+    _EQ_METHOD: ffi = None
     _pointer: ffi.CData
 
-    def __init__(self, pointer: ffi.CData):
+    def __init__(self, pointer: ffi.CData = None, *init_args):
         final_pointer: ffi.CData = pointer
 
         if pointer == None:
@@ -20,7 +20,7 @@ class PangoObject(ABC):
             elif self._INIT_METHOD == None:
                 raise "Initializing this class is not supported."
             else:
-                final_pointer = self._INIT_METHOD(pointer)
+                final_pointer = self._INIT_METHOD(*init_args)
 
         self._init_pointer(final_pointer, True)
 
@@ -31,7 +31,17 @@ class PangoObject(ABC):
     """The C pointer to this object."""
 
     def _init_pointer(self, pointer: ffi.CData, gc: bool):
-        if gc:
+        """
+        Assign the given C pointer to this object, optionally
+        enabling garbage collection.
+
+        :param pointer:
+            the C pointer to use.
+        :param gc:
+            whether to garbage collect.
+        """
+
+        if gc and self._GC_METHOD is not None:
             self._pointer = ffi.gc(pointer, self._GC_METHOD)
         else:
             self._pointer = pointer
@@ -57,6 +67,8 @@ class PangoObject(ABC):
         return self
 
     def copy(self):
+        if self._COPY_METHOD is None:
+            raise NotImplementedError
         new_pointer = self._COPY_METHOD(self._pointer)
         return self.from_pointer(new_pointer)
 
@@ -73,6 +85,6 @@ class PangoObject(ABC):
             return self.pointer == other.pointer
 
     def __repr__(self) -> str:
-        properties = vars(self)
-        formatted = ",".join([f"{k}={self[k]}" for k in properties])
-        return f"<{self.__name__}({formatted})>"
+        properties = vars(self).items()
+        formatted = ",".join([f"{k}={v}" for k, v in properties])
+        return f"<{self.__class__.__name__}({formatted})>"
