@@ -54,6 +54,7 @@ glib = _dlopen('glib', ffi, ['glib-2.0', 'glib-2.0-0'])
 from .version import *  # noqa
 from .enums import *  # noqa
 from .convert import *  # noqa
+from .pango_object import PangoObject  # noqa
 from .font_description import FontDescription  # noqa
 from .rectangle import Rectangle  # noqa
 from .item import Item  # noqa
