@@ -16,7 +16,7 @@ class TestAttribute(unittest.TestCase):
 
     def test_pointers_identical(self):
         a = Attribute.from_size_absolute(8)
-        b = a._pointer
+        b = a.pointer
         c = Attribute.from_pointer(b)
         assert a == c
 

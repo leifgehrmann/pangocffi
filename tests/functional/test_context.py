@@ -21,13 +21,13 @@ class TestContext(unittest.TestCase):
         context = Context()
 
         desc = FontDescription()
-        desc.set_family('sans-serif')
-        context.set_font_description(desc)
-        assert context.get_font_description().get_family() == 'sans-serif'
+        desc.family = 'sans-serif'
+        context.font_description = desc
+        assert context.font_description.get_family() == 'sans-serif'
 
-        context.set_base_gravity(Gravity.EAST)
-        assert context.get_base_gravity() == Gravity.EAST
-        assert context.get_gravity() == Gravity.EAST
+        context.base_gravity = Gravity.EAST
+        assert context.base_gravity == Gravity.EAST
+        assert context.gravity == Gravity.EAST
 
-        context.set_gravity_hint(GravityHint.STRONG)
-        assert context.get_gravity_hint() == GravityHint.STRONG
+        context.gravity_hint = GravityHint.STRONG
+        assert context.gravity_hint == GravityHint.STRONG

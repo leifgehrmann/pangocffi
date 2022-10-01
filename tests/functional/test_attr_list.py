@@ -9,7 +9,7 @@ from pangocffi.enums import Stretch
 class TestLayout(unittest.TestCase):
     def test_init(self):
         a = AttrList()
-        a.get_pointer()
+        a.pointer
 
     def test_attr_list_returns_null_from_null_pointer(self):
         with self.assertRaises(ValueError):
