@@ -1,6 +1,7 @@
 from . import pango, FontDescription, Gravity, GravityHint, PangoObject
 from typing import Optional
 
+
 class Context(PangoObject):
     """
     The :class:`Context` structure stores global information used to control
@@ -30,9 +31,7 @@ class Context(PangoObject):
         )
 
     def _set_font_description(self, desc: FontDescription):
-        pango.pango_context_set_font_description(
-            self._pointer, desc.get_pointer()
-        )
+        pango.pango_context_set_font_description(self._pointer, desc.pointer)
 
     font_description: Optional[FontDescription] = property(
         _get_font_description, _set_font_description
@@ -52,7 +51,8 @@ class Context(PangoObject):
 
     base_gravity: Gravity = property(_get_base_gravity, _set_base_gravity)
     """
-    The base gravity for the context, which is used for laying out vertical text.
+    The base gravity for the context, which is used for laying out vertical
+    text.
     """
 
     def _get_gravity(self) -> Gravity:

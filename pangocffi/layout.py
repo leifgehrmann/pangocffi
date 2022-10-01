@@ -52,10 +52,12 @@ class Layout(PangoObject):
         return FontDescription.from_pointer(desc_pointer)
 
     def _set_font_description(self, desc: Optional[FontDescription]) -> None:
-        value = desc.get_pointer() if isinstance(desc, FontDescription) else ffi.NULL
+        value = desc.pointer if isinstance(desc, FontDescription) else ffi.NULL
         pango.pango_layout_set_font_description(self._pointer, value)
 
-    font_description: Optional[FontDescription] = property(_get_font_description, _set_font_description)
+    font_description: Optional[FontDescription] = property(
+        _get_font_description, _set_font_description
+    )
     """
     The default font description for the layout. If no font
     description is set, the font description from the layout's context is used.
@@ -150,7 +152,7 @@ class Layout(PangoObject):
         else:
             pango.pango_layout_set_attributes(
                 self._pointer,
-                attrs.get_pointer()
+                attrs.pointer
             )
 
     def _del_attributes(self) -> None:
@@ -193,7 +195,7 @@ class Layout(PangoObject):
         ink_rect = Rectangle()
         logical_rect = Rectangle()
         pango.pango_layout_get_extents(
-            self._pointer, ink_rect.get_pointer(), logical_rect.get_pointer()
+            self._pointer, ink_rect.pointer, logical_rect.pointer
         )
         return ink_rect, logical_rect
 

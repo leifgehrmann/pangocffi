@@ -1,6 +1,7 @@
 from abc import ABC
 from . import ffi
 
+
 class PangoObject(ABC):
     """An abstract base class for every object used by Pango."""
 
@@ -14,10 +15,10 @@ class PangoObject(ABC):
     def __init__(self, pointer: ffi.CData = None, *init_args):
         final_pointer: ffi.CData = pointer
 
-        if pointer == None:
+        if pointer is None:
             if self._INIT_METHOD == ffi.new:
                 final_pointer = ffi.new(self._INIT_CLASS + " *")
-            elif self._INIT_METHOD == None:
+            elif self._INIT_METHOD is None:
                 raise "Initializing this class is not supported."
             else:
                 final_pointer = self._INIT_METHOD(*init_args)
@@ -46,7 +47,9 @@ class PangoObject(ABC):
             self._pointer = pointer
 
     @classmethod
-    def from_pointer(cls, pointer: ffi.CData, gc: bool = False) -> "PangoObject":
+    def from_pointer(cls,
+                     pointer: ffi.CData,
+                     gc: bool = False) -> "PangoObject":
         """
         Instantiates an object from a C pointer.
 

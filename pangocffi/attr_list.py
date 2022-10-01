@@ -18,19 +18,19 @@ class AttrList(PangoObject):
     _COPY_METHOD = pango.pango_attr_list_copy
     _EQ_METHOD = pango.pango_attr_list_equal
 
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> "AttrList":
+    def _ref(self) -> None:
         """
-        Instantiates a :class:`AttrList` from a pointer.
+        Increase the reference count of the given attribute list by one.
+        """
+        self._pointer = pango.pango_attr_list_ref(self._pointer)
 
-        :return:
-            the AttrList.
+    def _unref(self) -> None:
         """
-        if pointer == ffi.NULL:
-            raise ValueError("Null pointer")
-        self = object.__new__(cls)
-        self._pointer = pointer
-        return self
+        Decrease the reference count of the given attribute list by one.
+        If the result is zero, free the attribute list and the attributes
+        it contains.
+        """
+        pango.pango_attr_list_unref(self._pointer)
 
     def insert(self, attr: Attribute) -> None:
         """
@@ -44,7 +44,7 @@ class AttrList(PangoObject):
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
         self._ref()
-        pango.pango_attr_list_insert(self._pointer, attr.get_pointer())
+        pango.pango_attr_list_insert(self._pointer, attr.pointer)
 
     def insert_before(self, attr: Attribute) -> None:
         """
@@ -58,7 +58,7 @@ class AttrList(PangoObject):
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
         self._ref()
-        pango.pango_attr_list_insert_before(self._pointer, attr.get_pointer())
+        pango.pango_attr_list_insert_before(self._pointer, attr.pointer)
 
     def change(self, attr: Attribute) -> None:
         """
@@ -79,11 +79,11 @@ class AttrList(PangoObject):
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
         self._ref()
-        pango.pango_attr_list_change(self._pointer, attr.get_pointer())
+        pango.pango_attr_list_change(self._pointer, attr.pointer)
 
     def splice(self, attr_list: "AttrList", pos: int, length: int):
-        """This function opens up a hole in ``self``, fills it in with attributes
-        from the left, and then merges other on top of the hole.
+        """This function opens up a hole in ``self``, fills it in with
+        attributes from the left, and then merges other on top of the hole.
         This operation is equivalent to stretching every attribute that applies
         at position pos in list by an amount len , and then calling
         :py:meth:`AttrList.change` with a copy of each attribute in other in

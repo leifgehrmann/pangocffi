@@ -93,8 +93,8 @@ class LayoutIter(PangoObject):
         """
         Returns the current run. When iterating by run, at the end of each
         line, there's a position with a NULL run, so this function can return
-        ``None``. The NULL run at the end of each line ensures that all lines have
-        at least one run, even lines consisting of only a newline.
+        ``None``. The NULL run at the end of each line ensures that all lines
+        have at least one run, even lines consisting of only a newline.
 
         Use the faster :meth:`get_run_readonly()` if you do not plan
         to modify the contents of the run (glyphs, glyph widths, etc.).
@@ -124,7 +124,7 @@ class LayoutIter(PangoObject):
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_char_extents(
             self._pointer,
-            logical_rect.get_pointer()
+            logical_rect.pointer
         )
         return logical_rect
 
@@ -142,8 +142,8 @@ class LayoutIter(PangoObject):
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_cluster_extents(
             self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            ink_rect.pointer,
+            logical_rect.pointer
         )
         return ink_rect, logical_rect
 
@@ -161,8 +161,8 @@ class LayoutIter(PangoObject):
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_run_extents(
             self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            ink_rect.pointer,
+            logical_rect.pointer
         )
         return ink_rect, logical_rect
 
@@ -209,8 +209,8 @@ class LayoutIter(PangoObject):
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_line_extents(
             self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            ink_rect.pointer,
+            logical_rect.pointer
         )
         return ink_rect, logical_rect
 
@@ -227,7 +227,7 @@ class LayoutIter(PangoObject):
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_layout_extents(
             self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            ink_rect.pointer,
+            logical_rect.pointer
         )
         return ink_rect, logical_rect

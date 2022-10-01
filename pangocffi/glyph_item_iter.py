@@ -41,7 +41,7 @@ class GlyphItemIter(PangoObject):
         text_pointer = ffi.new('char[]', text.encode('utf8'))
         return bool(pango.pango_glyph_item_iter_init_start(
             self._pointer,
-            glyph_item.get_pointer(),
+            glyph_item.pointer,
             text_pointer
         ))
 
@@ -57,7 +57,7 @@ class GlyphItemIter(PangoObject):
         text_pointer = ffi.new('char[]', text.encode('utf8'))
         return bool(pango.pango_glyph_item_iter_init_end(
             self._pointer,
-            glyph_item.get_pointer(),
+            glyph_item.pointer,
             text_pointer
         ))
 
