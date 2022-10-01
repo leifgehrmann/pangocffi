@@ -16,11 +16,11 @@ class TestGlyphItemIter(unittest.TestCase):
     def test_glyph_item_iterator(self):
         text = 'Hi from Παν語'
         layout = Layout(self.pango_context)
-        layout.set_text(text)
+        layout.text = text
         layout_iter = layout.get_iter()
 
         glyph_item_iter = GlyphItemIter()
-        assert isinstance(glyph_item_iter.get_pointer(), ffi.CData)
+        assert isinstance(glyph_item_iter.pointer, ffi.CData)
 
         assert glyph_item_iter.init_start(
             layout_iter.get_run(),

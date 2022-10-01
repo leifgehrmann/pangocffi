@@ -6,7 +6,7 @@ class TestContext(unittest.TestCase):
 
     def test_context_init_identical_context(self):
         context = Context()
-        identical_context = Context.from_pointer(context.get_pointer())
+        identical_context = Context.from_pointer(context.pointer)
         assert identical_context == context
 
     def test_layout_not_implemented_equality(self):
@@ -23,7 +23,7 @@ class TestContext(unittest.TestCase):
         desc = FontDescription()
         desc.family = 'sans-serif'
         context.font_description = desc
-        assert context.font_description.get_family() == 'sans-serif'
+        assert context.font_description.family == 'sans-serif'
 
         context.base_gravity = Gravity.EAST
         assert context.base_gravity == Gravity.EAST

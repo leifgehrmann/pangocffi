@@ -18,7 +18,7 @@ class TestLayout(unittest.TestCase):
     def test_from_pointer(self):
         a = AttrList()
         a.copy()
-        b = AttrList.from_pointer(a.get_pointer())
+        b = AttrList.from_pointer(a.pointer)
         try:
             assert a == b
         except AttributeError:

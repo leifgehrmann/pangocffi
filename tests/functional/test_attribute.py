@@ -21,7 +21,7 @@ class TestAttribute(unittest.TestCase):
         assert a == c
 
     def test_start_index_end_index(self):
-        a = Attribute().from_size(8, 5, 9)
+        a = Attribute.from_size(8, 5, 9)
         assert a.start_index == 5
         assert a.end_index == 9
         a.start_index = 8

@@ -7,7 +7,7 @@ class TestFontDescription(unittest.TestCase):
 
     def test_font_description_init_identical(self):
         desc = FontDescription()
-        identical_desc = desc.from_pointer(desc.get_pointer())
+        identical_desc = desc.from_pointer(desc.pointer)
         assert identical_desc == desc
 
     def test_font_description_not_implemented_equality(self):
@@ -21,7 +21,7 @@ class TestFontDescription(unittest.TestCase):
     def test_setting_properties(self):
         desc = FontDescription()
 
-        assert desc.get_family() is None
+        assert desc.family is None
         desc.family = 'sans-serif'
         assert desc.family == 'sans-serif'
 
