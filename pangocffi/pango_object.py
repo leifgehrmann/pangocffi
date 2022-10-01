@@ -6,10 +6,21 @@ class PangoObject(ABC):
     """An abstract base class for every object used by Pango."""
 
     _INIT_METHOD: ffi = None
+    """
+    A CFFI function that initializes the object (i.e. `pango.pango_..._new()`).
+    Alternatively, `ffi.new`.
+    """
     _INIT_CLASS: str = None
+    """
+    Only if :attr:`_INIT_METHOD` is set to `ffi.new`, a string representing
+    the class name to initialize (e.g. `"PangoLayout"`).
+    """
     _GC_METHOD: ffi = None
+    """A CFFI function that frees the object (i.e. `pango.pango_..._free()`)"""
     _COPY_METHOD: ffi = None
+    """A CFFI function that copies the object (i.e. `pango.pango_..._copy()`)"""
     _EQ_METHOD: ffi = None
+    """A CFFI function that compares the object with another (i.e. `pango.pango_..._equals()`)"""
     _pointer: ffi.CData
 
     def __init__(self, pointer: ffi.CData = None, *init_args):
