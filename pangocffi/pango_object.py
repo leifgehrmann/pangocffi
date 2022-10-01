@@ -24,11 +24,10 @@ class PangoObject(ABC):
 
         self._init_pointer(final_pointer, True)
 
-    def _get_pointer(self) -> ffi.CData:
+    @property
+    def pointer(self) -> ffi.CData:
+        """The C pointer to this object."""
         return self._pointer
-
-    pointer: ffi.CData = property(_get_pointer)
-    """The C pointer to this object."""
 
     def _init_pointer(self, pointer: ffi.CData, gc: bool):
         """
