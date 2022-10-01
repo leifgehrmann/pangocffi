@@ -1,60 +1,25 @@
-from . import ffi
+from . import pango, PangoObject
 
 
-class Item:
+class Item(PangoObject):
     """
-    An :class:`Item` structure stores information about a segment of text.
+    The :class:`Item` structure stores information about a segment of text.
     """
 
-    def _init_pointer(self, pointer: ffi.CData):
-        self._pointer = pointer
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> 'Item':
-        """
-        Instantiates a :class:`Item` from a pointer.
-
-        :return:
-            the item.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError('Null pointer')
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
-        return self
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to this item.
-
-        :return:
-            a pointer to the item.
-        """
-        return self._pointer
+    _GC_METHOD = pango.pango_item_free
+    _COPY_METHOD = pango.pango_item_copy
 
     @property
     def offset(self) -> int:
-        """
-        :return:
-            byte offset of the start of this item in text.
-        :type: int
-        """
+        """Byte offset of the start of this item in text."""
         return self._pointer.offset
 
     @property
     def length(self) -> int:
-        """
-        :return:
-            length of this item in bytes.
-        :type: int
-        """
+        """Length of this item in bytes."""
         return self._pointer.length
 
     @property
     def num_chars(self) -> int:
-        """
-        :return:
-            number of Unicode characters in the item.
-        :type: int
-        """
+        """Length of this item in characters."""
         return self._pointer.num_chars

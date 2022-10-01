@@ -1,9 +1,9 @@
-from . import FontDescription, Underline, ffi, pango
+from . import FontDescription, Underline, ffi, pango, PangoObject
 from .enums import Gravity, GravityHint, Stretch, Style, Variant, Weight
 from .rectangle import Rectangle
 
 
-class Attribute:
+class Attribute(PangoObject):
     """
     The :class:`Attributes` — Font and other attributes for annotating text.
     Attributed text is used in a number of places in Pango.
@@ -13,63 +13,13 @@ class Attribute:
     attributes applied to a portion of text.
     """
 
-    def __init__(self):
-        self._pointer = None
+    _COPY_METHOD = pango.pango_attribute_copy
+    _EQ_METHOD = pango.pango_attribute_equal
 
-    @classmethod
-    def _init_pointer(cls, pointer: ffi.CData) -> "Attribute":
-        self = object.__new__(cls)
-        self._pointer = pointer
-        return self
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> "Attribute":
-        """
-        Instantiates a :class:`Attribute` from a pointer.
-
-        :return:
-            the Attribute.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError("Null pointer")
-        self = object.__new__(cls)
-        self._pointer = pointer
-        return self
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to the context
-
-        :return:
-            the pointer to the context.
-        """
-        return self._pointer
-
-    def __eq__(self, other: "Attribute") -> bool:
-        if isinstance(other, Attribute):
-            return bool(
-                pango.pango_attribute_equal(
-                    self.get_pointer(),
-                    other.get_pointer(),
-                )
-            )
-        raise NotImplementedError
-
-    @property
-    def start_index(self):
+    def _get_start_index(self):
         return self._pointer.start_index
 
-    @start_index.setter
-    def start_index(self, start_index: int):
-        """
-        Set's the Start Index of a Attribute.
-
-        :param start_index:
-            the start index of the range. Should be >=0.
-        :raises: AssertionError
-            When ``start_index`` isn't a :class:`int`.
-        """
-        assert isinstance(start_index, int), "start_index isn't a int"
+    def _set_start_index(self, start_index: int):
         assert start_index >= pango.PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING, \
             "start_index is too low"
         assert start_index < pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
@@ -77,26 +27,21 @@ class Attribute:
         start = ffi.cast("guint", start_index)
         self._pointer.start_index = start
 
-    @property
-    def end_index(self):
+    start_index: int = property(_get_start_index, _set_start_index)
+    """The index at which this attribute starts."""
+
+    def _get_end_index(self):
         return self._pointer.end_index
 
-    @end_index.setter
-    def end_index(self, end_index: int):
-        """
-        Set's the End Index of a Attribute.
-
-        :param end_index:
-            end index of the range. The character at this index
-            is not included in the range.
-        :raises: AssertionError
-            When ``end_index`` isn't a :class:`int`.
-        """
+    def _set_end_index(self, end_index: int):
         assert isinstance(end_index, int), "end_index isn't a int"
         assert end_index <= pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
             "end_index is too high"
         end = ffi.cast("guint", end_index)
         self._pointer.end_index = end
+
+    end_index: int = property(_get_end_index, _set_end_index)
+    """The index at which this attriute ends."""
 
     # @classmethod
     # def from_language(
@@ -904,20 +849,3 @@ class Attribute:
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
-
-    def copy(self) -> "Attribute":
-        """
-        Make a copy of an attribute.
-
-        :return:
-            the Attribute.
-        """
-        return Attribute._init_pointer(
-            pango.pango_attribute_copy(self._pointer),
-        )
-
-    def __copy__(self) -> "Attribute":
-        return self.copy()
-
-    def __deepcopy__(self, memo) -> "Attribute":
-        return self.copy()

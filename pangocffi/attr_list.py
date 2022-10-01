@@ -1,7 +1,7 @@
-from . import ffi, pango, Attribute
+from . import ffi, pango, Attribute, PangoObject
 
 
-class AttrList:
+class AttrList(PangoObject):
     """
     The :class:`AttrList` represents a list of attributes(:class:`Attribute`)
     that apply to a section of text. The attributes are, in general, allowed
@@ -13,20 +13,10 @@ class AttrList:
     one paragraph of text due to internal structures.
     """
 
-    def __init__(self) -> None:
-        self._init_pointer(pango.pango_attr_list_new())
-
-    def _init_pointer(self, pointer: ffi.CData):
-        self._pointer = ffi.gc(pointer, pango.pango_attr_list_unref)
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to the AttrList
-
-        :return:
-            the pointer to the AttrList.
-        """
-        return self._pointer
+    _INIT_METHOD = pango.pango_attr_list_new
+    _GC_METHOD = pango.pango_attr_list_unref
+    _COPY_METHOD = pango.pango_attr_list_copy
+    _EQ_METHOD = pango.pango_attr_list_equal
 
     @classmethod
     def from_pointer(cls, pointer: ffi.CData) -> "AttrList":
@@ -41,32 +31,6 @@ class AttrList:
         self = object.__new__(cls)
         self._pointer = pointer
         return self
-
-    def _ref(self) -> None:
-        """
-        Increase the reference count of the given attribute list by one.
-        """
-        self._pointer = pango.pango_attr_list_ref(self._pointer)
-
-    def _unref(self) -> None:
-        """
-        Decrease the reference count of the given attribute list by one.
-        If the result is zero, free the attribute list and the attributes
-        it contains.
-        """
-        pango.pango_attr_list_unref(self._pointer)
-
-    def copy(self) -> "AttrList":
-        """
-        Copy :class:`AttrList` and return an identical new.
-        """
-        return AttrList.from_pointer(pango.pango_attr_list_copy(self._pointer))
-
-    def __copy__(self) -> "AttrList":
-        return self.copy()
-
-    def __deepcopy__(self, memo) -> "AttrList":
-        return self.copy()
 
     def insert(self, attr: Attribute) -> None:
         """
@@ -154,15 +118,5 @@ class AttrList:
             pos,
             length,
         )
-
-    def __eq__(self, other: "AttrList") -> bool:
-        if isinstance(other, AttrList):
-            return bool(
-                pango.pango_attr_list_equal(
-                    self.get_pointer(),
-                    other.get_pointer(),
-                )
-            )
-        raise NotImplementedError
 
     # TODO: pango_attr_list_filter ()

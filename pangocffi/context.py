@@ -1,61 +1,28 @@
-from . import pango, gobject, ffi, FontDescription, Gravity, GravityHint
+from . import pango, FontDescription, Gravity, GravityHint, PangoObject
 from typing import Optional
 
-class Context(object):
+class Context(PangoObject):
     """
     The :class:`Context` structure stores global information used to control
     the itemization process.
     """
 
+    _INIT_METHOD = pango.pango_context_new
+
     def __init__(self):
         """
-        Creates a new PangoContext initialized to default values.
+        Creates a new context initialized to default values.
 
         This function is not particularly useful as it should always be
-        followed by a :meth:`set_font_map()` call, and the function
-        ``FontMap.create_context()`` does these two steps together and hence
+        followed by a :meth:`set_font_map()` call: the function
+        ``FontMap.create_context()`` does these two steps together and
         users are recommended to use that.
 
         If you are using Pango as part of a higher-level system, that system
         may have its own way of creating a :class:`Context`. For instance,
         PangoCairo has ``pango_cairo_create_context()``; use that instead.
         """
-        self._init_pointer(pango.pango_context_new(), gc=True)
-
-    def _init_pointer(self, pointer: ffi.CData, gc: bool):
-        if gc:
-            self._pointer = ffi.gc(pointer, gobject.g_object_unref)
-        else:
-            self._pointer = pointer
-
-    def _get_pointer(self) -> ffi.CData:
-        return self._pointer
-
-    pointer: ffi.CData = property(_get_pointer)
-    """The C pointer to the context."""
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData, gc: bool = False) -> 'Context':
-        """
-        Instantiates a :class:`Context` from a pointer.
-
-        :param pointer:
-            a pointer to a Pango Context.
-        :param gc:
-            whether to garbage collect the pointer. Defaults to ``False``.
-        :return:
-            the context.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError('Null pointer')
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer, gc)
-        return self
-
-    def __eq__(self, other):
-        if isinstance(other, Context):
-            return self.pointer == other.pointer
-        return NotImplemented
+        super().__init__()
 
     def _get_font_description(self) -> FontDescription:
         return FontDescription.from_pointer(

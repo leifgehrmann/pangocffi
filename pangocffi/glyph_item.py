@@ -1,8 +1,8 @@
 from typing import List
-from . import pango, ffi, Item
+from . import pango, ffi, Item, PangoObject
 
 
-class GlyphItem:
+class GlyphItem(PangoObject):
     """
     A :class:`GlyphItem` is a pair of a :class:`Item` and the glyphs resulting
     from shaping the text corresponding to an item. As an example of the usage
@@ -11,45 +11,14 @@ class GlyphItem:
     :class:`GlyphItem`.
     """
 
-    def _init_pointer(self, pointer: ffi.CData):
-        self._pointer = pointer
+    _GC_METHOD = pango.pango_glyph_item_free
+    _COPY_METHOD = pango.pango_glyph_item_copy
 
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> 'GlyphItem':
-        """
-        Instantiates a :class:`GlyphItem` from a pointer.
+    def _get_item(self) -> Item:
+        return Item.from_pointer(self._pointer.item)
 
-        :return:
-            the glyph item.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError('Null pointer')
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
-        return self
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to this glyph item.
-
-        :return:
-            a pointer to the glyph item.
-        """
-        return self._pointer
-
-    def copy(self) -> 'GlyphItem':
-        """
-        Make a deep copy of the :class:`GlyphItem` structure.
-
-        :return:
-            a copy of the :class:`GlyphItem`
-        """
-        glyph_item_pointer = pango.pango_glyph_item_copy(self._pointer)
-        glyph_item_pointer = ffi.gc(
-            glyph_item_pointer,
-            pango.pango_glyph_item_free
-        )
-        return GlyphItem.from_pointer(glyph_item_pointer)
+    item = property(_get_item)
+    """Corresponding :class:`Item`."""
 
     def split(self, text: str, split_index: int) -> 'GlyphItem':
         """
@@ -122,12 +91,3 @@ class GlyphItem:
 
         # type = ffi.typeof(logical_widths_pointer)
         return [logical_widths_pointer[i] for i in range(self.item.num_chars)]
-
-    @property
-    def item(self) -> Item:
-        """
-        :return:
-            corresponding :class:`Item`.
-        :type: Item
-        """
-        return Item.from_pointer(self._pointer.item)

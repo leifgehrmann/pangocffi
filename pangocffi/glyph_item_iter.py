@@ -1,8 +1,8 @@
-from . import pango, ffi
+from . import pango, ffi, PangoObject
 from . import GlyphItem
 
 
-class GlyphItemIter:
+class GlyphItemIter(PangoObject):
     """
     A :class:`GlyphItemIter` is an iterator over the clusters in a
     :class:`GlyphItem`. The forward direction of the iterator is the logical
@@ -24,23 +24,10 @@ class GlyphItemIter:
     manually.
     """
 
-    def __init__(self):
-        """
-        Returns an iterator to iterate over the visual extents of the layout.
-
-        :param layout:
-            a Pango :class:`Layout`
-        """
-        self._pointer = ffi.new("PangoGlyphItemIter *")
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to this iterator.
-
-        :return:
-            a pointer to the iterator.
-        """
-        return self._pointer
+    _INIT_METHOD = ffi.new
+    _INIT_CLASS = "PangoGlyphItemIter"
+    _GC_METHOD = pango.pango_glyph_item_iter_free
+    _COPY_METHOD = pango.pango_glyph_item_iter_copy
 
     def init_start(self, glyph_item: GlyphItem, text: str) -> bool:
         """
@@ -99,64 +86,36 @@ class GlyphItemIter:
 
     @property
     def glyph_item(self) -> GlyphItem:
-        """
-        :return:
-            the glyph item being iterated over
-        :type: GlyphItem
-        """
+        """The glyph item being iterated over."""
         return GlyphItem.from_pointer(self._pointer.glyph_item)
 
     @property
     def text(self) -> str:
-        """
-        :return:
-            the text for the layout
-        :type: str
-        """
+        """The text being iterated over."""
         return ffi.string(self._pointer.text).decode('utf-8')
 
     @property
     def start_glyph(self) -> int:
-        """
-        :type: int
-        """
         return self._pointer.start_glyph
 
     @property
     def start_index(self) -> int:
-        """
-        :return:
-            the cluster start index within text
-        :type: int
-        """
+        """The index at which this cluster starts within the text."""
         return self._pointer.start_index
 
     @property
     def start_char(self) -> int:
-        """
-        :type: int
-        """
         return self._pointer.start_char
 
     @property
     def end_glyph(self) -> int:
-        """
-        :type: int
-        """
         return self._pointer.end_glyph
 
     @property
     def end_index(self) -> int:
-        """
-        :return:
-            the cluster end index within text
-        :type: int
-        """
+        """The character at which this cluster ends within the text."""
         return self._pointer.end_index
 
     @property
     def end_char(self) -> int:
-        """
-        :type: int
-        """
         return self._pointer.end_char

@@ -1,11 +1,11 @@
-from . import pango, gobject, ffi
+from . import pango, gobject, ffi, PangoObject
 from . import Context, FontDescription, AttrList
 from . import Alignment, Rectangle, EllipsizeMode, WrapMode
 from pangocffi import LayoutIter
 from typing import Tuple, Optional
 
 
-class Layout(object):
+class Layout(PangoObject):
     """
     A Pango :class:`Layout` represents an entire paragraph of text. It is
     initialized with a Pango :class:`Context`, UTF-8 string and set of
@@ -15,61 +15,18 @@ class Layout(object):
     and the physical position of the resulting glyphs can be made.
     """
 
+    _INIT_METHOD = pango.pango_layout_new
+    _GC_METHOD = gobject.g_object_unref
+
     def __init__(self, context: Context):
-        """
-        Create a new :class:`Layout` object with attributes initialized to
-        default values for a particular :class:`Context`.
+        return super().__init__(None, context.pointer)
 
-        :param context:
-            the Pango :class:`Context`
-        """
-        self._init_pointer(
-            pango.pango_layout_new(context.get_pointer()),
-            gc=True
-        )
-
-    def _init_pointer(self, pointer: ffi.CData, gc: bool):
-        if gc:
-            self._pointer = ffi.gc(pointer, gobject.g_object_unref)
-        else:
-            self._pointer = pointer
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData, gc: bool = False) -> "Layout":
-        """
-        Instantiates a :class:`Layout` from a pointer.
-
-        :param pointer:
-            a C pointer to a Pango Layout.
-        :param gc:
-            whether to garbage collect the pointer. Defaults to ``False``.
-        :return:
-            the layout.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError("Null pointer")
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer, gc)
-        return self
-
-    def _get_pointer(self) -> ffi.CData:
-        return self._pointer
-
-    pointer: ffi.CData = property(_get_pointer)
-    """The C pointer to this layout."""
-
-    def _get_context(self) -> Context:
+    @property
+    def context(self) -> Context:
+        """The :class:`Context` used for this layout."""
         return Context.from_pointer(
             pango.pango_layout_get_context(self._pointer),
         )
-
-    context: Context = property(_get_context)
-    """
-    Returns the Pango :class:`Context` used for this layout.
-
-    :return:
-        the :class:`Context` for the layout.
-    """
 
     def _get_text(self) -> str:
         text_pointer = pango.pango_layout_get_text(self._pointer)
@@ -86,9 +43,6 @@ class Layout(object):
     Note that if you have used :meth:`apply_markup()` on the layout before,
     you may want to clear the :attr:`attributes` from the markup when setting
     this property, as attributes are not cleared automatically.
-
-    :param text:
-        a valid UTF-8 string
     """
 
     def _get_font_description(self) -> Optional[FontDescription]:
@@ -288,4 +242,4 @@ class Layout(object):
             the layout iterator
         """
         layout_iterator_pointer = pango.pango_layout_get_iter(self._pointer)
-        return LayoutIter.from_pointer(layout_iterator_pointer, gc=True)
+        return LayoutIter(layout_iterator_pointer)
