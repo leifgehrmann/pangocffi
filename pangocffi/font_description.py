@@ -1,190 +1,90 @@
 from typing import Optional, Union
-from . import pango, ffi
+from . import pango, ffi, PangoObject
 from . import Style, Variant, Weight, Stretch, Gravity
 
 
-class FontDescription(object):
+class FontDescription(PangoObject):
     """
     The :class:`FontDescription` represents the description of an ideal font.
     These structures are used both to list what fonts are available on the
     system and also for specifying the characteristics of a font to load.
     """
 
-    def __init__(self):
-        """
-        Creates a new font description structure with all fields unset.
+    _INIT_METHOD = pango.pango_font_description_new
+    _GC_METHOD = pango.pango_font_description_free
+    _COPY_METHOD = pango.pango_font_description_copy
 
-        :param:
-            a :class:`FontDescription`
-        """
-        self._init_pointer(pango.pango_font_description_new())
-
-    def _init_pointer(self, pointer: ffi.CData):
-        self._pointer = pointer
-        # self._pointer = ffi.gc(pointer, pango.pango_font_description_free)
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to the font description
-
-        :return:
-            the pointer to the font description.
-        """
-        return self._pointer
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> 'FontDescription':
-        """
-        Instantiates a :class:`FontDescription` from a pointer.
-
-        :return:
-            the font description.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError('Null pointer')
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
-        return self
-
-    def __eq__(self, other):
-        if isinstance(other, FontDescription):
-            return self.get_pointer() == other.get_pointer()
-        return NotImplemented
-
-    def set_family(self, family: str) -> None:
-        """
-        Sets the family name field of a font description. The family name
-        represents a family of related font styles, and will resolve to a
-        particular :class:`FontFamily`. In some uses of
-        :class:`FontDescription`, it is also possible to use a comma separated
-        list of family names for this field.
-
-        :param family:
-            a string representing the family name.
-        """
-        family_pointer = ffi.new('char[]', family.encode('utf8'))
-        pango.pango_font_description_set_family(self._pointer, family_pointer)
-
-    def get_family(self) -> Optional[str]:
-        """
-        Returns the family name field of a font description.
-
-        :return:
-            the family name field for the font description, or ``None`` if not
-            previously set.
-        """
+    def _get_family(self) -> Optional[str]:
         family_pointer = pango.pango_font_description_get_family(self._pointer)
         if family_pointer == ffi.NULL:
             return None
         return ffi.string(family_pointer).decode()
 
-    def set_style(self, style: Style) -> None:
-        """
-        Sets the style field of a :class:`FontDescription`. The :class:`Style`
-        enumeration describes whether the font is slanted and the manner in
-        which it is slanted.
+    def _set_family(self, family: str) -> None:
+        family_pointer = ffi.new('char[]', family.encode('utf8'))
+        pango.pango_font_description_set_family(self._pointer, family_pointer)
 
-        Most fonts will either have a italic style or an oblique style, but not
-        both, and font matching in Pango will match italic specifications with
-        oblique fonts and vice-versa if an exact match is not found.
+    family: Optional[str] = property(_get_family, _set_family)
+    """
+    The family name of the font description. This represents a font family of
+    related font styles, and will resolve to a particular :class:`FontFamily`.
+    In some uses of :class:`FontDescription`, it is also possible to use a
+    comma-separated list of family names for this field.
+    """
 
-        :param style:
-            the style for the font description
-        """
-        pango.pango_font_description_set_style(self._pointer, style.value)
-
-    def get_style(self) -> Style:
-        """
-        Returns the style field of a :class:`FontDescription`.
-
-        :return:
-             the style field for the font description.
-        """
+    def _get_style(self) -> Style:
         return Style(pango.pango_font_description_get_style(self._pointer))
 
-    def set_variant(self, variant: Variant) -> None:
-        """
-        Sets the variant field of a font description. The :class:`Variant`
-        enumeration describes whether the font is normal or small caps.
+    def _set_style(self, style: Style) -> None:
+        pango.pango_font_description_set_style(self._pointer, style.value)
 
-        :param variant:
-            the variant type for the font description.
-        """
-        pango.pango_font_description_set_variant(self._pointer, variant.value)
+    style: Style = property(_get_style, _set_style)
+    """
+    The slant style of the font description.
 
-    def get_variant(self) -> Variant:
-        """
-        Returns the variant field of a :class:`FontDescription`.
+    Most fonts will either have an italic style or an oblique style, but not
+    both, and font matching in Pango will match italic specifications with
+    oblique fonts and vice-versa if an exact match is not found.
+    """
 
-        :return:
-            the variant field for the font description.
-        """
+    def _get_variant(self) -> Variant:
         return Variant(pango.pango_font_description_get_variant(self._pointer))
 
-    def set_weight(self, weight: Union[Weight, int]) -> None:
-        """
-        Sets the weight field of a font description. The weight field specifies
-        how bold or light the font should be. In addition to the values of the
-        :class:`Weight` enumeration, other intermediate numeric values are
-        possible.
+    def _set_variant(self, variant: Variant) -> None:
+        pango.pango_font_description_set_variant(self._pointer, variant.value)
 
-        :param weight:
+    variant: Variant = property(_get_variant, _set_variant)
+    """
+    The variant of the font description, which describes whether the font
+    is normal or small caps.
+    """
 
-        """
-        if isinstance(weight, Weight):
-            pango.pango_font_description_set_weight(
-                self._pointer,
-                weight.value
-            )
-        else:
-            pango.pango_font_description_set_weight(self._pointer, weight)
-
-    def get_weight(self) -> int:
-        """
-        Returns the weight field of a font description.
-
-        :return:
-            the weight field for the font description.
-        """
+    def _get_weight(self) -> int:
         return pango.pango_font_description_get_weight(self._pointer)
 
-    def set_stretch(self, stretch: Stretch) -> None:
-        """
-        Sets the stretch field of a font description. The stretch field
-        specifies how narrow or wide the font should be.
+    def _set_weight(self, weight: Union[Weight, int]) -> None:
+        if isinstance(weight, Weight):
+            weight = weight.value
+        pango.pango_font_description_set_weight(self._pointer, weight)
 
-        :param stretch:
-             the stretch for the font description
-        """
-        pango.pango_font_description_set_stretch(self._pointer, stretch.value)
+    weight: Union[Weight, int] = property(_get_weight, _set_weight)
 
-    def get_stretch(self) -> Stretch:
-        """
-        Returns the stretch field of a font description.
-
-        :return:
-            the stretch field for the font description.
-        """
+    def _get_stretch(self) -> Stretch:
         return Stretch(pango.pango_font_description_get_stretch(self._pointer))
 
-    def set_size(self, size: int) -> None:
-        """
-        Sets the size field of a font description in fractional points. This is
-        mutually exclusive with :meth:`set_absolute_size()`.
+    def _set_stretch(self, stretch: Stretch) -> None:
+        pango.pango_font_description_set_stretch(self._pointer, stretch.value)
 
-        :param size:
-             the size of the font in points, scaled by ``PANGO_SCALE``. (That
-             is, a size value of 10 * ``PANGO_SCALE`` is a 10 point font. The
-             conversion factor between points and device units depends on
-             system configuration and the output device. For screen display, a
-             logical DPI of 96 is common, in which case a 10 point font
-             corresponds to a 10 * (96 / 72) = 13.3 pixel font. Use
-             :meth:`set_absolute_size()` if you need a particular size in
-             device units.
-        """
+    stretch: Stretch = property(_get_stretch, _set_stretch)
+    """
+    The stretch of the font description, which specifies how narrow or
+    wide the font should be.
+    """
+
+    def _set_size(self, size: int) -> None:
         pango.pango_font_description_set_size(self._pointer, size)
 
-    def get_size(self) -> int:
+    def _get_size(self) -> int:
         """
         Returns the size field of a font description.
 
@@ -196,49 +96,47 @@ class FontDescription(object):
         """
         return pango.pango_font_description_get_size(self._pointer)
 
-    def set_absolute_size(self, size: float) -> None:
-        """
-        Sets the size field of a font description, in device units. This is
-        mutually exclusive with :meth:`set_size()` which sets the font size in
-        points.
+    size = property(_get_size, _set_size)
+    """
+    The size field of a font description in fractional points, scaled by
+    ``PANGO_SCALE``. (That is, a size value of ``10 * PANGO_SCALE`` is a
+    10 point font). The conversion factor between points and device units
+    depends on system configuration and the output device. For screen display,
+    a logical DPI of 96 is common, in which case a 10 point font corresponds
+    to a ``10 * (96 / 72) = 13.3`` pixel font. Use :meth:`set_absolute_size()`
+    if you need a particular size in device units.
+    """
 
-        :param size:
-             the new size, in Pango units. There are ``PANGO_SCALE`` Pango
-             units in one device unit. For an output backend where a device
-             unit is a pixel, a size value of 10 * ``PANGO_SCALE`` gives a 10
-             pixel font.
-        """
-        pango.pango_font_description_set_absolute_size(self._pointer, size)
-
-    def get_size_is_absolute(self) -> bool:
+    @property
+    def size_is_absolute(self) -> bool:
         """
         Determines whether the size of the font is in points (not absolute) or
-        device units (absolute). See :meth:`set_size()` and
+        device units (absolute). See :attr:`size` and
         :meth:`set_absolute_size()`.
 
         :return:
-            whether the size for the font description is in points or device
-            units.
+            whether the size for the font description is in device units.
         """
         return pango.pango_font_description_get_size_is_absolute(self._pointer)
 
-    def set_gravity(self, gravity: Gravity) -> None:
-        """
-        Sets the gravity field of a font description. The gravity field
-        specifies how the glyphs should be rotated. If gravity is
-        ``Gravity.AUTO``, this actually unsets the gravity mask on the font
-        description.
+    def _get_gravity(self) -> Gravity:
+        return Gravity(pango.pango_font_description_get_gravity(self._pointer))
 
-        :param gravity:
-             the gravity for the font description.
-        """
+    def _set_gravity(self, gravity: Gravity) -> None:
         pango.pango_font_description_set_gravity(self._pointer, gravity.value)
 
-    def get_gravity(self) -> Gravity:
-        """
-        Returns the gravity field of a font description.
+    gravity: Gravity = property(_get_gravity, _set_gravity)
+    """
+    Sets the gravity of the font description, which specifies how the glyphs
+    should be rotated. If gravity is ``Gravity.AUTO``, this actually unsets
+    the gravity mask on the font description.
+    """
 
-        :return:
-            the gravity field for the font description.
+    def set_absolute_size(self, size: float) -> None:
         """
-        return Gravity(pango.pango_font_description_get_gravity(self._pointer))
+        Sets the size field of a font description, in device units. There are
+        ``PANGO_SCALE`` Pango units in one device unit. For an output backend
+        where a device unit is a pixel, a size value of ``10 * PANGO_SCALE``
+        gives a 10 pixel font. See :attr:`size`.
+        """
+        pango.pango_font_description_set_absolute_size(self._pointer, size)
