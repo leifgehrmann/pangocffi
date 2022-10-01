@@ -86,5 +86,12 @@ class PangoObject(ABC):
 
     def __repr__(self) -> str:
         properties = vars(self).items()
-        formatted = ",".join([f"{k}={v}" for k, v in properties])
-        return f"<{self.__class__.__name__}({formatted})>"
+
+        formatted = []
+        for k, v in properties:
+            if k != "_pointer":
+                f = k.lstrip("_") + "=" + str(v)
+                formatted.append(f)
+
+        entries = ",".join(formatted)
+        return f"<{self.__class__.__name__}({entries})>"
