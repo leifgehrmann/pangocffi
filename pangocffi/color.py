@@ -9,7 +9,7 @@ class Color(PangoObject):
     _COPY_METHOD = pango.pango_color_copy
 
     def __init__(self, red: int, green: int, blue: int):
-        self._init_pointer()
+        super().__init__()
         self.red = red
         self.green = green
         self.blue = blue
