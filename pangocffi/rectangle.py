@@ -1,13 +1,17 @@
 from typing import Optional
-from . import ffi
+from . import ffi, PangoObject
 
 
-class Rectangle:
+class Rectangle(PangoObject):
     """
     The :class:`Rectangle` structure represents a rectangle. It is
     frequently used to represent the logical or ink extents of a single glyph
     or section of text.
     """
+
+    _INIT_METHOD = ffi.new
+    _INIT_CLASS = "PangoRectangle"
+
     def __init__(
             self,
             pointer: Optional[ffi.CData] = None,
@@ -16,10 +20,7 @@ class Rectangle:
             x: Optional[int] = None,
             y: Optional[int] = None
     ):
-        if pointer is None:
-            self.pointer = ffi.new("PangoRectangle *")
-        else:
-            self.pointer = pointer
+        super().__init__(pointer)
 
         if width is not None:
             self.pointer.width = width
@@ -30,91 +31,38 @@ class Rectangle:
         if y is not None:
             self.pointer.y = y
 
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns a pointer to the :class:`Rectangle`.
+    def _get_x(self) -> int:
+        return self._pointer.x
 
-        :return:
-            a pointer to ``PangoRectangle``
-        """
-        return self.pointer
+    def _set_x(self, value: int):
+        self._pointer.x = value
 
-    @staticmethod
-    def from_pointer(pointer: ffi.CData) -> 'Rectangle':
-        """
-        Returns an instance of a :class:`Rectangle` from a pointer.
+    x: int = property(_get_x, _set_x)
+    """X coordinate of the left side of the rectangle."""
 
-        :return:
-            the :class:`Rectangle`.
-        """
-        return Rectangle(
-            pointer=pointer
-        )
+    def _get_y(self) -> int:
+        return self._pointer.y
 
-    @property
-    def x(self) -> int:
-        """
-        :return:
-            X coordinate of the left side of the rectangle.
-        :type: int
-        """
-        return self.pointer.x
+    def _set_y(self, value: int):
+        self._pointer.y = value
 
-    @x.setter
-    def x(self, value: int):
-        """
-        :param value:
-            Sets the X coordinate of the left side of the rectangle.
-        """
-        self.pointer.x = value
+    y: int = property(_get_y, _set_y)
+    """Y coordinate of the the top side of the rectangle."""
 
-    @property
-    def y(self) -> int:
-        """
-        :return:
-            Y coordinate of the the top side of the rectangle.
-        :type: int
-        """
-        return self.pointer.y
+    def _get_width(self) -> int:
+        return self._pointer.width
 
-    @y.setter
-    def y(self, value: int):
-        """
-        :param value:
-            Sets the Y coordinate of the the top side of the rectangle.
-        """
-        self.pointer.y = value
+    def _set_width(self, value: int):
+        self._pointer.width = value
 
-    @property
-    def width(self) -> int:
-        """
-        :return:
-            width of the rectangle.
-        :type: int
-        """
-        return self.pointer.width
+    width: int = property(_get_width, _set_width)
+    """The width of the rectangle."""
 
-    @width.setter
-    def width(self, value: int):
-        """
-        :param value:
-            Sets the width of the rectangle.
-        """
-        self.pointer.width = value
+    def _get_height(self) -> int:
+        return self._pointer.height
 
-    @property
-    def height(self) -> int:
-        """
-        :return:
-            height of the rectangle.
-        :type: int
-        """
-        return self.pointer.height
+    def _set_height(self, value: int):
+        self._pointer.height = value
 
-    @height.setter
-    def height(self, value: int):
-        """
-        :param value:
-            Sets the height of the rectangle.
-        """
-        self.pointer.height = value
+    height: int = property(_get_height, _set_height)
+    """The height of the rectangle."""
