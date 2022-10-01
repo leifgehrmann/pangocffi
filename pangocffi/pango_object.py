@@ -30,7 +30,7 @@ class PangoObject(ABC):
             if self._INIT_METHOD == ffi.new:
                 final_pointer = ffi.new(self._INIT_CLASS + " *")
             elif self._INIT_METHOD is None:
-                raise "Initializing this class is not supported."
+                raise Exception("Initializing this class is not supported.")
             else:
                 final_pointer = self._INIT_METHOD(*init_args)
 
@@ -91,11 +91,13 @@ class PangoObject(ABC):
     def __deepcopy__(self, memo) -> "PangoObject":
         return self.copy()
 
-    def __eq__(self, other: "PangoObject") -> bool:
-        if self._EQ_METHOD:
-            return bool(self._EQ_METHOD(self.pointer, other.pointer))
-        else:
-            return self.pointer == other.pointer
+    def __eq__(self, other) -> bool:
+        if isinstance(other, PangoObject):
+            if self._EQ_METHOD:
+                return bool(self._EQ_METHOD(self.pointer, other.pointer))
+            else:
+                return self.pointer == other.pointer
+        return False
 
     def __repr__(self) -> str:
         properties = vars(self).items()
