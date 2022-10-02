@@ -6,7 +6,6 @@ class Color(PangoObject):
     _INIT_METHOD = ffi.new
     _INIT_CLASS = "PangoColor"
     _GC_METHOD = pango.pango_color_free
-    _COPY_METHOD = pango.pango_color_copy
 
     def __init__(self, red: int, green: int, blue: int):
         super().__init__()
@@ -94,6 +93,10 @@ class Color(PangoObject):
             glib.g_free,
         )
         return ffi.string(string).decode("utf-8")
+
+    # TODO: remove this and go back to using _COPY_METHOD
+    def __copy__(self) -> "Color":
+        return Color(self.red, self.green, self.blue)
 
     def __eq__(self, other: "Color") -> bool:
         if isinstance(other, Color):
