@@ -95,7 +95,7 @@ class Color(PangoObject):
         return ffi.string(string).decode("utf-8")
 
     # TODO: remove this and go back to using _COPY_METHOD
-    def __copy__(self) -> "Color":
+    def copy(self) -> "Color":
         return Color(self.red, self.green, self.blue)
 
     def __eq__(self, other: "Color") -> bool:
