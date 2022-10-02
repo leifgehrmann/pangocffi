@@ -119,4 +119,13 @@ class AttrList(PangoObject):
             length,
         )
 
+    # avoid _EQ_METHOD since pango_attr_list_equal is a newer method
+    def __eq__(self, other) -> bool:
+        if isinstance(other, PangoObject):
+            if hasattr(pango, "pango_attr_list_equal"):
+                return bool(pango.pango_attr_list_equal(self.pointer, other.pointer))
+            else:
+                return self.pointer == other.pointer
+        return False
+
     # TODO: pango_attr_list_filter ()
