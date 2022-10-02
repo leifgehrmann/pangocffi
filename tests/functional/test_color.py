@@ -36,5 +36,6 @@ class TestColor(unittest.TestCase):
 
     def test_equal(self):
         a = Color(0, 0, 0)
-        with self.assertRaises(NotImplementedError):
-            assert a == 1
+        b = Color(1, 1, 1)
+        assert a != b
+        assert a != 1
