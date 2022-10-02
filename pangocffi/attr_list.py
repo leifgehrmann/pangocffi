@@ -16,7 +16,6 @@ class AttrList(PangoObject):
     _INIT_METHOD = pango.pango_attr_list_new
     _GC_METHOD = pango.pango_attr_list_unref
     _COPY_METHOD = pango.pango_attr_list_copy
-    _EQ_METHOD = pango.pango_attr_list_equal
 
     def _ref(self) -> None:
         """
