@@ -226,3 +226,8 @@ ________________
 .. autofunction:: pangocffi.pango_version
 
 .. autofunction:: pangocffi.pango_version_string
+
+Pango Object
+____________
+
+.. autoclass:: PangoObject
