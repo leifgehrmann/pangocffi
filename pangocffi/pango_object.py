@@ -18,9 +18,14 @@ class PangoObject(ABC):
     _GC_METHOD: ffi = None
     """A CFFI function that frees the object (i.e. `pango.pango_..._free()`)"""
     _COPY_METHOD: ffi = None
-    """A CFFI function that copies the object (i.e. `pango.pango_..._copy()`)"""
+    """
+    A CFFI function that copies the object (i.e. `pango.pango_..._copy()`)
+    """
     _EQ_METHOD: ffi = None
-    """A CFFI function that compares the object with another (i.e. `pango.pango_..._equals()`)"""
+    """
+    A CFFI function that compares the object with another
+    (i.e. `pango.pango_..._equals()`)
+    """
     _pointer: ffi.CData
 
     def __init__(self, pointer: ffi.CData = None, *init_args):

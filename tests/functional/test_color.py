@@ -1,7 +1,7 @@
 import copy
 import unittest
 
-from pangocffi import Color, ffi, pango
+from pangocffi import Color, ffi
 
 
 class TestColor(unittest.TestCase):
