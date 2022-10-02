@@ -82,8 +82,9 @@ class AttrList(PangoObject):
         pango.pango_attr_list_change(self._pointer, attr.pointer)
 
     def splice(self, attr_list: "AttrList", pos: int, length: int):
-        """This function opens up a hole in ``self``, fills it in with
-        attributes from the left, and then merges other on top of the hole.
+        """
+        This function opens up a hole in ``self``, fills it in with attributes
+        from the left, and then merges other on top of the hole.
         This operation is equivalent to stretching every attribute that applies
         at position pos in list by an amount len , and then calling
         :py:meth:`AttrList.change` with a copy of each attribute in other in
