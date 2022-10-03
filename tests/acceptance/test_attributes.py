@@ -72,7 +72,7 @@ def test_attributes():
     ))
 
     # Example: Highlight multiple Monospace texts
-    markup_texts = ('pango.set_markup(\'...\')', 'Attribute.from_shape()')
+    markup_texts = ('pango.apply_markup(\'...\')', 'Attribute.from_shape()')
     for markup_text in markup_texts:
         text_to_match = markup_text.encode('utf-8')
         match_index = text_utf8.index(text_to_match)
