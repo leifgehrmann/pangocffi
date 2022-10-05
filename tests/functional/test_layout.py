@@ -78,8 +78,11 @@ class TestLayout(unittest.TestCase):
         attr_list.insert(attr)
 
         layout.attributes = attr_list
-        layout.attributes
+        assert layout.attributes is not None
+
+        del layout.attributes
+        assert layout.attributes is None
 
         # Resetting the attributes
         layout.attributes = None
-        layout.attributes
+        assert layout.attributes is None
