@@ -69,8 +69,7 @@ class TestLayout(unittest.TestCase):
                     "Pango version more that 1.46.0 is required."
                 )
             )
-        with self.assertRaises(NotImplementedError):
-            assert a == 2
+        assert a != 2
 
     def test_insert(self):
         a = AttrList()

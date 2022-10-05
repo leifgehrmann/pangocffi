@@ -260,5 +260,4 @@ class TestAttribute(unittest.TestCase):
         assert a == b
         c = copy.deepcopy(a)
         assert a == c
-        with self.assertRaises(NotImplementedError):
-            a == 6
+        assert a != 6
