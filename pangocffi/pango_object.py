@@ -4,7 +4,8 @@ from . import ffi
 
 class PangoObject(ABC):
     """
-    An :external:class:`AbstractBaseClass <abc.ABC>` for every object used by Pango.
+    An :external:class:`AbstractBaseClass <abc.ABC>` for every object used by
+    Pango.
     """
 
     _INIT_METHOD: ffi = None
