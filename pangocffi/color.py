@@ -5,7 +5,6 @@ from . import PangoObject
 class Color(PangoObject):
     _INIT_METHOD = ffi.new
     _INIT_CLASS = "PangoColor"
-    _GC_METHOD = pango.pango_color_free
 
     def __init__(self, red: int, green: int, blue: int):
         super().__init__()

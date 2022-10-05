@@ -26,7 +26,6 @@ class GlyphItemIter(PangoObject):
 
     _INIT_METHOD = ffi.new
     _INIT_CLASS = "PangoGlyphItemIter"
-    _GC_METHOD = pango.pango_glyph_item_iter_free
     _COPY_METHOD = pango.pango_glyph_item_iter_copy
 
     def init_start(self, glyph_item: GlyphItem, text: str) -> bool:
