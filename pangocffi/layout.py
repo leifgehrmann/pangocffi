@@ -116,7 +116,7 @@ class Layout(PangoObject):
     def _set_alignment(self, alignment: Alignment) -> None:
         pango.pango_layout_set_alignment(self._pointer, alignment.value)
 
-    aligmment: Alignment = property(_get_alignment, _set_alignment)
+    alignment: Alignment = property(_get_alignment, _set_alignment)
     """
     The alignment of the layout: how partial lines are positioned
     within the horizontal space available.
