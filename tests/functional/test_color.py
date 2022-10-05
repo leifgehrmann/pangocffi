@@ -22,8 +22,8 @@ class TestColor(unittest.TestCase):
         b.parse_color("#123")
         assert str(b) == "<Color(red=572657937,green=13107,blue=0)>"
         assert b.red == 572657937
-        assert b.blue == 0
         assert b.green == 13107
+        assert b.blue == 0
 
     def test_to_string(self):
         b = Color(0, 0, 0)
@@ -39,3 +39,8 @@ class TestColor(unittest.TestCase):
         b = Color(1, 1, 1)
         assert a != b
         assert a != 1
+
+    def test_from_pointer(self):
+        a = Color(1, 2, 3)
+        b = Color.from_pointer(a.pointer)
+        assert a == b
