@@ -9,7 +9,7 @@ from pangocffi.enums import Stretch
 class TestLayout(unittest.TestCase):
     def test_init(self):
         a = AttrList()
-        a.get_pointer()
+        a.pointer
 
     def test_attr_list_returns_null_from_null_pointer(self):
         with self.assertRaises(ValueError):
@@ -18,7 +18,7 @@ class TestLayout(unittest.TestCase):
     def test_from_pointer(self):
         a = AttrList()
         a.copy()
-        b = AttrList.from_pointer(a.get_pointer())
+        b = AttrList.from_pointer(a.pointer)
         try:
             assert a == b
         except AttributeError:
@@ -69,8 +69,7 @@ class TestLayout(unittest.TestCase):
                     "Pango version more that 1.46.0 is required."
                 )
             )
-        with self.assertRaises(NotImplementedError):
-            assert a == 2
+        assert a != 2
 
     def test_insert(self):
         a = AttrList()

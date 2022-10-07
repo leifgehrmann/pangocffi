@@ -1,11 +1,11 @@
-from . import pango, gobject, ffi
+from . import pango, gobject, ffi, PangoObject
 from . import Context, FontDescription, AttrList
 from . import Alignment, Rectangle, EllipsizeMode, WrapMode
 from pangocffi import LayoutIter
 from typing import Tuple, Optional
 
 
-class Layout(object):
+class Layout(PangoObject):
     """
     A Pango :class:`Layout` represents an entire paragraph of text. It is
     initialized with a Pango :class:`Context`, UTF-8 string and set of
@@ -15,268 +15,165 @@ class Layout(object):
     and the physical position of the resulting glyphs can be made.
     """
 
+    _INIT_METHOD = pango.pango_layout_new
+    _GC_METHOD = gobject.g_object_unref
+
     def __init__(self, context: Context):
-        """
-        Create a new :class:`Layout` object with attributes initialized to
-        default values for a particular :class:`Context`.
+        return super().__init__(None, context.pointer)
 
-        :param context:
-            the Pango :class:`Context`
-        """
-        self._init_pointer(
-            pango.pango_layout_new(context.get_pointer()),
-            gc=True
-        )
-
-    def _init_pointer(self, pointer: ffi.CData, gc: bool):
-        if gc:
-            self._pointer = ffi.gc(pointer, gobject.g_object_unref)
-        else:
-            self._pointer = pointer
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData, gc: bool = False) -> "Layout":
-        """
-        Instantiates a :class:`Layout` from a pointer.
-
-        :param pointer:
-            a pointer to a Pango Layout.
-        :param gc:
-            whether to garbage collect the pointer. Defaults to ``False``.
-        :return:
-            the layout.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError("Null pointer")
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer, gc)
-        return self
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to this layout.
-
-        :return:
-            a pointer to the layout.
-        """
-        return self._pointer
-
-    def get_context(self) -> Context:
-        """
-        Returns the Pango :class:`Context` used for this layout.
-
-        :return:
-            the :class:`Context` for the layout.
-        """
+    @property
+    def context(self) -> Context:
+        """The :class:`Context` used for this layout."""
         return Context.from_pointer(
             pango.pango_layout_get_context(self._pointer),
         )
 
-    def set_text(self, text: str) -> None:
-        """
-        Sets the text of the layout.
-
-        Note that if you have used ``set_markup()`` or
-        ``set_markup_with_accel()`` on the layout before, you may want to call
-        ``set_attributes()`` to clear the attributes set on the layout from
-        the markup as this function does not clear attributes.
-
-        :param text:
-            a valid UTF-8 string
-        """
-        text_pointer = ffi.new("char[]", text.encode("utf8"))
-        pango.pango_layout_set_text(self._pointer, text_pointer, -1)
-
-    def get_text(self) -> str:
-        """
-        Returns the text in the layout.
-
-        :return:
-            the text in the layout.
-        """
+    def _get_text(self) -> str:
         text_pointer = pango.pango_layout_get_text(self._pointer)
         return ffi.string(text_pointer).decode("utf-8")
 
-    def set_markup(self, markup: str) -> None:
+    def _set_text(self, text: str) -> None:
+        text_pointer = ffi.new("char[]", text.encode("utf8"))
+        pango.pango_layout_set_text(self._pointer, text_pointer, -1)
+
+    text: str = property(_get_text, _set_text)
+    """
+    The text contained in the layout.
+
+    Note that if you have used :meth:`apply_markup()` on the layout before,
+    you may want to clear the :attr:`attributes` from the markup when setting
+    this property, as attributes are not cleared automatically.
+    """
+
+    def _get_font_description(self) -> Optional[FontDescription]:
+        desc_pointer = pango.pango_layout_get_font_description(self._pointer)
+        if desc_pointer == ffi.NULL:
+            return None
+        return FontDescription.from_pointer(desc_pointer)
+
+    def _set_font_description(self, desc: Optional[FontDescription]) -> None:
+        value = desc.pointer if isinstance(desc, FontDescription) else ffi.NULL
+        pango.pango_layout_set_font_description(self._pointer, value)
+
+    font_description: Optional[FontDescription] = property(
+        _get_font_description, _set_font_description
+    )
+    """
+    The default font description for the layout. If no font
+    description is set, the font description from the layout's context is used.
+    """
+
+    def _get_width(self) -> int:
+        return pango.pango_layout_get_width(self._pointer)
+
+    def _set_width(self, width: int) -> None:
+        pango.pango_layout_set_width(self._pointer, width)
+
+    width: int = property(_get_width, _set_width)
+    """The width to which the lines of the layout should wrap or ellipsize."""
+
+    def _get_height(self) -> int:
+        return pango.pango_layout_get_height(self._pointer)
+
+    def _set_height(self, height: int) -> None:
+        pango.pango_layout_set_height(self._pointer, height)
+
+    height: int = property(_get_height, _set_height)
+    """
+    The height to which the layout should be ellipsized at.
+
+    If the height is positive, it will be the maximum height of the layout.
+    Only lines which fit will be shown, and any omitted text is replaced
+    by an ellipsis. At least one line is included in each paragraph
+    regardless of how small the height value is; a value of zero will
+    render exactly one line for the entire layout.
+
+    If height is negative, it will be the (negative of) maximum number of
+    lines per paragraph. That is, the total number of lines shown may well
+    be more than this value if the layout contains multiple paragraphs of
+    text. The default value of -1 means that first line of each paragraph
+    is ellipsized.
+
+    This property only has effect if a positive width is set on layout and
+    its ellipsization mode is not ``NONE``. The behavior is undefined if a
+    height other than -1 is set and ellipsization mode is set to ``NONE``.
+    """
+
+    def _get_spacing(self) -> int:
+        return pango.pango_layout_get_spacing(self._pointer)
+
+    def _set_spacing(self, spacing: int) -> None:
+        pango.pango_layout_set_spacing(self._pointer, spacing)
+
+    spacing: int = property(_get_spacing, _set_spacing)
+    """
+    The amount of spacing, in Pango units, between the lines of the layout.
+    """
+
+    def _get_alignment(self) -> Alignment:
+        return Alignment(pango.pango_layout_get_alignment(self._pointer))
+
+    def _set_alignment(self, alignment: Alignment) -> None:
+        pango.pango_layout_set_alignment(self._pointer, alignment.value)
+
+    alignment: Alignment = property(_get_alignment, _set_alignment)
+    """
+    The alignment of the layout: how partial lines are positioned
+    within the horizontal space available.
+    """
+
+    def _get_ellipsize(self) -> EllipsizeMode:
+        return EllipsizeMode(pango.pango_layout_get_ellipsize(self._pointer))
+
+    def _set_ellipsize(self, ellipsize: EllipsizeMode) -> None:
+        pango.pango_layout_set_ellipsize(self._pointer, ellipsize.value)
+
+    ellipsize: EllipsizeMode = property(_get_ellipsize, _set_ellipsize)
+    """The ellipsize mode of the layout."""
+
+    def _get_wrap(self) -> WrapMode:
+        return WrapMode(pango.pango_layout_get_wrap(self._pointer))
+
+    def _set_wrap(self, wrap: WrapMode) -> None:
+        pango.pango_layout_set_wrap(self._pointer, wrap.value)
+
+    wrap: WrapMode = property(_get_wrap, _set_wrap)
+    """The wrap mode of the layout."""
+
+    def _get_attributes(self) -> Optional[AttrList]:
+        attrs_pointer = pango.pango_layout_get_attributes(self._pointer)
+        if attrs_pointer == ffi.NULL:
+            return None
+        return AttrList.from_pointer(attrs_pointer)
+
+    def _set_attributes(self, attrs: Optional[AttrList]) -> None:
+        if attrs is None:
+            pango.pango_layout_set_attributes(self._pointer, ffi.NULL)
+        else:
+            pango.pango_layout_set_attributes(
+                self._pointer,
+                attrs.pointer
+            )
+
+    def _del_attributes(self) -> None:
+        self._set_attributes(None)
+
+    attributes = property(_get_attributes, _set_attributes, _del_attributes)
+    """
+    The text attributes for this layout.
+
+    :param attrs: a :class:`AttrList`
+    """
+
+    def apply_markup(self, markup: str) -> None:
         """
-        Same as set_markup_with_accel(), but the markup text isn't scanned for
-        accelerators.
+        Sets the layout text and attribute list from marked-up text.
 
         :param markup:
             marked-up text
         """
         markup_pointer = ffi.new("char[]", markup.encode("utf8"))
         pango.pango_layout_set_markup(self._pointer, markup_pointer, -1)
-
-    def set_font_description(self, desc: Optional[FontDescription]) -> None:
-        """
-        Sets the default font description for the layout. If no font
-        description is set on the layout, the font description from the
-        layout's context is used.
-
-        :param desc:
-            the new :class:`FontDescription`, or ``None`` to unset the current
-            ``FontDescription``.
-        """
-        if desc is None:
-            pango.pango_layout_set_font_description(self._pointer, ffi.NULL)
-        else:
-            pango.pango_layout_set_font_description(
-                self._pointer,
-                desc.get_pointer(),
-            )
-
-    def get_font_description(self) -> Optional[FontDescription]:
-        """
-        Returns the font description for the layout, if any.
-
-        :return:
-            the layout's :class:`FontDescription`, or ``None`` if the
-            :class:`FontDescription` from the layout's :class:`Context` is
-            inherited.
-        """
-        desc_pointer = pango.pango_layout_get_font_description(self._pointer)
-        if desc_pointer == ffi.NULL:
-            return None
-        return FontDescription.from_pointer(desc_pointer)
-
-    def set_width(self, width: int) -> None:
-        """
-        Sets the width to which the lines of the layout should wrap or
-        ellipsized. The default value is -1: no width set.
-
-        :param width:
-            the desired width in Pango units, or -1 to indicate that no
-            wrapping or ellipsization should be performed.
-        """
-        pango.pango_layout_set_width(self._pointer, width)
-
-    def get_width(self) -> int:
-        """
-        Returns the width to which the lines of the layout should wrap.
-
-        :return:
-             the width in Pango units, or -1 if no width set.
-        """
-        return pango.pango_layout_get_width(self._pointer)
-
-    def set_height(self, height: int) -> None:
-        """
-        Sets the ``height`` to which the layout should be ellipsized at.
-        There are two different behaviors, based on whether height is positive
-        or negative.
-
-        If ``height`` is positive, it will be the maximum height of the layout.
-        Only lines would be shown that would fit, and if there is any text
-        omitted, an ellipsis added. At least one line is included in each
-        paragraph regardless of how small the height value is.
-        A value of zero will render exactly one line for the entire layout.
-
-        If height is negative, it will be the (negative of) maximum number of
-        lines per paragraph. That is, the total number of lines shown may well
-        be more than this value if the layout contains multiple paragraphs of
-        text. The default value of -1 means that first line of each paragraph
-        is ellipsized. This behavior may be changed in the future to act per
-        layout instead of per paragraph. File a bug against pango at
-        http://bugzilla.gnome.org/ if your code relies on this behavior.
-
-        Height setting only has effect if a positive width is set on layout and
-        ellipsization mode of layout is not ``Ellipsize.NONE``. The behavior
-        is undefined if a height other than -1 is set and ellipsization mode
-        is set to ``Ellipsize.NONE``, and may change in the future.
-
-        :param height:
-            the desired height of the layout in Pango units if positive, or
-            desired number of lines if negative.
-        """
-        pango.pango_layout_set_height(self._pointer, height)
-
-    def get_height(self) -> int:
-        """
-        Returns the height of the layout used for ellipsization.
-
-        :return:
-            the height, in Pango units if positive, or number of lines if
-            negative.
-        """
-        return pango.pango_layout_get_height(self._pointer)
-
-    def get_spacing(self) -> int:
-        """
-        Returns the amount of spacing between the lines of the layout.
-
-        :return:
-            the spacing in pango units.
-        """
-        return pango.pango_layout_get_spacing(self._pointer)
-
-    def set_spacing(self, spacing: int) -> None:
-        """
-        Sets the amount of spacing in Pango unit between the lines of
-        the layout.
-
-        :param spacing:
-            the amount of spacing
-        """
-        pango.pango_layout_set_spacing(self._pointer, spacing)
-
-    def set_alignment(self, alignment: Alignment) -> None:
-        """
-        Sets the alignment for the layout: how partial lines are positioned
-        within the horizontal space available.
-
-        :param alignment:
-            the alignment.
-        """
-        pango.pango_layout_set_alignment(self._pointer, alignment.value)
-
-    def get_alignment(self) -> Alignment:
-        """
-        Returns the alignment for the layout: how partial lines are positioned
-        within the horizontal space available.
-
-        :return:
-            the alignment.
-        """
-        return Alignment(pango.pango_layout_get_alignment(self._pointer))
-
-    def set_ellipsize(self, ellipsize: EllipsizeMode) -> None:
-        """
-        Sets the ellipsize mode for the layout.
-
-        :param ellipsize:
-            the ellipsize mode.
-        """
-
-        pango.pango_layout_set_ellipsize(self._pointer, ellipsize.value)
-
-    def get_ellipsize(self) -> EllipsizeMode:
-        """
-        Returns the ellipsize mode of the layout.
-
-        :return:
-            the ellipsize mode.
-        """
-        return EllipsizeMode(pango.pango_layout_get_ellipsize(self._pointer))
-
-    def set_wrap(self, wrap: WrapMode) -> None:
-        """
-        Sets the wrap mode for the layout.
-
-        :param wrap:
-            the wrap mode.
-        """
-
-        pango.pango_layout_set_wrap(self._pointer, wrap.value)
-
-    def get_wrap(self) -> WrapMode:
-        """
-        Returns the wrap mode of the layout.
-
-        :return:
-            the wrap mode.
-        """
-        return WrapMode(pango.pango_layout_get_wrap(self._pointer))
 
     def get_extents(self) -> Tuple[Rectangle, Rectangle]:
         """
@@ -298,7 +195,7 @@ class Layout(object):
         ink_rect = Rectangle()
         logical_rect = Rectangle()
         pango.pango_layout_get_extents(
-            self._pointer, ink_rect.get_pointer(), logical_rect.get_pointer()
+            self._pointer, ink_rect.pointer, logical_rect.pointer
         )
         return ink_rect, logical_rect
 
@@ -323,10 +220,10 @@ class Layout(object):
 
     def get_baseline(self) -> int:
         """
-        Returns the Y position of baseline of the first line in the layout.
+        Returns the Y coordinate of the first line's baseline in the layout.
 
         :return:
-            baseline of first line, from top of :class:`Layout`
+            baseline of the :class:`Layout`'s first, line from the top
         """
         return pango.pango_layout_get_baseline(self._pointer)
 
@@ -347,28 +244,4 @@ class Layout(object):
             the layout iterator
         """
         layout_iterator_pointer = pango.pango_layout_get_iter(self._pointer)
-        return LayoutIter.from_pointer(layout_iterator_pointer, gc=True)
-
-    def set_attributes(self, attrs: Optional[AttrList]) -> None:
-        """
-        Sets the text attributes for a layout object.
-
-        :param attrs: a :class:`AttrList`
-        :type attrs: AttrList
-        """
-        if attrs is None:
-            pango.pango_layout_set_attributes(self._pointer, ffi.NULL)
-        else:
-            pango.pango_layout_set_attributes(
-                self._pointer,
-                attrs.get_pointer()
-            )
-
-    def get_attributes(self) -> Optional[AttrList]:
-        """
-        Gets the attribute list for the layout, if any.
-        """
-        attrs_pointer = pango.pango_layout_get_attributes(self._pointer)
-        if attrs_pointer == ffi.NULL:
-            return None
-        return AttrList.from_pointer(attrs_pointer)
+        return LayoutIter(layout_iterator_pointer)

@@ -15,11 +15,11 @@ class TestLayoutRunWithContext(unittest.TestCase):
 
     def test_layout_run_from_pointer(self):
         layout = Layout(self.pango_context)
-        layout.set_text('Hello World')
+        layout.text = 'Hello World'
         layout_iter = layout.get_iter()
 
         layout_run = layout_iter.get_run()
-        same_layout = LayoutRun.from_pointer(layout_run.get_pointer())
+        same_layout = LayoutRun.from_pointer(layout_run.pointer)
 
         assert isinstance(same_layout, LayoutRun)
 
@@ -29,7 +29,7 @@ class TestLayoutRunWithContext(unittest.TestCase):
 
     def test_layout_run_properties(self):
         layout = Layout(self.pango_context)
-        layout.set_text('Hello World')
+        layout.text = 'Hello World'
         layout_iter = layout.get_iter()
 
         layout_run = layout_iter.get_run()

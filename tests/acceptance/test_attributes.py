@@ -15,7 +15,7 @@ def test_attributes():
 
     text = 'Hi from Παν語! This test is to make sure that text is correctly ' \
            'annotated, and to also highlight functionality that is not ' \
-           'available from methods like pango.set_markup(\'...\'). ' \
+           'available from methods like pango.apply_markup(\'...\'). ' \
            'For instance, Attribute.from_shape() allows you to embed a ' \
            'picture or a widget in a layout. Example: Ø.'
     text_utf8 = text.encode('utf-8')
@@ -26,8 +26,8 @@ def test_attributes():
         pangocairo.pango_cairo_create_layout(cairo_context)
     )
 
-    layout.set_width(pangocffi.units_from_double(width * 72 / 25.4))
-    layout.set_text(text)
+    layout.width = pangocffi.units_from_double(width * 72 / 25.4)
+    layout.text = text
 
     attr_list = AttrList()
 
@@ -72,7 +72,7 @@ def test_attributes():
     ))
 
     # Example: Highlight multiple Monospace texts
-    markup_texts = ('pango.set_markup(\'...\')', 'Attribute.from_shape()')
+    markup_texts = ('pango.apply_markup(\'...\')', 'Attribute.from_shape()')
     for markup_text in markup_texts:
         text_to_match = markup_text.encode('utf-8')
         match_index = text_utf8.index(text_to_match)
@@ -116,9 +116,9 @@ def test_attributes():
     ))
 
     # Apply all the attributes to the layout
-    layout.set_attributes(attr_list)
+    layout.attributes = attr_list
 
     # Using pangocairocffi, this would be `pangocairocffi.show_layout(layout)`
-    pangocairo.pango_cairo_show_layout(cairo_context, layout.get_pointer())
+    pangocairo.pango_cairo_show_layout(cairo_context, layout.pointer)
 
     context_creator.close()

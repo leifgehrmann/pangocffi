@@ -1,146 +1,79 @@
-from . import pango, gobject, ffi, FontDescription, Gravity, GravityHint
+from . import pango, FontDescription, Gravity, GravityHint, PangoObject
+from typing import Optional
 
 
-class Context(object):
+class Context(PangoObject):
     """
     The :class:`Context` structure stores global information used to control
     the itemization process.
     """
 
+    _INIT_METHOD = pango.pango_context_new
+
     def __init__(self):
         """
-        Creates a new PangoContext initialized to default values.
+        Creates a new context initialized to default values.
 
         This function is not particularly useful as it should always be
-        followed by a :meth:`set_font_map()` call, and the function
-        ``FontMap.create_context()`` does these two steps together and hence
+        followed by a :meth:`set_font_map()` call: the function
+        ``FontMap.create_context()`` does these two steps together and
         users are recommended to use that.
 
         If you are using Pango as part of a higher-level system, that system
-        may have it's own way of create a :class:`Context`. For instance, the
-        PangoCairo toolkit has pango_cairo_create_context(). Use those instead.
+        may have its own way of creating a :class:`Context`. For instance,
+        PangoCairo has ``pango_cairo_create_context()``; use that instead.
         """
-        self._init_pointer(pango.pango_context_new(), gc=True)
+        super().__init__()
 
-    def _init_pointer(self, pointer: ffi.CData, gc: bool):
-        if gc:
-            self._pointer = ffi.gc(pointer, gobject.g_object_unref)
-        else:
-            self._pointer = pointer
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to the context
-
-        :return:
-            the pointer to the context.
-        """
-        return self._pointer
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData, gc: bool = False) -> 'Context':
-        """
-        Instantiates a :class:`Context` from a pointer.
-
-        :param pointer:
-            a pointer to a Pango Context.
-        :param gc:
-            whether to garbage collect the pointer. Defaults to ``False``.
-        :return:
-            the context.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError('Null pointer')
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer, gc)
-        return self
-
-    def __eq__(self, other):
-        if isinstance(other, Context):
-            return self.get_pointer() == other.get_pointer()
-        return NotImplemented
-
-    def set_font_description(self, desc: FontDescription) -> None:
-        """
-        Set the default font description for the context.
-
-        :param desc:
-            the new pango font description.
-        """
-        pango.pango_context_set_font_description(
-            self._pointer, desc.get_pointer()
-        )
-
-    def get_font_description(self) -> FontDescription:
-        """
-        Retrieve the default font description for the context.
-
-        :return:
-            the context's default font description.
-        """
+    def _get_font_description(self) -> FontDescription:
         return FontDescription.from_pointer(
             pango.pango_context_get_font_description(self._pointer)
         )
 
-    def get_base_gravity(self) -> Gravity:
-        """
-        Retrieves the base gravity for the context.
-        See :meth:`set_base_gravity()`.
+    def _set_font_description(self, desc: FontDescription):
+        pango.pango_context_set_font_description(self._pointer, desc.pointer)
 
-        :return:
-            the base gravity for the context.
-        """
-        return Gravity(
-            pango.pango_context_get_base_gravity(self._pointer)
-        )
+    font_description: Optional[FontDescription] = property(
+        _get_font_description, _set_font_description
+    )
+    """
+    The default font description for the context.
 
-    def set_base_gravity(self, gravity: Gravity):
-        """
-        Sets the base gravity for the context.
+    :param desc:
+        the new Pango font description.
+    """
 
-        The base gravity is used in laying vertical text out.
+    def _get_base_gravity(self) -> Gravity:
+        return Gravity(pango.pango_context_get_base_gravity(self._pointer))
 
-        :param gravity:
-            the new base gravity
-        """
+    def _set_base_gravity(self, gravity: Gravity):
         pango.pango_context_set_base_gravity(self._pointer, gravity.value)
 
-    def get_gravity(self) -> Gravity:
-        """
-        Retrieves the gravity for the context. This is similar to
-        :meth:`get_base_gravity()`, except for when the base gravity is
-        :meth:`Gravity.AUTO` for which :meth:`get_for_matrix()` is used to
-        return the gravity from the current context matrix.
+    base_gravity: Gravity = property(_get_base_gravity, _set_base_gravity)
+    """
+    The base gravity for the context, which is used for laying out vertical
+    text.
+    """
 
-        :return:
-            the resolved gravity for the context.
-        """
-        return Gravity(
-            pango.pango_context_get_gravity(self._pointer)
-        )
+    def _get_gravity(self) -> Gravity:
+        return Gravity(pango.pango_context_get_gravity(self._pointer))
 
-    def get_gravity_hint(self) -> GravityHint:
-        """
-        Retrieves the gravity hint for the context.
-        See :meth:`set_gravity_hint()` for details.
+    gravity: Gravity = property(_get_gravity)
+    """
+    The gravity for the context. This is similar to :attr:`base_gravity`,
+    unless it's :meth:`Gravity.AUTO`; :meth:`get_for_matrix()` is used to
+    retrieve the appropriate gravity from the current context matrix.
+    """
 
-        :return:
-            the gravity hint for the context.
-        """
-        return GravityHint(
-            pango.pango_context_get_gravity_hint(self._pointer)
-        )
+    def _get_gravity_hint(self) -> GravityHint:
+        return GravityHint(pango.pango_context_get_gravity_hint(self._pointer))
 
-    def set_gravity_hint(self, hint: GravityHint):
-        """
-        Sets the gravity hint for the context.
-
-        The gravity hint is used in laying vertical text out, and is only
-        relevant if gravity of the context as returned by
-        :meth:`get_gravity()` is set :meth:`Gravity.EAST` or
-        :meth:`Gravity.WEST`.
-
-        :param hint:
-            the new gravity hint
-        """
+    def _set_gravity_hint(self, hint: GravityHint):
         pango.pango_context_set_gravity_hint(self._pointer, hint.value)
+
+    gravity_hint: GravityHint = property(_get_gravity_hint, _set_gravity_hint)
+    """
+    The gravity hint for the context, which is used when laying out vertical
+    text, and is only relevant if the gravity of the context is
+    :meth:`Gravity.EAST` or :meth:`Gravity.WEST`.
+    """

@@ -1,9 +1,9 @@
-from . import FontDescription, Underline, ffi, pango
+from . import FontDescription, Underline, ffi, pango, PangoObject
 from .enums import Gravity, GravityHint, Stretch, Style, Variant, Weight
 from .rectangle import Rectangle
 
 
-class Attribute:
+class Attribute(PangoObject):
     """
     The :class:`Attributes` — Font and other attributes for annotating text.
     Attributed text is used in a number of places in Pango.
@@ -13,63 +13,13 @@ class Attribute:
     attributes applied to a portion of text.
     """
 
-    def __init__(self):
-        self._pointer = None
+    _COPY_METHOD = pango.pango_attribute_copy
+    _EQ_METHOD = pango.pango_attribute_equal
 
-    @classmethod
-    def _init_pointer(cls, pointer: ffi.CData) -> "Attribute":
-        self = object.__new__(cls)
-        self._pointer = pointer
-        return self
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> "Attribute":
-        """
-        Instantiates a :class:`Attribute` from a pointer.
-
-        :return:
-            the Attribute.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError("Null pointer")
-        self = object.__new__(cls)
-        self._pointer = pointer
-        return self
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to the context
-
-        :return:
-            the pointer to the context.
-        """
-        return self._pointer
-
-    def __eq__(self, other: "Attribute") -> bool:
-        if isinstance(other, Attribute):
-            return bool(
-                pango.pango_attribute_equal(
-                    self.get_pointer(),
-                    other.get_pointer(),
-                )
-            )
-        raise NotImplementedError
-
-    @property
-    def start_index(self):
+    def _get_start_index(self):
         return self._pointer.start_index
 
-    @start_index.setter
-    def start_index(self, start_index: int):
-        """
-        Set's the Start Index of a Attribute.
-
-        :param start_index:
-            the start index of the range. Should be >=0.
-        :raises: AssertionError
-            When ``start_index`` isn't a :class:`int`.
-        """
-        assert isinstance(start_index, int), "start_index isn't a int"
+    def _set_start_index(self, start_index: int):
         assert start_index >= pango.PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING, \
             "start_index is too low"
         assert start_index < pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
@@ -77,26 +27,21 @@ class Attribute:
         start = ffi.cast("guint", start_index)
         self._pointer.start_index = start
 
-    @property
-    def end_index(self):
+    start_index: int = property(_get_start_index, _set_start_index)
+    """The index at which this attribute starts."""
+
+    def _get_end_index(self):
         return self._pointer.end_index
 
-    @end_index.setter
-    def end_index(self, end_index: int):
-        """
-        Set's the End Index of a Attribute.
-
-        :param end_index:
-            end index of the range. The character at this index
-            is not included in the range.
-        :raises: AssertionError
-            When ``end_index`` isn't a :class:`int`.
-        """
+    def _set_end_index(self, end_index: int):
         assert isinstance(end_index, int), "end_index isn't a int"
         assert end_index <= pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
             "end_index is too high"
         end = ffi.cast("guint", end_index)
         self._pointer.end_index = end
+
+    end_index: int = property(_get_end_index, _set_end_index)
+    """The index at which this attriute ends."""
 
     # @classmethod
     # def from_language(
@@ -105,7 +50,7 @@ class Attribute:
     #    """
     #    Todo: API not implemented
     #    """
-    #    temp = cls._init_pointer(pango.pango_attr_language_new(language))
+    #    temp = cls.from_pointer(pango.pango_attr_language_new(language))
     #    temp.start_index = start_index
     #    temp.end_index = end_index
     #    return temp
@@ -129,7 +74,7 @@ class Attribute:
             the Attribute.
         """
         family = ffi.new("char[]", family.encode("utf-8"))
-        temp = cls._init_pointer(pango.pango_attr_family_new(family))
+        temp = cls.from_pointer(pango.pango_attr_family_new(family))
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -154,7 +99,7 @@ class Attribute:
             When ``style`` isn't a :class:`Style`.
         """
         assert isinstance(style, Style), "style isn't a Style"
-        temp = cls._init_pointer(pango.pango_attr_style_new(style.value))
+        temp = cls.from_pointer(pango.pango_attr_style_new(style.value))
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -179,7 +124,7 @@ class Attribute:
             When ``variant`` isn't a :class:`Variant`.
         """
         assert isinstance(variant, Variant), "variant isn't a Variant"
-        temp = cls._init_pointer(pango.pango_attr_variant_new(variant.value))
+        temp = cls.from_pointer(pango.pango_attr_variant_new(variant.value))
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -204,7 +149,7 @@ class Attribute:
             When ``stretch`` isn't a :class:`Stretch`.
         """
         assert isinstance(stretch, Stretch), "stretch isn't a Stretch"
-        temp = cls._init_pointer(pango.pango_attr_stretch_new(stretch.value))
+        temp = cls.from_pointer(pango.pango_attr_stretch_new(stretch.value))
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -229,7 +174,7 @@ class Attribute:
             When ``weight`` isn't a :class:`Weight`.
         """
         assert isinstance(weight, Weight), "weight isn't a Weight"
-        temp = cls._init_pointer(pango.pango_attr_weight_new(weight.value))
+        temp = cls.from_pointer(pango.pango_attr_weight_new(weight.value))
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -255,7 +200,7 @@ class Attribute:
         """
         assert isinstance(size, int), "size isn't int"
         size = ffi.cast("int", size)
-        temp = cls._init_pointer(pango.pango_attr_size_new(size))
+        temp = cls.from_pointer(pango.pango_attr_size_new(size))
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
@@ -281,7 +226,7 @@ class Attribute:
         """
         assert isinstance(size, int), "size isn't int"
         size = ffi.cast("int", size)
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_size_new_absolute(
                 size,
             ),
@@ -317,7 +262,7 @@ class Attribute:
         assert isinstance(
             font_desc, FontDescription
         ), "font_desc isn't a FontDescription"
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_font_desc_new(
                 font_desc._pointer,
             )
@@ -360,7 +305,7 @@ class Attribute:
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_foreground_new(
                 red,
                 green,
@@ -405,7 +350,7 @@ class Attribute:
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_background_new(
                 red,
                 green,
@@ -437,7 +382,7 @@ class Attribute:
         """
         assert isinstance(strikethrough, int), "strikethrough isn't a bool"
         strikethrough = ffi.cast("gboolean", strikethrough)
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_strikethrough_new(
                 strikethrough,
             ),
@@ -482,7 +427,7 @@ class Attribute:
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_strikethrough_color_new(
                 red,
                 green,
@@ -516,7 +461,7 @@ class Attribute:
             When ``underline`` isn't a :class:`Underline`.
         """
         assert isinstance(underline, Underline), "underline isn't a Underline"
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_underline_new(
                 underline.value,
             ),
@@ -561,7 +506,7 @@ class Attribute:
         red = ffi.cast("guint16", red)
         green = ffi.cast("guint16", green)
         blue = ffi.cast("guint16", blue)
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_underline_color_new(
                 red,
                 green,
@@ -606,10 +551,10 @@ class Attribute:
         assert isinstance(
             logical_rectangle, Rectangle
         ), "logical_rectangle isn't a Rectangle"
-        temp = cls._init_pointer(
+        temp = cls.from_pointer(
             pango.pango_attr_shape_new(
-                ink_rect.get_pointer(), logical_rectangle.get_pointer()
-            ),
+                ink_rect.pointer, logical_rectangle.pointer
+            )
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -642,8 +587,8 @@ class Attribute:
         """
         assert isinstance(scale_factor, int), "scale_factor isn't a int"
         scale_factor = ffi.cast("double", scale_factor)
-        temp = cls._init_pointer(
-            pango.pango_attr_scale_new(scale_factor),
+        temp = cls.from_pointer(
+            pango.pango_attr_scale_new(scale_factor)
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -675,8 +620,8 @@ class Attribute:
         """
         assert isinstance(rise, int), "rise isn't a int"
         rise = ffi.cast("int", rise)
-        temp = cls._init_pointer(
-            pango.pango_attr_rise_new(rise),
+        temp = cls.from_pointer(
+            pango.pango_attr_rise_new(rise)
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -707,8 +652,8 @@ class Attribute:
         """
         assert isinstance(letter_spacing, int), "rise isn't a int"
         letter_spacing = ffi.cast("int", letter_spacing)
-        temp = cls._init_pointer(
-            pango.pango_attr_letter_spacing_new(letter_spacing),
+        temp = cls.from_pointer(
+            pango.pango_attr_letter_spacing_new(letter_spacing)
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -745,8 +690,8 @@ class Attribute:
         assert isinstance(enable_fallback, bool),\
             "enable_fallback isn't a bool"
         enable_fallback = ffi.cast("gboolean", enable_fallback)
-        temp = cls._init_pointer(
-            pango.pango_attr_fallback_new(enable_fallback),
+        temp = cls.from_pointer(
+            pango.pango_attr_fallback_new(enable_fallback)
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -775,8 +720,8 @@ class Attribute:
             When ``gravity`` isn't a :class:`Gravity`.
         """
         assert isinstance(gravity, Gravity), "gravity isn't a Gravity"
-        temp = cls._init_pointer(
-            pango.pango_attr_gravity_new(gravity.value),
+        temp = cls.from_pointer(
+            pango.pango_attr_gravity_new(gravity.value)
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -805,8 +750,8 @@ class Attribute:
             When ``hint`` isn't a :class:`GravityHint`.
         """
         assert isinstance(hint, GravityHint), "hint isn't a GravityHint"
-        temp = cls._init_pointer(
-            pango.pango_attr_gravity_hint_new(hint.value),
+        temp = cls.from_pointer(
+            pango.pango_attr_gravity_hint_new(hint.value)
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -836,8 +781,8 @@ class Attribute:
         """
         assert isinstance(features, str), "features isn't a str"
         features = ffi.new("char[]", features.encode("utf8"))
-        temp = cls._init_pointer(
-            pango.pango_attr_font_features_new(features),
+        temp = cls.from_pointer(
+            pango.pango_attr_font_features_new(features)
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -867,8 +812,8 @@ class Attribute:
         """
         assert isinstance(alpha, int), "alpha isn't a int"
         alpha = ffi.cast("guint16", alpha)
-        temp = cls._init_pointer(
-            pango.pango_attr_foreground_alpha_new(alpha),
+        temp = cls.from_pointer(
+            pango.pango_attr_foreground_alpha_new(alpha)
         )
         temp.start_index = start_index
         temp.end_index = end_index
@@ -898,26 +843,9 @@ class Attribute:
         """
         assert isinstance(alpha, int), "alpha isn't a int"
         alpha = ffi.cast("guint16", alpha)
-        temp = cls._init_pointer(
-            pango.pango_attr_background_alpha_new(alpha),
+        temp = cls.from_pointer(
+            pango.pango_attr_background_alpha_new(alpha)
         )
         temp.start_index = start_index
         temp.end_index = end_index
         return temp
-
-    def copy(self) -> "Attribute":
-        """
-        Make a copy of an attribute.
-
-        :return:
-            the Attribute.
-        """
-        return Attribute._init_pointer(
-            pango.pango_attribute_copy(self._pointer),
-        )
-
-    def __copy__(self) -> "Attribute":
-        return self.copy()
-
-    def __deepcopy__(self, memo) -> "Attribute":
-        return self.copy()

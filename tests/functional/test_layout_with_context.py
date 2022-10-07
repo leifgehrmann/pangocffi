@@ -16,33 +16,33 @@ class TestLayoutWithContext(unittest.TestCase):
     def test_layout_setting_text(self):
         layout = Layout(self.pango_context)
 
-        layout.set_text('Hi from Παν語')
-        assert layout.get_text() == 'Hi from Παν語'
+        layout.text = 'Hi from Παν語'
+        assert layout.text == 'Hi from Παν語'
 
-        layout.set_markup('<span font="italic 30">Hello from Παν語</span>')
-        assert layout.get_text() == 'Hello from Παν語'
+        layout.apply_markup('<span font="italic 30">Hello from Παν語</span>')
+        assert layout.text == 'Hello from Παν語'
 
     def test_layout_setting_properties(self):
         layout = Layout(self.pango_context)
 
-        layout.set_width(300)
-        assert layout.get_width() == 300
+        layout.width = 300
+        assert layout.width == 300
 
-        layout.set_height(400)
-        assert layout.get_height() == 400
+        layout.height = 400
+        assert layout.height == 400
 
-        assert layout.get_spacing() == 0
-        layout.set_spacing(30)
-        assert layout.get_spacing() == 30
+        assert layout.spacing == 0
+        layout.spacing = 30
+        assert layout.spacing == 30
 
-        layout.set_alignment(Alignment.CENTER)
-        assert layout.get_alignment() is Alignment.CENTER
+        layout.alignment = Alignment.CENTER
+        assert layout.alignment is Alignment.CENTER
 
-        layout.set_ellipsize(EllipsizeMode.MIDDLE)
-        assert layout.get_ellipsize() is EllipsizeMode.MIDDLE
+        layout.ellipsize = EllipsizeMode.MIDDLE
+        assert layout.ellipsize is EllipsizeMode.MIDDLE
 
-        layout.set_wrap(WrapMode.WORD_CHAR)
-        assert layout.get_wrap() is WrapMode.WORD_CHAR
+        layout.wrap = WrapMode.WORD_CHAR
+        assert layout.wrap is WrapMode.WORD_CHAR
 
         ink_rect, logical_rect = layout.get_extents()
         assert logical_rect.width == 0

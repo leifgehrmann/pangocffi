@@ -10,19 +10,25 @@ import unittest
 
 
 class TestLayout(unittest.TestCase):
+    def test_layout_not_implemented_copy(self):
+        context = Context()
+        layout = Layout(context)
+        with self.assertRaises(NotImplementedError):
+            layout.copy()
+
     @staticmethod
     def test_layout_returns_identical_context():
         context = Context()
         layout = Layout(context)
-        identical_context = layout.get_context()
-        assert identical_context.get_pointer() == context.get_pointer()
+        identical_context = layout.context
+        assert identical_context.pointer == context.pointer
 
     @staticmethod
     def test_layout_get_pointer_returns_identical_layout():
         context = Context()
         layout = Layout(context)
-        identical_layout = Layout.from_pointer(layout.get_pointer())
-        assert identical_layout.get_pointer() == layout.get_pointer()
+        identical_layout = Layout.from_pointer(layout.pointer)
+        assert identical_layout.pointer == layout.pointer
 
     def test_layout_not_implemented_equality(self):
         context = Context()
@@ -39,47 +45,50 @@ class TestLayout(unittest.TestCase):
         layout = Layout(context)
 
         # Assert that the font description is not set
-        assert layout.get_font_description() is None
+        assert layout.font_description is None
 
         # Creating the font description
         desc = FontDescription()
-        desc.set_family("sans-serif")
-        layout.set_font_description(desc)
+        desc.family = "sans-serif"
+        layout.font_description = desc
 
         # Verifying the font description was set
-        same_desc = layout.get_font_description()
-        assert same_desc.get_family() == desc.get_family()
+        same_desc = layout.font_description
+        assert same_desc.family == desc.family
 
         # Changing the font description
-        desc.set_family("serif")
-        assert same_desc.get_family() != desc.get_family()
+        desc.family = "serif"
+        assert same_desc.family != desc.family
 
         # Resetting the font description
-        layout.set_font_description(None)
-        assert layout.get_font_description() is None
+        layout.font_description = None
+        assert layout.font_description is None
 
     @staticmethod
     def test_layout_setting_text():
         context = Context()
         layout = Layout(context)
 
-        layout.set_width(300)
+        layout.width = 300
 
-        layout.set_text("Hi from Pango")
-        layout.set_markup('<span font="italic 30">Hi from Παν語</span>')
+        layout.text = "Hi from Pango"
+        layout.apply_markup('<span font="italic 30">Hi from Παν語</span>')
 
     def test_set_attributes(self):
         context = Context()
         layout = Layout(context)
-        layout.set_text("Working?")
+        layout.text = "Working?"
         attr = Attribute.from_size(5, 1, 4)
         attr_list = AttrList()
 
         attr_list.insert(attr)
 
-        layout.set_attributes(attr_list)
-        layout.get_attributes()
+        layout.attributes = attr_list
+        assert layout.attributes is not None
+
+        del layout.attributes
+        assert layout.attributes is None
 
         # Resetting the attributes
-        layout.set_attributes(None)
-        layout.get_attributes()
+        layout.attributes = None
+        assert layout.attributes is None

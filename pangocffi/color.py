@@ -1,102 +1,76 @@
 from . import ffi, glib, pango
+from . import PangoObject
 
 
-class Color:
+class Color(PangoObject):
+    _INIT_METHOD = ffi.new
+    _INIT_CLASS = "PangoColor"
+
     def __init__(self, red: int, green: int, blue: int):
-        self._init_pointer()
+        super().__init__()
         self.red = red
         self.green = green
         self.blue = blue
 
-    def _init_pointer(self, pointer: ffi.CData = None):
-        if pointer is None:
-            self._pointer = ffi.new("PangoColor *")
-        else:
-            self._pointer = pointer
-
     @classmethod
     def from_pointer(cls, pointer: ffi.CData) -> "Color":
         """
-        Instantiates a :class:`Attribute` from a pointer.
+        Instantiates a :class:`Color` from a pointer.
 
         :return:
-            the Attribute.
+            the color.
         """
-        if pointer == ffi.NULL:
-            raise ValueError("Null pointer")
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer)
+
+        self: Color = super().from_pointer(pointer)
         self.red = pointer.red
         self.green = pointer.green
         self.blue = pointer.blue
+
         return self
 
-    def copy(self):
-        """
-        Make a deep copy of the ``Color`` structure.
-
-        :return:
-            a copy of :class:`Color`
-        """
-        new_one = pango.pango_color_copy(self._pointer)
-        pointer = ffi.gc(new_one, pango.pango_color_free)
-        return Color.from_pointer(pointer)
-
-    def __copy__(self) -> "Color":
-        return self.copy()
-
-    def __deepcopy__(self, memo) -> "Color":
-        return self.copy()
-
-    @property
-    def red(self):
+    def _get_red(self):
         return self._red
 
-    @red.setter
-    def red(self, red: int):
+    def _set_red(self, red: int):
         self._red = int(red)
         red = ffi.cast("guint16", red)
         self._pointer.red = red
 
-    @property
-    def green(self):
+    red: int = property(_get_red, _set_red)
+    """The `red` component for the color."""
+
+    def _get_green(self):
         return int(self._green)
 
-    @green.setter
-    def green(self, green: int):
+    def _set_green(self, green: int):
         self._green = int(green)
         green = ffi.cast("guint16", green)
         self._pointer.green = green
 
-    @property
-    def blue(self):
+    green: int = property(_get_green, _set_green)
+    """The `green` component for the color."""
+
+    def _get_blue(self):
         return int(self._blue)
 
-    @blue.setter
-    def blue(self, blue: int):
+    def _set_blue(self, blue: int):
         self._blue = int(blue)
         blue = ffi.cast("guint16", blue)
         self._pointer.blue = blue
 
+    blue: int = property(_get_blue, _set_blue)
+    """The `blue` component for the color."""
+
     def parse_color(self, spec: str) -> bool:
         """
-        Fill in the fields of a color from a string
-        specification. The string can either one of
-        a large set of standard names. (Taken from
-        the CSS specification), or it can be a
-        hexadecimal value in the form '#rgb'
-        '#rrggbb' '#rrrgggbbb' or '#rrrrggggbbbb'
-        where 'r', 'g' and 'b' are hex digits of
-        the red, green, and blue components of the
-        color, respectively. (White in the four forms
-        is '#fff' '#ffffff' '#fffffffff' and
-        '#ffffffffffff')
+        Fill in the fields of the color from a string specification. The string
+        can be any CSS color name, hexadecimal value in the form `#RGB`,
+        `#RRGGBB` `#RRRGGGBBB` or `#RRRRGGGGBBBB`.
 
         :param spec:
-            a string specifying the new color
+            the string specifying the new color
         :return:
-            ``TRUE`` if parsing of the specifier succeeded,
-            otherwise false.
+            whether parsing the specifier succeeded
         """
         spec = ffi.new("char[]", spec.encode("utf8"))
         ret = bool(pango.pango_color_parse(self._pointer, spec))
@@ -107,13 +81,11 @@ class Color:
 
     def to_string(self):
         """
-        Returns a textual specification of color in the
-        hexadecimal form #rrrrggggbbbb, where r, g and b
-        are hex digits representing the red, green, and
-        blue components respectively.
+        Returns a string representation of the color in the hexadecimal
+        format `#RRRRGGGGBBBB`.
 
         :return:
-            string hexadecimal
+            the color string
         """
         string = ffi.gc(
             pango.pango_color_to_string(self._pointer),
@@ -121,14 +93,15 @@ class Color:
         )
         return ffi.string(string).decode("utf-8")
 
-    def __eq__(self, col: "Color") -> bool:
-        if isinstance(col, Color):
-            return (
-                self.red == col.red
-                and self.green == col.green
-                and self.red == self.red
-            )
-        raise NotImplementedError
+    # TODO: remove this and go back to using _COPY_METHOD
+    # See https://github.com/leifgehrmann/pangocffi/issues/49
+    def copy(self) -> "Color":
+        return Color(self.red, self.green, self.blue)
 
-    def __repr__(self) -> str:
-        return f"<Color(red={self.red},blue={self.blue},green={self.green})>"
+    def __eq__(self, other: "Color") -> bool:
+        if isinstance(other, Color):
+            return (
+                self.red == other.red
+                and self.green == other.green
+                and self.blue == other.blue
+            )

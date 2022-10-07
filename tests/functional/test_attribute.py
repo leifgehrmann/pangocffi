@@ -16,12 +16,12 @@ class TestAttribute(unittest.TestCase):
 
     def test_pointers_identical(self):
         a = Attribute.from_size_absolute(8)
-        b = a._pointer
+        b = a.pointer
         c = Attribute.from_pointer(b)
         assert a == c
 
     def test_start_index_end_index(self):
-        a = Attribute().from_size(8, 5, 9)
+        a = Attribute.from_size(8, 5, 9)
         assert a.start_index == 5
         assert a.end_index == 9
         a.start_index = 8
@@ -260,5 +260,4 @@ class TestAttribute(unittest.TestCase):
         assert a == b
         c = copy.deepcopy(a)
         assert a == c
-        with self.assertRaises(NotImplementedError):
-            a == 6
+        assert a != 6

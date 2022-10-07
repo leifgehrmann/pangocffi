@@ -31,5 +31,5 @@ def test_rectangle_init_with_values():
 
 def test_rectangle_pointers():
     rect = Rectangle()
-    same_rect = rect.from_pointer(rect.get_pointer())
+    same_rect = rect.from_pointer(rect.pointer)
     assert same_rect.x == 0

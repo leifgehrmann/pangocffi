@@ -1,7 +1,7 @@
-from . import ffi, pango, Attribute
+from . import ffi, pango, Attribute, PangoObject
 
 
-class AttrList:
+class AttrList(PangoObject):
     """
     The :class:`AttrList` represents a list of attributes(:class:`Attribute`)
     that apply to a section of text. The attributes are, in general, allowed
@@ -13,34 +13,9 @@ class AttrList:
     one paragraph of text due to internal structures.
     """
 
-    def __init__(self) -> None:
-        self._init_pointer(pango.pango_attr_list_new())
-
-    def _init_pointer(self, pointer: ffi.CData):
-        self._pointer = ffi.gc(pointer, pango.pango_attr_list_unref)
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to the AttrList
-
-        :return:
-            the pointer to the AttrList.
-        """
-        return self._pointer
-
-    @classmethod
-    def from_pointer(cls, pointer: ffi.CData) -> "AttrList":
-        """
-        Instantiates a :class:`AttrList` from a pointer.
-
-        :return:
-            the AttrList.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError("Null pointer")
-        self = object.__new__(cls)
-        self._pointer = pointer
-        return self
+    _INIT_METHOD = pango.pango_attr_list_new
+    _GC_METHOD = pango.pango_attr_list_unref
+    _COPY_METHOD = pango.pango_attr_list_copy
 
     def _ref(self) -> None:
         """
@@ -56,18 +31,6 @@ class AttrList:
         """
         pango.pango_attr_list_unref(self._pointer)
 
-    def copy(self) -> "AttrList":
-        """
-        Copy :class:`AttrList` and return an identical new.
-        """
-        return AttrList.from_pointer(pango.pango_attr_list_copy(self._pointer))
-
-    def __copy__(self) -> "AttrList":
-        return self.copy()
-
-    def __deepcopy__(self, memo) -> "AttrList":
-        return self.copy()
-
     def insert(self, attr: Attribute) -> None:
         """
         Insert the given attribute into the PangoAttrList. It will be inserted
@@ -80,7 +43,7 @@ class AttrList:
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
         self._ref()
-        pango.pango_attr_list_insert(self._pointer, attr.get_pointer())
+        pango.pango_attr_list_insert(self._pointer, attr.pointer)
 
     def insert_before(self, attr: Attribute) -> None:
         """
@@ -94,7 +57,7 @@ class AttrList:
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
         self._ref()
-        pango.pango_attr_list_insert_before(self._pointer, attr.get_pointer())
+        pango.pango_attr_list_insert_before(self._pointer, attr.pointer)
 
     def change(self, attr: Attribute) -> None:
         """
@@ -115,7 +78,7 @@ class AttrList:
         """
         assert isinstance(attr, Attribute), "attr isn't a Attribute"
         self._ref()
-        pango.pango_attr_list_change(self._pointer, attr.get_pointer())
+        pango.pango_attr_list_change(self._pointer, attr.pointer)
 
     def splice(self, attr_list: "AttrList", pos: int, length: int):
         """
@@ -156,14 +119,16 @@ class AttrList:
             length,
         )
 
-    def __eq__(self, other: "AttrList") -> bool:
-        if isinstance(other, AttrList):
-            return bool(
-                pango.pango_attr_list_equal(
-                    self.get_pointer(),
-                    other.get_pointer(),
-                )
-            )
-        raise NotImplementedError
+    # avoid _EQ_METHOD since pango_attr_list_equal is a newer method
+    def __eq__(self, other) -> bool:
+        if isinstance(other, PangoObject):
+            if self.pointer == other.pointer:
+                return True
+            else:
+                return bool(pango.pango_attr_list_equal(
+                    self.pointer, other.pointer
+                ))
+
+        return False
 
     # TODO: pango_attr_list_filter ()

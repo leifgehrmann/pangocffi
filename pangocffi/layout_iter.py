@@ -1,50 +1,18 @@
 from typing import Tuple, Optional
 from . import pango, ffi
-from . import LayoutRun, Rectangle
+from . import PangoObject, LayoutRun, Rectangle
 
 
-class LayoutIter:
+class LayoutIter(PangoObject):
     """
     A :class:`LayoutIter` can be used to iterate over the visual extents of a
     Pango :class:`Layout`.
+
+    To obtain a :class:`LayoutIter`, use :meth:`Layout.get_iter()`.
     """
 
-    def _init_pointer(self, pointer: ffi.CData, gc: bool):
-        if gc:
-            self._pointer = ffi.gc(pointer, pango.pango_layout_iter_free)
-        else:
-            self._pointer = pointer
-
-    def get_pointer(self) -> ffi.CData:
-        """
-        Returns the pointer to this iterator.
-
-        :return:
-            a pointer to the iterator.
-        """
-        return self._pointer
-
-    @classmethod
-    def from_pointer(
-            cls,
-            pointer: ffi.CData,
-            gc: bool = False
-    ) -> 'LayoutIter':
-        """
-        Instantiates a :class:`LayoutIter` from a pointer.
-
-        :param pointer:
-            a pointer to a Pango Layout Iter.
-        :param gc:
-            whether to garbage collect the pointer. Defaults to ``False``.
-        :return:
-            the layout iterator.
-        """
-        if pointer == ffi.NULL:
-            raise ValueError('Null pointer')
-        self = object.__new__(cls)
-        cls._init_pointer(self, pointer, gc)
-        return self
+    _GC_METHOD: pango.pango_layout_iter_free
+    _COPY_METHOD: pango.pango_layout_iter_copy
 
     def next_run(self) -> bool:
         """
@@ -53,7 +21,7 @@ class LayoutIter:
         return ``False``.
 
         :return:
-            whether motion was possible.
+            whether motion was possible
         """
         return bool(pango.pango_layout_iter_next_run(self._pointer))
 
@@ -64,7 +32,7 @@ class LayoutIter:
         return ``False``.
 
         :return:
-            whether motion was possible.
+            whether motion was possible
         """
         return bool(pango.pango_layout_iter_next_char(self._pointer))
 
@@ -75,7 +43,7 @@ class LayoutIter:
         return ``False``.
 
         :return:
-            whether motion was possible.
+            whether motion was possible
         """
         return bool(pango.pango_layout_iter_next_cluster(self._pointer))
 
@@ -95,7 +63,7 @@ class LayoutIter:
         Determines whether the iterator is on the last line of the layout.
 
         :return:
-            ``True`` if iterator is on the last line.
+            whether the iterator is on the last line
         """
         return bool(pango.pango_layout_iter_at_last_line(self._pointer))
 
@@ -107,7 +75,7 @@ class LayoutIter:
         in the layout, if on the NULL run (see :meth:`get_run()`).
 
         :return:
-            The current byte index.
+            the current byte index
         """
         return pango.pango_layout_iter_get_index(self._pointer)
 
@@ -117,7 +85,7 @@ class LayoutIter:
         coordinates (origin at top left of the entire layout).
 
         :return:
-            The baseline of the current line.
+            the baseline of the current line
         """
         return pango.pango_layout_iter_get_baseline(self._pointer)
 
@@ -125,8 +93,8 @@ class LayoutIter:
         """
         Returns the current run. When iterating by run, at the end of each
         line, there's a position with a NULL run, so this function can return
-        None. The NULL run at the end of each line ensures that all lines have
-        at least one run, even lines consisting of only a newline.
+        ``None``. The NULL run at the end of each line ensures that all lines
+        have at least one run, even lines consisting of only a newline.
 
         Use the faster :meth:`get_run_readonly()` if you do not plan
         to modify the contents of the run (glyphs, glyph widths, etc.).
@@ -156,7 +124,7 @@ class LayoutIter:
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_char_extents(
             self._pointer,
-            logical_rect.get_pointer()
+            logical_rect.pointer
         )
         return logical_rect
 
@@ -174,8 +142,8 @@ class LayoutIter:
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_cluster_extents(
             self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            ink_rect.pointer,
+            logical_rect.pointer
         )
         return ink_rect, logical_rect
 
@@ -193,8 +161,8 @@ class LayoutIter:
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_run_extents(
             self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            ink_rect.pointer,
+            logical_rect.pointer
         )
         return ink_rect, logical_rect
 
@@ -241,8 +209,8 @@ class LayoutIter:
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_line_extents(
             self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            ink_rect.pointer,
+            logical_rect.pointer
         )
         return ink_rect, logical_rect
 
@@ -259,7 +227,7 @@ class LayoutIter:
         logical_rect = Rectangle()
         pango.pango_layout_iter_get_layout_extents(
             self._pointer,
-            ink_rect.get_pointer(),
-            logical_rect.get_pointer()
+            ink_rect.pointer,
+            logical_rect.pointer
         )
         return ink_rect, logical_rect

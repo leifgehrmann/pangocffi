@@ -17,14 +17,14 @@ class TestLayoutIterWithContext(unittest.TestCase):
         layout = Layout(self.pango_context)
         layout_iter = layout.get_iter()
         assert isinstance(layout_iter, LayoutIter)
-        assert isinstance(layout_iter.get_pointer(), ffi.CData)
+        assert isinstance(layout_iter.pointer, ffi.CData)
 
-        pointer_shallow_copy = layout_iter.get_pointer()
+        pointer_shallow_copy = layout_iter.pointer
         layout_iter_shallow_copy = LayoutIter.from_pointer(
             pointer_shallow_copy
         )
         assert isinstance(layout_iter_shallow_copy, LayoutIter)
-        assert isinstance(layout_iter_shallow_copy.get_pointer(), ffi.CData)
+        assert isinstance(layout_iter_shallow_copy.pointer, ffi.CData)
 
     def test_layout_iter_properties(self):
         layout = Layout(self.pango_context)
