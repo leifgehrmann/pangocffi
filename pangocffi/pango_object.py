@@ -38,7 +38,7 @@ class PangoObject(ABC):
             if self._INIT_METHOD == ffi.new:
                 final_pointer = ffi.new(self._INIT_CLASS + " *")
             elif self._INIT_METHOD is None:
-                raise Exception("Initializing this class is not supported.")
+                raise NotImplementedError("Initializing this class is not supported.")
             else:
                 final_pointer = self._INIT_METHOD(*init_args)
 

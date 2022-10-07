@@ -10,6 +10,12 @@ import unittest
 
 
 class TestLayout(unittest.TestCase):
+    def test_layout_not_implemented_copy(self):
+        context = Context()
+        layout = Layout(context)
+        with self.assertRaises(NotImplementedError):
+            layout.copy()
+
     @staticmethod
     def test_layout_returns_identical_context():
         context = Context()
