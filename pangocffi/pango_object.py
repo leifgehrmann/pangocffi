@@ -101,10 +101,10 @@ class PangoObject(ABC):
 
     def __eq__(self, other) -> bool:
         if isinstance(other, PangoObject):
+            if self.pointer == other.pointer:
+                return True
             if self._EQ_METHOD:
                 return bool(self._EQ_METHOD(self.pointer, other.pointer))
-            else:
-                return self.pointer == other.pointer
         return False
 
     def __repr__(self) -> str:
