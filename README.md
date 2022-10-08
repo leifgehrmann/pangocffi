@@ -2,7 +2,7 @@
 
 [![Latest PyPi Release](https://img.shields.io/pypi/v/pangocffi.svg)](https://pypi.python.org/pypi/pangocffi)
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/pangocffi.svg?style=flat)](https://pypi.python.org/pypi/pangocffi)
-[![Build Status](https://travis-ci.org/leifgehrmann/pangocffi.svg?branch=master)](https://travis-ci.org/leifgehrmann/pangocffi)
+[![Build Status](https://github.com/leifgehrmann/pangocffi/actions/workflows/build.yml/badge.svg)](https://github.com/leifgehrmann/pangocffi/actions)
 [![Documentation Status](https://readthedocs.org/projects/pangocffi/badge/?version=latest)](https://pangocffi.readthedocs.io/en/latest/?badge=latest)
 [![Code Coverage](https://codecov.io/gh/leifgehrmann/pangocffi/branch/master/graph/badge.svg)](https://codecov.io/gh/leifgehrmann/pangocffi)
 
