@@ -31,7 +31,7 @@ Module-level objects
         context = Context()
         layout = Layout(context)
 
-        pango_c.pango_renderer_draw_layout(..., layout.get_pointer(), 0, 0)
+        pango_c.pango_renderer_draw_layout(..., layout.pointer, 0, 0)
 
     See the `pango reference manual`_ for details.
 
