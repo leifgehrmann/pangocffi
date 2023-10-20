@@ -239,3 +239,34 @@ class Underline(Enum):
     mispelling; in some cases a contrasting color may
     automatically be used. This type of underlining is available
     since Pango 1.4."""
+
+
+class TabAlign(Enum):
+    """
+    :class:`TabAlign` specifies where the text appears relative to the
+    tab stop position.
+    """
+
+    LEFT = pango.PANGO_TAB_LEFT
+    """
+    The text appears to the right of the tab stop position.
+    """
+
+    RIGHT = pango.PANGO_TAB_RIGHT
+    """
+    The text appears to the left of the tab stop position until the
+    available space is filled. Since: 1.50
+    """
+
+    CENTER = pango.PANGO_TAB_CENTER
+    """
+    The text is centered at the tab stop position until the available
+    space is filled. Since: 1.50
+    """
+
+    DECIMAL = pango.PANGO_TAB_DECIMAL
+    """
+    Text before the first occurrence of the decimal point character
+    appears to the left of the tab stop position (until the available
+    space is filled), the rest to the right. Since: 1.50
+    """

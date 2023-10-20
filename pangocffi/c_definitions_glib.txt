@@ -8,7 +8,7 @@ typedef int gint32;
 typedef gint gboolean;
 typedef char gchar;
 typedef unsigned char guchar;
-typedef ... gunichar;
+typedef guint32 gunichar;
 typedef void* gpointer;
 typedef ... gconstpointer;
 typedef ... GObject;

@@ -1,5 +1,5 @@
 from . import pango, gobject, ffi, PangoObject
-from . import Context, FontDescription, AttrList
+from . import Context, FontDescription, AttrList, TabArray
 from . import Alignment, Rectangle, EllipsizeMode, WrapMode
 from pangocffi import LayoutIter
 from typing import Tuple, Optional
@@ -163,6 +163,18 @@ class Layout(PangoObject):
     The text attributes for this layout.
 
     :param attrs: a :class:`AttrList`
+    """
+
+    def _get_tabs(self) -> TabArray:
+        tabs_pointer = pango.pango_layout_get_tabs(self._pointer)
+        return TabArray(tabs_pointer)
+
+    def _set_tabs(self, tabs: TabArray) -> None:
+        pango.pango_layout_set_tabs(self._pointer, tabs._pointer)
+
+    tabs: str = property(_get_tabs, _set_tabs)
+    """
+    The tab stops for this layout.
     """
 
     def apply_markup(self, markup: str) -> None:
