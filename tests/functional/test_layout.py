@@ -5,6 +5,7 @@ from pangocffi import (
     ffi,
     Attribute,
     AttrList,
+    TabArray,
 )
 import unittest
 
@@ -92,3 +93,17 @@ class TestLayout(unittest.TestCase):
         # Resetting the attributes
         layout.attributes = None
         assert layout.attributes is None
+
+    def test_set_tabs(self):
+        context = Context()
+        layout = Layout(context)
+
+        assert layout.tabs is None
+
+        tab_array = TabArray()
+
+        layout.tabs = tab_array
+        assert layout.tabs is not None
+
+        layout.tabs = None
+        assert layout.tabs is None

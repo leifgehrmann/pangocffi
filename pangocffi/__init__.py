@@ -63,7 +63,7 @@ from .glyph_item import GlyphItem  # noqa
 from .glyph_item_iter import GlyphItemIter  # noqa
 from .attribute import Attribute  # noqa
 from .attr_list import AttrList  # noqa
-from .tabarray import TabArray # noqa
+from .tab_array import TabArray # noqa
 from .layout_run import LayoutRun  # noqa
 from .layout_iter import LayoutIter  # noqa
 from .layout import Layout  # noqa
