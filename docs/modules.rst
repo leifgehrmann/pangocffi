@@ -120,7 +120,15 @@ Tab Stops
 
 Structures for storing tab stops.
 
-API not implemented yet.
+TabArray
+________
+
+.. autoclass:: TabArray
+
+TabAlign
+________
+
+.. autoclass:: TabAlign
 
 Text Attribute Markup
 =====================
