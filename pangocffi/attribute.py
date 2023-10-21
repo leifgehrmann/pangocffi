@@ -687,7 +687,7 @@ class Attribute(PangoObject):
         :raises: AssertionError
             When ``enable_fallback`` isn't a :class:`bool`.
         """
-        assert isinstance(enable_fallback, bool),\
+        assert isinstance(enable_fallback, bool), \
             "enable_fallback isn't a bool"
         enable_fallback = ffi.cast("gboolean", enable_fallback)
         temp = cls.from_pointer(
