@@ -165,12 +165,17 @@ class Layout(PangoObject):
     :param attrs: a :class:`AttrList`
     """
 
-    def _get_tabs(self) -> TabArray:
+    def _get_tabs(self) -> Optional[TabArray]:
         tabs_pointer = pango.pango_layout_get_tabs(self._pointer)
-        return TabArray(tabs_pointer)
+        if tabs_pointer == ffi.NULL:
+            return None
+        return TabArray.from_pointer(tabs_pointer)
 
-    def _set_tabs(self, tabs: TabArray) -> None:
-        pango.pango_layout_set_tabs(self._pointer, tabs._pointer)
+    def _set_tabs(self, tabs: Optional[TabArray]) -> None:
+        if tabs is None:
+            pango.pango_layout_set_tabs(self._pointer, ffi.NULL)
+        else:
+            pango.pango_layout_set_tabs(self._pointer, tabs._pointer)
 
     tabs: str = property(_get_tabs, _set_tabs)
     """
