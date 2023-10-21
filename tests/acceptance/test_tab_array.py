@@ -1,7 +1,6 @@
 import pangocffi
 from pangocffi import Layout, TabArray, TabAlign
 from tests.context_creator import ContextCreator
-import locale
 
 
 def test_tab_array_decimal_places():
@@ -38,14 +37,11 @@ def test_tab_array_decimal_places():
         ['Erfurt', 269.2],
     ]
 
-    locale.setlocale(locale.LC_ALL, 'de_DE')
-
     text = '\t<span font_weight="bold">Name</span>' \
            '\t<span font_weight="bold"> Fläche (km²)</span>\n'
     for line in lines:
         text += "\t" + line[0]
-        text += "\t" + locale.format_string("%f", line[1])\
-            .rstrip('0').rstrip(',')
+        text += "\t" + '{:.4f}'.format(line[1]).replace('.', ',').rstrip('0')
         text += '\n'
 
     # Using pangocairocffi, this would be `pangocairocffi.create_layout()` with
