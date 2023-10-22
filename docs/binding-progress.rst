@@ -318,9 +318,14 @@ ______________________
 * ✔ pango_tab_array_get_size ()
 * ✔ pango_tab_array_resize ()
 * ✔ pango_tab_array_set_tab ()
-* ✔ pango_tab_array_get_tab ()
+* pango_tab_array_get_tab ()
 * ✔ pango_tab_array_get_tabs ()
-* pango_tab_array_get_positions_in_pixels ()
+* ✔ pango_tab_array_set_decimal_point ()
+* ✔ pango_tab_array_get_decimal_point ()
+* ✔ pango_tab_array_set_positions_in_pixels ()
+* ✔ pango_tab_array_get_positions_in_pixels ()
+* pango_tab_array_sort ()
+* pango_tab_array_to_string ()
 * ✔ PangoTabArray
 * PANGO_TYPE_TAB_ARRAY
 * ✔ PangoTabAlign
@@ -359,8 +364,8 @@ ______________________
 * pango_layout_get_auto_dir ()
 * ✔︎ pango_layout_set_alignment ()
 * ✔︎ pango_layout_get_alignment ()
-* pango_layout_set_tabs ()
-* pango_layout_get_tabs ()
+* ✔︎ pango_layout_set_tabs ()
+* ✔︎ pango_layout_get_tabs ()
 * pango_layout_set_single_paragraph_mode ()
 * pango_layout_get_single_paragraph_mode ()
 * pango_layout_get_unknown_glyphs_count ()
