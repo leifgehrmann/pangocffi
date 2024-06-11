@@ -1,4 +1,4 @@
-from . import pango, FontDescription, Gravity, GravityHint, PangoObject
+from . import pango, Font, FontDescription, Gravity, GravityHint, PangoObject
 from typing import Optional
 
 
@@ -77,3 +77,14 @@ class Context(PangoObject):
     text, and is only relevant if the gravity of the context is
     :meth:`Gravity.EAST` or :meth:`Gravity.WEST`.
     """
+
+    def load_font(self, font_description: FontDescription) -> Font:
+        """
+        Loads a font and returns it.
+
+        :param desc:
+            the Pango font description.
+        """
+        return Font.from_pointer(
+            pango.pango_context_load_font(self._pointer, font_description._pointer)
+        )
