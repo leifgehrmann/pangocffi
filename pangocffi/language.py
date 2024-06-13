@@ -52,4 +52,3 @@ class Language(PangoObject):
         Describe the language as a string.
         """
         return pango.pango_language_to_string(self._pointer)
-
