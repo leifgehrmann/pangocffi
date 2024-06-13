@@ -44,4 +44,3 @@ class FontMetrics(PangoObject):
     def underline_thickness(self) -> int:
         return pango.pango_font_metrics_get_underline_thickness(
             self._pointer)
-
