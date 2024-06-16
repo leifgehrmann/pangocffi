@@ -86,10 +86,6 @@ class Context(PangoObject):
             the Pango font description.
         """
         return Font.from_pointer(
-<<<<<<< HEAD
             pango.pango_context_load_font(self._pointer,
                                           font_description._pointer)
-=======
-            pango.pango_context_load_font(self._pointer, font_description._pointer)
->>>>>>> f15b3c59d7c35b35dd67899c86be84a568727b6c
         )
