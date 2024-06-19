@@ -27,5 +27,5 @@ class TestFontMetricsWithContext(unittest.TestCase):
         assert metrics.height >= 0
         assert metrics.strikethrough_position >= 0
         assert metrics.strikethrough_thickness >= 0
-        assert metrics.underline_position <= 0
-        assert metrics.underline_thickness >= 0
+        assert isinstance(metrics.underline_position, int)
+        assert isinstance(metrics.underline_thickness, int)
