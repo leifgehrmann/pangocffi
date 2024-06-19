@@ -1,5 +1,7 @@
-from pangocffi import Context, FontDescription, Gravity, GravityHint, ffi
+from pangocffi import Context, FontDescription, Gravity, GravityHint, ffi, Font
 import unittest
+
+from tests.context_creator import ContextCreator
 
 
 class TestContext(unittest.TestCase):
@@ -31,3 +33,24 @@ class TestContext(unittest.TestCase):
 
         context.gravity_hint = GravityHint.STRONG
         assert context.gravity_hint == GravityHint.STRONG
+
+    def test_context_load_font_none(self):
+        context = Context()
+
+        desc = FontDescription()
+        desc.family = 'sans-serif'
+        font = context.load_font(desc)
+        assert font is None
+
+    def test_context_load_font_with_context(self):
+        # Setup
+        surface_context = ContextCreator.create_surface_without_output()
+        context = surface_context.get_pango_context_as_class()
+
+        desc = FontDescription()
+        desc.family = 'sans-serif'
+        font = context.load_font(desc)
+        assert isinstance(font, Font)
+
+        # Tear down
+        surface_context.close()
