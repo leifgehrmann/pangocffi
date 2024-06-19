@@ -59,6 +59,31 @@ def replace_compiler_computed_values(source: str) -> str:
     return source
 
 
+def remove_autoptr_cleanup_macros(source: str) -> str:
+    # Some header files contain values are meant to be computed by the compiler.
+    source = re.sub('G_DEFINE_AUTOPTR_CLEANUP_FUNC\\(([a-zA-Z_]+), ([a-zA-Z_]*)\\)',
+                    '', source)
+    return source
+
+
+def add_attr_index_definitions(cdefs: str) -> str:
+    cdefs = 'typedef enum {\n' + \
+            '  PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING = 0,\n' + \
+            '  PANGO_ATTR_INDEX_TO_TEXT_END = 4294967295\n' + \
+            '} PangoAttrIndex;\n' + \
+            cdefs
+    return cdefs
+
+
+def add_extra_typedefs(cdefs: str) -> str:
+    cdefs = 'typedef ... hb_feature_t;\n' + \
+            'typedef ... hb_font_t;\n' + \
+            'typedef ... GBytes;\n' + \
+            'typedef ... GQuark;\n' + \
+            cdefs
+    return cdefs
+
+
 def remove_typedefs(source: str) -> str:
     return re.sub(r'typedef (\.\.\.|enum|[A-Za-z0-9]*) [^;]*;\n', '', source)
 
@@ -82,6 +107,7 @@ def remove_availability_flags(source: str) -> str:
         r'PANGO_AVAILABLE_IN_(ALL|[0-9_]*)\n',
         r'PANGO_DEPRECATED\n',
         r'PANGO_DEPRECATED_IN_[0-9_]*\n',
+        r'PANGO_DEPRECATED_IN_[0-9]*_[0-9]*_FOR\(([a-zA-Z_]+)\)',
         r'PANGO_DEPRECATED_FOR\(g_unichar_get_mirror_char\)\n',
     ]
     for pattern in patterns:
@@ -119,7 +145,7 @@ def get_struct_for_opaque_typedef(
 
 
 def remove_opaque_typedef(cdefs: str, opaque_typedef_name: str):
-    return re.sub(r"typedef \.\.\. %s;" % opaque_typedef_name, '', cdefs)
+    return re.sub(r"typedef\s+\.\.\.\s+%s;" % opaque_typedef_name, '', cdefs)
 
 
 def read_pango_header(pango_git_dir, header_file):
@@ -127,6 +153,7 @@ def read_pango_header(pango_git_dir, header_file):
 
     source = remove_hard_to_regex_phrases(source)
     source = replace_compiler_computed_values(source)
+    source = remove_autoptr_cleanup_macros(source)
 
     # This phrase appears in pango-layout.h and CFFI complains. I honestly have
     # not clue why. Making the type "unknown" resolves this.
@@ -164,6 +191,7 @@ def generate(pango_git_dir):
         'pango-attributes.h',
         'pango-bidi-type.h',
         'pango-break.h',
+        'pango-color.h',
         'pango-context.h',
         'pango-coverage.h',
         'pango-direction.h',
@@ -239,9 +267,31 @@ def generate(pango_git_dir):
         'PangoGlyphItemIter'
     )
 
+    typedefs_struct += get_struct_for_opaque_typedef(
+        'PangoAttribute',
+        pango_git_dir,
+        'pango-attributes.h',
+        '_PangoAttribute'
+    )
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoAttribute')
+
+    typedefs_struct += get_struct_for_opaque_typedef(
+        'PangoColor',
+        pango_git_dir,
+        'pango-color.h',
+        '_PangoColor'
+    )
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoColor')
+
     # Remove and replace the aliased opaque typedefs
     typedefs_struct += 'typedef PangoGlyphItem PangoLayoutRun;\n'
     typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoLayoutRun')
+
+    # insert extra typedefs for hb and GBytes
+    typedefs_opaque = add_extra_typedefs(typedefs_opaque)
+
+    # insert definitions for attr index
+    typedefs_opaque = add_attr_index_definitions(typedefs_opaque)
 
     cdefs = typedefs_opaque +\
         typedefs_struct +\

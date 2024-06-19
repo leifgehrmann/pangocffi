@@ -62,10 +62,17 @@ ________________
 
 .. autoclass:: FontDescription
 
+Font
+____
+
+.. autoclass:: Font
+
+API not fully implemented yet.
+
 Font Metrics
 ____________
 
-API not implemented yet.
+.. autoclass:: FontMetrics
 
 Font Map
 ________

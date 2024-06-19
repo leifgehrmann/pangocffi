@@ -55,6 +55,9 @@ from .version import *  # noqa
 from .enums import *  # noqa
 from .convert import *  # noqa
 from .pango_object import PangoObject  # noqa
+from .language import Language  # noqa
+from .font_metrics import FontMetrics  # noqa
+from .font import Font  # noqa
 from .font_description import FontDescription  # noqa
 from .rectangle import Rectangle  # noqa
 from .item import Item  # noqa
