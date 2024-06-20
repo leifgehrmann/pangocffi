@@ -13,7 +13,14 @@ class TestFontWithContext(unittest.TestCase):
         self.pango_context = None
         self.context.close()
 
-    def test_get_metrics(self):
+    def test_get_metrics_without_language(self):
+        desc = FontDescription()
+        desc.family = 'sans-serif'
+        font = self.pango_context.load_font(desc)
+        metrics = font.get_metrics()
+        assert isinstance(metrics, FontMetrics)
+
+    def test_get_metrics_with_language(self):
         lang = Language.from_string('pt_BR')
         desc = FontDescription()
         desc.family = 'sans-serif'

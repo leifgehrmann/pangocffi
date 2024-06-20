@@ -201,7 +201,7 @@ API not implemented yet.
 Language
 ________
 
-API not implemented yet.
+.. autoclass:: Language
 
 Underlined Text
 ===============

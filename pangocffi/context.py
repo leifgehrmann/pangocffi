@@ -79,15 +79,18 @@ class Context(PangoObject):
     :meth:`Gravity.EAST` or :meth:`Gravity.WEST`.
     """
 
-    def load_font(self, font_description: FontDescription) -> Optional[Font]:
+    def load_font(self, desc: FontDescription) -> Optional[Font]:
         """
-        Loads a font and returns it.
+        Loads the font in one of the fontmaps in the context that is the
+        closest match for ``desc``.
 
         :param desc:
-            the Pango font description.
+            A :class:`FontDescription` describing the font to load.
+        :return:
+            The :class:`Font` that was loaded, or ``None`` if no font matched.
         """
         font_pointer = pango.pango_context_load_font(self._pointer,
-                                                     font_description._pointer)
+                                                     desc._pointer)
         if font_pointer == ffi.NULL:
             return None
         return Font.from_pointer(font_pointer)
