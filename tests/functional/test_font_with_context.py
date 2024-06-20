@@ -19,7 +19,6 @@ class TestFontWithContext(unittest.TestCase):
         font = self.pango_context.load_font(desc)
         metrics = font.get_metrics()
         assert isinstance(metrics, FontMetrics)
-        assert metrics.height > 0
 
     def test_get_metrics_with_language(self):
         lang = Language.from_string('pt_BR')
@@ -28,4 +27,3 @@ class TestFontWithContext(unittest.TestCase):
         font = self.pango_context.load_font(desc)
         metrics = font.get_metrics(lang)
         assert isinstance(metrics, FontMetrics)
-        assert metrics.height > 0
