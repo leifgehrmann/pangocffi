@@ -49,6 +49,11 @@ class TestLanguage(unittest.TestCase):
             assert langs[0].to_string() == 'en'
             assert langs[1].to_string() == 'de'
 
+    def test_get_sample_string(self):
+        lang = Language.from_string('en-US')
+        sample_string = lang.get_sample_string()
+        assert len(sample_string) > 0
+
     def test_matches(self):
         lang = Language.from_string('pt_BR')
         assert lang.matches('*')
@@ -67,3 +72,10 @@ class TestLanguage(unittest.TestCase):
     def test_to_string(self):
         lang = Language.from_string('pt_BR')
         assert lang.to_string() == 'pt-br'
+
+    def test_equal(self):
+        lang_a = Language.from_string('pt_BR')
+        lang_b = Language.from_string('pt-br')
+        lang_c = Language.from_string('de-de')
+        assert lang_a == lang_b
+        assert lang_a != lang_c
