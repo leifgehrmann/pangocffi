@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  tox:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:

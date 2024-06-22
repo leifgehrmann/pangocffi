@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  sdist:
     runs-on: ubuntu-latest
 
     steps:
