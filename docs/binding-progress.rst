@@ -33,7 +33,7 @@ ______________________
 * ✔︎ pango_context_set_gravity_hint ()
 * pango_context_get_matrix ()
 * pango_context_set_matrix ()
-* pango_context_load_font ()
+* ✔︎ pango_context_load_font ()
 * pango_context_load_fontset ()
 * pango_context_get_metrics ()
 * pango_context_list_families ()
@@ -149,14 +149,14 @@ ______________________
 * pango_font_description_to_filename ()
 * pango_font_metrics_ref ()
 * pango_font_metrics_unref ()
-* pango_font_metrics_get_ascent ()
-* pango_font_metrics_get_descent ()
-* pango_font_metrics_get_approximate_char_width ()
-* pango_font_metrics_get_approximate_digit_width ()
-* pango_font_metrics_get_underline_thickness ()
-* pango_font_metrics_get_underline_position ()
-* pango_font_metrics_get_strikethrough_thickness ()
-* pango_font_metrics_get_strikethrough_position ()
+* ✔︎ pango_font_metrics_get_ascent ()
+* ✔︎ pango_font_metrics_get_descent ()
+* ✔︎ pango_font_metrics_get_approximate_char_width ()
+* ✔︎ pango_font_metrics_get_approximate_digit_width ()
+* ✔︎ pango_font_metrics_get_underline_thickness ()
+* ✔︎ pango_font_metrics_get_underline_position ()
+* ✔︎ pango_font_metrics_get_strikethrough_thickness ()
+* ✔︎ pango_font_metrics_get_strikethrough_position ()
 * PANGO_FONT()
 * PANGO_IS_FONT()
 * pango_font_find_shaper ()
@@ -208,7 +208,7 @@ ______________________
 * PANGO_TYPE_STRETCH
 * ✔︎ PangoFontMask
 * PANGO_TYPE_FONT_MASK
-* PangoFontMetrics
+* ✔︎ PangoFontMetrics
 * PANGO_TYPE_FONT_METRICS
 * PangoFont
 * PANGO_TYPE_FONT
@@ -430,17 +430,18 @@ ______________________
 * pango_script_iter_get_range ()
 * pango_script_iter_next ()
 * pango_script_iter_free ()
-* pango_language_from_string ()
-* pango_language_to_string ()
-* pango_language_matches ()
+* ✔︎ pango_language_from_string ()
+* ✔︎ pango_language_to_string ()
+* ✔︎ pango_language_matches ()
 * pango_language_includes_script ()
 * pango_language_get_scripts ()
-* pango_language_get_default ()
-* pango_language_get_sample_string ()
+* ✔︎ pango_language_get_default ()
+* ✔︎ pango_language_get_preferred ()
+* ✔︎ pango_language_get_sample_string ()
 * PangoScript
 * PANGO_TYPE_SCRIPT
 * PangoScriptIter
-* PangoLanguage
+* ✔︎ PangoLanguage
 * PANGO_TYPE_LANGUAGE
 * pango_unichar_direction ()
 * pango_find_base_dir ()
