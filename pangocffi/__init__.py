@@ -90,3 +90,8 @@ from .layout_run import LayoutRun  # noqa
 from .layout_iter import LayoutIter  # noqa
 from .layout import Layout  # noqa
 from .color import Color  # noqa
+
+
+PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING = 0
+PANGO_ATTR_INDEX_TO_TEXT_END = 4294967295
+

@@ -309,6 +309,7 @@ def generate(pango_git_dir):
     typedefs_opaque = add_extra_typedefs(typedefs_opaque)
 
     # insert definitions for attr index
+    # FIXME: these cannot be made an enum
     # typedefs_opaque = add_attr_index_definitions(typedefs_opaque)
 
     cdefs = typedefs_opaque +\
