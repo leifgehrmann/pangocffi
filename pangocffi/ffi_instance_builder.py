@@ -42,11 +42,12 @@ class FFIInstanceBuilder:
                     int(os.environ['PANGOCFFI_API_MODE']) == 1):
                 ffi.set_source_pkgconfig(
                     '_pangocffi',
-                    ['pango', 'glib-2.0'],
+                    ['pango', 'glib-2.0', 'pangoft2'],
                     """
                     #include "glib.h"
                     #include "glib-object.h"
                     #include "pango/pango.h"
+                    #include "pango/pango-fontmap.h"
                     """,
                     sources=[]
                 )

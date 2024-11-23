@@ -66,6 +66,7 @@ def remove_autoptr_cleanup_macros(source: str) -> str:
     return source
 
 
+# FIXME: actually needed by screws up c mode, define in __init__
 def add_attr_index_definitions(cdefs: str) -> str:
     cdefs = 'typedef enum {\n' + \
             '  PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING = 0,\n' + \
@@ -79,7 +80,7 @@ def add_extra_typedefs(cdefs: str) -> str:
     cdefs = 'typedef ... hb_feature_t;\n' + \
             'typedef ... hb_font_t;\n' + \
             'typedef ... GBytes;\n' + \
-            'typedef ... GQuark;\n' + \
+            'typedef guint32 GQuark;\n' + \
             cdefs
     return cdefs
 
@@ -142,6 +143,13 @@ def get_struct_for_opaque_typedef(
     public_struct_definition = re.sub(r"};", '} %s;' % opaque_typedef_name, public_struct_definition)
 
     return public_struct_definition + '\n'
+
+
+def remove_gi_scanner_preprocessor(
+        input: str
+) -> str:
+    regex = r"#ifndef\s*__GI_SCANNER__([^#]*)#else([^#]*)#endif"
+    return re.sub(regex, '\\1', input, flags=re.MULTILINE)
 
 
 def remove_opaque_typedef(cdefs: str, opaque_typedef_name: str):
@@ -240,6 +248,16 @@ def generate(pango_git_dir):
     )
     typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoRectangle')
 
+    typedefs_struct += remove_gi_scanner_preprocessor(
+        get_struct_for_opaque_typedef(
+            'PangoAnalysis',
+            pango_git_dir,
+            'pango-item.h',
+            '_PangoAnalysis'
+        )
+    )
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoAnalysis')
+
     typedefs_struct += get_struct_for_opaque_typedef(
         'PangoItem',
         pango_git_dir,
@@ -291,7 +309,7 @@ def generate(pango_git_dir):
     typedefs_opaque = add_extra_typedefs(typedefs_opaque)
 
     # insert definitions for attr index
-    typedefs_opaque = add_attr_index_definitions(typedefs_opaque)
+    # typedefs_opaque = add_attr_index_definitions(typedefs_opaque)
 
     cdefs = typedefs_opaque +\
         typedefs_struct +\
@@ -306,7 +324,7 @@ def generate(pango_git_dir):
     cdefs = re.sub(r'const PangoItem', 'PangoItem', cdefs)
 
     # Convert PangoAnalysis (util we make PangoAnalysis non-opaque)
-    cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis;', cdefs)
+    # cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis;', cdefs)
 
     cdefs = remove_multiple_blank_lines(cdefs)
     cdefs = remove_multiple_spaces(cdefs)
