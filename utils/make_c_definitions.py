@@ -66,16 +66,6 @@ def remove_autoptr_cleanup_macros(source: str) -> str:
     return source
 
 
-# FIXME: actually needed by screws up c mode, define in __init__
-def add_attr_index_definitions(cdefs: str) -> str:
-    cdefs = 'typedef enum {\n' + \
-            '  PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING = 0,\n' + \
-            '  PANGO_ATTR_INDEX_TO_TEXT_END = 4294967295\n' + \
-            '} PangoAttrIndex;\n' + \
-            cdefs
-    return cdefs
-
-
 def add_extra_typedefs(cdefs: str) -> str:
     cdefs = 'typedef ... hb_feature_t;\n' + \
             'typedef ... hb_font_t;\n' + \
@@ -307,10 +297,6 @@ def generate(pango_git_dir):
 
     # insert extra typedefs for hb and GBytes
     typedefs_opaque = add_extra_typedefs(typedefs_opaque)
-
-    # insert definitions for attr index
-    # FIXME: these cannot be made an enum
-    # typedefs_opaque = add_attr_index_definitions(typedefs_opaque)
 
     cdefs = typedefs_opaque +\
         typedefs_struct +\
