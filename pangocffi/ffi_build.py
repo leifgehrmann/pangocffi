@@ -6,9 +6,10 @@
 
 """
 
+import importlib.util
 import sys
 from pathlib import Path
-import importlib.util
+
 
 sys.path.append(str(Path(__file__).parent))
 

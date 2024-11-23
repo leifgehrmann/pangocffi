@@ -5,6 +5,7 @@
     generates an FFI for pangocffi
 """
 
+import os
 from pathlib import Path
 from cffi import FFI
 from typing import Optional
@@ -29,9 +30,27 @@ class FFIInstanceBuilder:
         c_definitions_pango = c_definitions_pango_file.read()
 
         ffi = FFI()
+        # Mirror the GType setup in gobject/gtypes.h
+        if ffi.sizeof('void*') > ffi.sizeof('long'):
+            ffi.cdef('typedef unsigned int* GType;')
+        else:
+            ffi.cdef('typedef unsigned long GType;')
         ffi.cdef(c_definitions_glib)
         ffi.cdef(c_definitions_pango)
         if self.source is not None:
-            ffi.set_source(self.source, None)
+            if ('PANGOCFFI_API_MODE' in os.environ and
+                    int(os.environ['PANGOCFFI_API_MODE']) == 1):
+                ffi.set_source_pkgconfig(
+                    '_pangocffi',
+                    ['pango', 'glib-2.0'],
+                    """
+                    #include "glib.h"
+                    #include "glib-object.h"
+                    #include "pango/pango.h"
+                    """,
+                    sources=[]
+                )
+            else:
+                ffi.set_source(self.source, None)
 
         return ffi
