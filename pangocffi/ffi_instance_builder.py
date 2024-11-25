@@ -37,44 +37,41 @@ class FFIInstanceBuilder:
             ffi.cdef('typedef unsigned long GType;')
         ffi.cdef(c_definitions_glib)
         ffi.cdef(c_definitions_pango)
-        if self.source is not None:
-            if ('PANGOCFFI_API_MODE' in os.environ and
-                    int(os.environ['PANGOCFFI_API_MODE']) == 1):
-                ffi.set_source_pkgconfig(
-                    '_pangocffi',
-                    ['pango', 'glib-2.0', 'pangoft2', 'pangoxft'],
-                    r"""
-                    #include "glib.h"
-                    #include "glib-object.h"
-                    #include "pango/pango.h"
-                    #include "pango/pango-fontmap.h"
+        if ('PANGOCFFI_API_MODE' in os.environ and
+                int(os.environ['PANGOCFFI_API_MODE']) == 1):
+            ffi.set_source_pkgconfig(
+                '_pangocffi',
+                ['pango', 'glib-2.0', 'pangoft2', 'pangoxft'],
+                r"""
+                #include "glib.h"
+                #include "glib-object.h"
+                #include "pango/pango.h"
+                #include "pango/pango-fontmap.h"
 
-                    #include <stdio.h>
-                    #if PANGO_VERSION < G_ENCODE_VERSION(1, 54)
-                    int pango_item_get_char_offset (
-                      PangoItem* item) {
-                        fprintf(stderr, "Unimplemented!!\n");
-                        return -1;
-                    }
-                    #endif
-                    #if PANGO_VERSION < G_ENCODE_VERSION(1, 52)
-                    PangoFont*
-                    pango_font_map_reload_font (
-                      PangoFontMap* fontmap,
-                      PangoFont* font,
-                      double scale,
-                      PangoContext* context,
-                      const char* variations) {
-                        fprintf(stderr, "Unimplemented!!\n");
-                        return -1;
-                    }
+                #include <stdio.h>
+                #if PANGO_VERSION < G_ENCODE_VERSION(1, 54)
+                int pango_item_get_char_offset (
+                  PangoItem* item) {
+                    fprintf(stderr, "Unimplemented!!\n");
+                    return -1;
+                }
+                #endif
+                #if PANGO_VERSION < G_ENCODE_VERSION(1, 52)
+                PangoFont*
+                pango_font_map_reload_font (
+                  PangoFontMap* fontmap,
+                  PangoFont* font,
+                  double scale,
+                  PangoContext* context,
+                  const char* variations) {
+                    fprintf(stderr, "Unimplemented!!\n");
+                    return -1;
+                }
 
-                    #endif
-                    """,
-                    sources=[]
-                )
-            else:
-                ffi.set_source(self.source, None)
+                #endif
+                """,
+                sources=[]
+            )
         else:
             ffi.set_source(self.source, None)
 
