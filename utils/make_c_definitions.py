@@ -193,7 +193,6 @@ def generate(pango_git_dir):
         'pango-context.h',
         'pango-coverage.h',
         'pango-direction.h',
-        'pango-engine.h',
         'pango-font.h',
         'pango-fontmap.h',
         'pango-fontset.h',
