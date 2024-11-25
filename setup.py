@@ -19,7 +19,7 @@ setup(
     use_scm_version=True,
     install_requires=['cffi >= 1.1.0', 'cairocffi >= 1.7.2'],
     setup_requires=['cffi >= 1.1.0', 'cairocffi >= 1.7.2'],
-    packages=['pangocffi'] if api_mode else [],
-    cffi_modules=['pangocffi/ffi_build.py:ffi']
+    packages=['pangocffi'],
+    cffi_modules=['pangocffi/ffi_build.py:ffi'] if api_mode else []
 )
 
