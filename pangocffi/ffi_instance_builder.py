@@ -75,5 +75,7 @@ class FFIInstanceBuilder:
                 )
             else:
                 ffi.set_source(self.source, None)
+        else:
+            ffi.set_source(self.source, None)
 
         return ffi
