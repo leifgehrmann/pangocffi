@@ -6,6 +6,7 @@
 """
 
 import os
+import platform
 from pathlib import Path
 from cffi import FFI
 from typing import Optional
@@ -41,7 +42,8 @@ class FFIInstanceBuilder:
                 int(os.environ['PANGOCFFI_API_MODE']) == 1):
             ffi.set_source_pkgconfig(
                 '_pangocffi',
-                ['pango', 'glib-2.0', 'pangoft2', 'pangoxft'],
+                ['pango', 'glib-2.0', 'pangoft2'] +
+                (['pangoxft'] if platform.system() == 'Linux' else []),
                 r"""
                 #include "glib.h"
                 #include "glib-object.h"
@@ -65,7 +67,7 @@ class FFIInstanceBuilder:
                   PangoContext* context,
                   const char* variations) {
                     fprintf(stderr, "Unimplemented!!\n");
-                    return -1;
+                    return NULL;
                 }
 
                 #endif
