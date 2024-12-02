@@ -1,6 +1,6 @@
 from . import FontDescription, Underline, ffi, pango, PangoObject
 from .enums import (AttrIndex, Gravity, GravityHint, Stretch, Style,
-        Variant, Weight)
+                    Variant, Weight)
 from .rectangle import Rectangle
 
 
