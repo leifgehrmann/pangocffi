@@ -1,5 +1,5 @@
 from . import FontDescription, Underline, ffi, pango, PangoObject
-from .enums import Gravity, GravityHint, Stretch, Style, Variant, Weight
+from .enums import AttrIndex, Gravity, GravityHint, Stretch, Style, Variant, Weight
 from .rectangle import Rectangle
 
 
@@ -20,9 +20,9 @@ class Attribute(PangoObject):
         return self._pointer.start_index
 
     def _set_start_index(self, start_index: int):
-        assert start_index >= pango.PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING, \
+        assert start_index >= AttrIndex.PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING, \
             "start_index is too low"
-        assert start_index < pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
+        assert start_index < AttrIndex.PANGO_ATTR_INDEX_TO_TEXT_END, \
             "start_index is too high"
         start = ffi.cast("guint", start_index)
         self._pointer.start_index = start
@@ -35,7 +35,7 @@ class Attribute(PangoObject):
 
     def _set_end_index(self, end_index: int):
         assert isinstance(end_index, int), "end_index isn't a int"
-        assert end_index <= pango.PANGO_ATTR_INDEX_TO_TEXT_END, \
+        assert end_index <= AttrIndex.PANGO_ATTR_INDEX_TO_TEXT_END, \
             "end_index is too high"
         end = ffi.cast("guint", end_index)
         self._pointer.end_index = end

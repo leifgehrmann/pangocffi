@@ -1,5 +1,6 @@
+from enum import Enum, IntEnum
+
 from pangocffi import pango
-from enum import Enum
 
 
 class Style(Enum):
@@ -270,3 +271,21 @@ class TabAlign(Enum):
     appears to the left of the tab stop position (until the available
     space is filled), the rest to the right. Since: 1.50
     """
+
+
+class AttrIndex(IntEnum):
+    """
+    :class:`AttrIndex` is used for specifying relative indexing of
+    attributes.
+    """
+
+    PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING = 0
+    """
+    Index from the begining of the text.
+    """
+
+    PANGO_ATTR_INDEX_TO_TEXT_END = 4294967295
+    """
+    Index to the end of the text.
+    """
+
