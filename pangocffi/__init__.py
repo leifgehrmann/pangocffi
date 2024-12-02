@@ -58,7 +58,8 @@ if not api_mode:
 
     from .ffi_build import ffi  # noqa
 
-    pango = _dlopen('pango', ffi, ['pango', 'pango-1', 'pango-1.0', 'pango-1.0-0'])
+    pango = _dlopen('pango', ffi, ['pango', 'pango-1', 'pango-1.0',
+                                   'pango-1.0-0'])
     gobject = _dlopen('gobject', ffi, ['gobject-2.0', 'gobject-2.0-0'])
     glib = _dlopen('glib', ffi, ['glib-2.0', 'glib-2.0-0'])
 
@@ -85,4 +86,3 @@ from .layout_run import LayoutRun  # noqa
 from .layout_iter import LayoutIter  # noqa
 from .layout import Layout  # noqa
 from .color import Color  # noqa
-

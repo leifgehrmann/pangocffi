@@ -288,4 +288,3 @@ class AttrIndex(IntEnum):
     """
     Index to the end of the text.
     """
-
