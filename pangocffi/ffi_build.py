@@ -13,7 +13,7 @@ from pathlib import Path
 from warnings import warn
 
 from cffi import FFI
-from cffi.error import VerificationError
+from cffi.error import PkgConfigError, VerificationError
 
 sys.path.append(str(Path(__file__).parent))
 
@@ -90,7 +90,7 @@ def build_ffi():
         ffi_api.compile(verbose=True)
         return ffi_api
     except (CCompilerError, ExecError, PlatformError,
-            VerificationError) as e:
+            PkgConfigError, VerificationError) as e:
         warn("Falling back to precompiled python mode: {}".format(str(e)))
 
         ffi_abi = ffi_for_mode("abi")
