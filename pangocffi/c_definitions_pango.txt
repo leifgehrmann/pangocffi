@@ -1,11 +1,7 @@
-typedef enum {
- PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING = 0,
- PANGO_ATTR_INDEX_TO_TEXT_END = 4294967295
-} PangoAttrIndex;
 typedef ... hb_feature_t;
 typedef ... hb_font_t;
 typedef ... GBytes;
-typedef ... GQuark;
+typedef guint32 GQuark;
 typedef ... PangoAttrClass;
 typedef ... PangoAttrString;
 typedef ... PangoAttrLanguage;
@@ -40,7 +36,6 @@ typedef ... PangoGlyphGeometry;
 typedef ... PangoGlyphVisAttr;
 typedef ... PangoGlyphInfo;
 typedef ... PangoGlyphString;
-typedef ... PangoAnalysis;
 typedef ... PangoLayout;
 typedef ... PangoLayoutClass;
 typedef ... PangoLayoutLine;
@@ -67,10 +62,22 @@ typedef struct
 } PangoRectangle;
 typedef struct
 {
+ PangoEngineShape *shape_engine;
+ PangoEngineLang *lang_engine;
+ PangoFont *font;
+ guint8 level;
+ guint8 gravity;
+ guint8 flags;
+ guint8 script;
+ PangoLanguage *language;
+ GSList *extra_attrs;
+} PangoAnalysis;
+typedef struct
+{
  int offset;
  int length;
  int num_chars;
- void * analysis;
+ PangoAnalysis analysis;
 } PangoItem;
 typedef struct
 {
@@ -661,11 +668,6 @@ PangoCoverage *pango_coverage_from_bytes (guchar *bytes,
 GType pango_engine_get_type (void) ;
 GType pango_engine_lang_get_type (void) ;
 GType pango_engine_shape_get_type (void) ;
-void script_engine_list (PangoEngineInfo **engines,
- int *n_engines);
-void script_engine_init (GTypeModule *module);
-void script_engine_exit (void);
-PangoEngine *script_engine_create (const char *id);
 GType pango_font_description_get_type (void) ;
 PangoFontDescription *pango_font_description_new (void);
 PangoFontDescription *pango_font_description_copy (const PangoFontDescription *desc);

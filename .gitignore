@@ -29,3 +29,8 @@ venv
 
 # Mac OS
 .DS_store
+
+# Build temporaries
+_*.o
+_*.so
+_*.c

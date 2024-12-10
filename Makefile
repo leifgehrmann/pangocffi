@@ -33,6 +33,9 @@ clean: clean-generated-ffi clean-build clean-pyc clean-test ## remove all build,
 
 clean-generated-ffi: ## remove FFI generated artifacts
 	rm -fr pangocffi/_generated/
+	rm -f _pangocffi*.so
+	rm -f _pangocffi*.c
+	rm -f _pangocffi*.o
 
 clean-build: ## remove build artifacts
 	rm -fr build/

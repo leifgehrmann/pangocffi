@@ -66,20 +66,11 @@ def remove_autoptr_cleanup_macros(source: str) -> str:
     return source
 
 
-def add_attr_index_definitions(cdefs: str) -> str:
-    cdefs = 'typedef enum {\n' + \
-            '  PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING = 0,\n' + \
-            '  PANGO_ATTR_INDEX_TO_TEXT_END = 4294967295\n' + \
-            '} PangoAttrIndex;\n' + \
-            cdefs
-    return cdefs
-
-
 def add_extra_typedefs(cdefs: str) -> str:
     cdefs = 'typedef ... hb_feature_t;\n' + \
             'typedef ... hb_font_t;\n' + \
             'typedef ... GBytes;\n' + \
-            'typedef ... GQuark;\n' + \
+            'typedef guint32 GQuark;\n' + \
             cdefs
     return cdefs
 
@@ -144,6 +135,13 @@ def get_struct_for_opaque_typedef(
     return public_struct_definition + '\n'
 
 
+def remove_gi_scanner_preprocessor(
+        input: str
+) -> str:
+    regex = r"#ifndef\s*__GI_SCANNER__([^#]*)#else([^#]*)#endif"
+    return re.sub(regex, '\\1', input, flags=re.MULTILINE)
+
+
 def remove_opaque_typedef(cdefs: str, opaque_typedef_name: str):
     return re.sub(r"typedef\s+\.\.\.\s+%s;" % opaque_typedef_name, '', cdefs)
 
@@ -195,7 +193,6 @@ def generate(pango_git_dir):
         'pango-context.h',
         'pango-coverage.h',
         'pango-direction.h',
-        'pango-engine.h',
         'pango-font.h',
         'pango-fontmap.h',
         'pango-fontset.h',
@@ -239,6 +236,16 @@ def generate(pango_git_dir):
         '_PangoRectangle'
     )
     typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoRectangle')
+
+    typedefs_struct += remove_gi_scanner_preprocessor(
+        get_struct_for_opaque_typedef(
+            'PangoAnalysis',
+            pango_git_dir,
+            'pango-item.h',
+            '_PangoAnalysis'
+        )
+    )
+    typedefs_opaque = remove_opaque_typedef(typedefs_opaque, 'PangoAnalysis')
 
     typedefs_struct += get_struct_for_opaque_typedef(
         'PangoItem',
@@ -290,9 +297,6 @@ def generate(pango_git_dir):
     # insert extra typedefs for hb and GBytes
     typedefs_opaque = add_extra_typedefs(typedefs_opaque)
 
-    # insert definitions for attr index
-    typedefs_opaque = add_attr_index_definitions(typedefs_opaque)
-
     cdefs = typedefs_opaque +\
         typedefs_struct +\
         typedefs_enum +\
@@ -306,7 +310,7 @@ def generate(pango_git_dir):
     cdefs = re.sub(r'const PangoItem', 'PangoItem', cdefs)
 
     # Convert PangoAnalysis (util we make PangoAnalysis non-opaque)
-    cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis;', cdefs)
+    # cdefs = re.sub(r'PangoAnalysis analysis;', 'void * analysis;', cdefs)
 
     cdefs = remove_multiple_blank_lines(cdefs)
     cdefs = remove_multiple_spaces(cdefs)
