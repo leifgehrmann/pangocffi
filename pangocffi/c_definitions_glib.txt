@@ -17,7 +17,12 @@ typedef ... GString;
 typedef ... GDestroyNotify;
 typedef ... GList;
 typedef ... GSList;
-typedef ... GError;
+typedef guint32 GQuark;
+typedef struct {
+  GQuark domain;
+  gint code;
+  gchar* message;
+} GError;
 typedef ... GMarkupParseContext;
 typedef ... GTypeModule;
 

@@ -5,7 +5,6 @@ typedef enum {
 typedef ... hb_feature_t;
 typedef ... hb_font_t;
 typedef ... GBytes;
-typedef ... GQuark;
 typedef ... PangoAttrClass;
 typedef ... PangoAttrString;
 typedef ... PangoAttrLanguage;
