@@ -52,6 +52,21 @@ def test_pango_font_map_add_font_file_error():
         r"(Specified font file '/not/a/font/filename.xxx' does not exist)")
 
 
+@pytest.mark.skipif(
+    sys.platform == 'darwin',
+    reason="applies only to macOS"
+)
+def test_pango_font_map_add_font_file_errors_on_core_text():
+    context_creator = ContextCreator.create_surface_without_output()
+    fontmap = context_creator.pangocairo.pango_cairo_font_map_new()
+
+    with pytest.raises(ValueError) as e:
+        _pango_font_map_add_font_file(fontmap, str(TEST_FONT_PATH))
+    assert e.match(
+        r"Adding font files not supported for PangoCairoCoreTextFontMap"
+    )
+
+
 def _pango_font_map_add_font_file(fontmap: PangoFontMap_ptr, filename: str):
     filename = ffi.new("char[]", filename.encode())
     error = ffi.new("GError**")
