@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 from typing import Any, TypeAlias
 
@@ -14,11 +15,18 @@ needs_pango_156 = pytest.mark.skipif(
 )
 
 
+skip_macos = pytest.mark.skipif(
+    sys.platform == 'darwin',
+    reason="Adding font files not supported for PangoCairoCoreTextFontMap"
+)
+
+
 TEST_FONT_PATH = Path(__file__).parent / "Untitled1.ttf"
 TEST_FONT_FAMILY_NAME = "Untitled1"
 
 
 @needs_pango_156
+@skip_macos
 def test_pango_font_map_add_font_file():
     context_creator = ContextCreator.create_surface_without_output()
     fontmap = context_creator.pangocairo.pango_cairo_font_map_new()
@@ -31,6 +39,7 @@ def test_pango_font_map_add_font_file():
 
 
 @needs_pango_156
+@skip_macos
 def test_pango_font_map_add_font_file_error():
     context_creator = ContextCreator.create_surface_without_output()
     fontmap = context_creator.pangocairo.pango_cairo_font_map_new()
