@@ -46,6 +46,7 @@ def test_pango_font_map_add_font_file_error():
 
     with pytest.raises(ValueError) as e:
         _pango_font_map_add_font_file(fontmap, "/not/a/font/filename.xxx")
+    # Linux and Windows return these errors, respectively
     assert e.match(
         r"(Adding.* /not/a/font/filename.xxx .*failed)|"
         r"(Specified font file '/not/a/font/filename.xxx' does not exist)")
