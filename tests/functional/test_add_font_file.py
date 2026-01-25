@@ -53,7 +53,7 @@ def test_pango_font_map_add_font_file_error():
 
 
 @pytest.mark.skipif(
-    sys.platform == 'darwin',
+    sys.platform != 'darwin',
     reason="applies only to macOS"
 )
 def test_pango_font_map_add_font_file_errors_on_core_text():
