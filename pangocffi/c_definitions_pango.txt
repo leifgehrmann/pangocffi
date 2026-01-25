@@ -5,7 +5,6 @@ typedef enum {
 typedef ... hb_feature_t;
 typedef ... hb_font_t;
 typedef ... GBytes;
-typedef ... GQuark;
 typedef ... PangoAttrClass;
 typedef ... PangoAttrString;
 typedef ... PangoAttrLanguage;
@@ -800,6 +799,10 @@ PangoFont * pango_font_map_reload_font (PangoFontMap *fontmap,
  double scale,
  PangoContext *context,
  const char *variations);
+gboolean pango_font_map_add_font_file (PangoFontMap* fontmap,
+ const char* filename,
+ GError** error
+);
 GType pango_fontset_get_type (void) ;
 PangoFont * pango_fontset_get_font (PangoFontset *fontset,
  guint wc);

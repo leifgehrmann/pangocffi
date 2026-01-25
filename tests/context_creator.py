@@ -182,6 +182,8 @@ class ContextCreator(object):
             PangoContext * pango_cairo_create_context (cairo_t *cr);
             PangoLayout * pango_cairo_create_layout (cairo_t *cr);
             void pango_cairo_show_layout (cairo_t *cr, PangoLayout *layout);
+
+            PangoFontMap * pango_cairo_font_map_new (void);
         ''')
         cls.ffi.set_source('pangocffi._generated.ffi', None)
         cls.cairo = _dlopen(
