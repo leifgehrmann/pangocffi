@@ -19,10 +19,6 @@ autodoc_member_order = "bysource"
 autodoc_default_options = {
     'members': None  # Set to True when readthedocs.org updates sphinx to v2.0
 }
-intersphinx_mapping = {
-    "http://docs.python.org/": None,
-    "https://pycairo.readthedocs.io/en/latest/": None,
-}
 
 sys.path.insert(0, os.path.abspath(".."))
 

@@ -13,24 +13,39 @@ pangocffi depends on Pango_, GLib_, and libffi_ being installed.
 .. _GLib: https://wiki.gnome.org/Projects/GLib
 .. _libffi: https://sourceware.org/libffi/
 
-* On Mac OS, this is as easy as installing `homebrew`_ and then running::
+Feel free to contribute a guide for how to install these dependencies on other
+systems.
+
+Linux
+^^^^^
+
+These packages are usually installed as part of the base OS.
+
+macOS
+^^^^^
+
+The default installation of Python that Apple bundles with macOS does not support loading dynamic libraries used by pangocffi.
+Instead, it is recommended that python3 be installed via homebrew::
+
+    brew install python3
+
+To check if python3 has been installed by homebrew, run ``which python3``, and confirm the path is ``/opt/homebrew/bin/python3``.
+
+Use `homebrew`_ to install the packages::
 
     brew install pkg-config
     brew install libffi
     brew install pango
     brew install glib
 
-* On Linux, these packages are usually installed as part of the base OS.
+Windows
+^^^^^^^
 
-* On Windows, if you are using a 64-bit Python, you can use
-  `this binary installer`_ to install GTK 3. Use ``python --version --version``
-  to check whether you're running 32-bit or 64-bit Python.
+If you are using a 64-bit Python, you can use `this binary installer`_ to install GTK 3.
+Use ``python --version --version`` to check whether you're running 32-bit or 64-bit Python.
 
 .. _homebrew: https://brew.sh
 .. _`this binary installer`: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer
-
-Feel free to contribute a guide for how to install these dependencies on other
-systems.
 
 Installing pangocffi
 ____________________

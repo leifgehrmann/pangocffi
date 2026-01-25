@@ -90,7 +90,11 @@ class GlyphItemIter(PangoObject):
 
     @property
     def text(self) -> str:
-        """The text being iterated over."""
+        """The text being iterated over.
+
+        Note: In some versions of Pango, the return value will always be a
+        blank string.
+        """
         return ffi.string(self._pointer.text).decode('utf-8')
 
     @property
