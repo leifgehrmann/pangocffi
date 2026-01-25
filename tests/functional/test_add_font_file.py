@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 from typing import Any, TypeAlias
 
@@ -14,11 +15,18 @@ needs_pango_156 = pytest.mark.skipif(
 )
 
 
+skip_macos = pytest.mark.skipif(
+    sys.platform == 'darwin',
+    reason="Adding font files not supported for PangoCairoCoreTextFontMap"
+)
+
+
 TEST_FONT_PATH = Path(__file__).parent / "Untitled1.ttf"
 TEST_FONT_FAMILY_NAME = "Untitled1"
 
 
 @needs_pango_156
+@skip_macos
 def test_pango_font_map_add_font_file():
     context_creator = ContextCreator.create_surface_without_output()
     fontmap = context_creator.pangocairo.pango_cairo_font_map_new()
@@ -31,13 +39,32 @@ def test_pango_font_map_add_font_file():
 
 
 @needs_pango_156
+@skip_macos
 def test_pango_font_map_add_font_file_error():
     context_creator = ContextCreator.create_surface_without_output()
     fontmap = context_creator.pangocairo.pango_cairo_font_map_new()
 
     with pytest.raises(ValueError) as e:
         _pango_font_map_add_font_file(fontmap, "/not/a/font/filename.xxx")
-    assert e.match(r"Adding.* /not/a/font/filename.xxx .*failed")
+    # Linux and Windows return these errors, respectively
+    assert e.match(
+        r"(Adding.* /not/a/font/filename.xxx .*failed)|"
+        r"(Specified font file '/not/a/font/filename.xxx' does not exist)")
+
+
+@pytest.mark.skipif(
+    sys.platform != 'darwin',
+    reason="applies only to macOS"
+)
+def test_pango_font_map_add_font_file_errors_on_core_text():
+    context_creator = ContextCreator.create_surface_without_output()
+    fontmap = context_creator.pangocairo.pango_cairo_font_map_new()
+
+    with pytest.raises(ValueError) as e:
+        _pango_font_map_add_font_file(fontmap, str(TEST_FONT_PATH))
+    assert e.match(
+        r"Adding font files not supported for PangoCairoCoreTextFontMap"
+    )
 
 
 def _pango_font_map_add_font_file(fontmap: PangoFontMap_ptr, filename: str):
