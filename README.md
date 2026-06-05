@@ -4,7 +4,6 @@
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/pangocffi.svg?style=flat)](https://pypi.python.org/pypi/pangocffi)
 [![Build Status](https://github.com/leifgehrmann/pangocffi/actions/workflows/build.yml/badge.svg)](https://github.com/leifgehrmann/pangocffi/actions)
 [![Documentation Status](https://readthedocs.org/projects/pangocffi/badge/?version=latest)](https://pangocffi.readthedocs.io/en/latest/?badge=latest)
-[![Code Coverage](https://codecov.io/gh/leifgehrmann/pangocffi/branch/master/graph/badge.svg)](https://codecov.io/gh/leifgehrmann/pangocffi)
 
 pangocffi is a [CFFI]-based set of Python bindings for [pango].
 
