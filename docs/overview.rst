@@ -1,6 +1,11 @@
 Overview
 ========
 
+**Deprecation Notice:** pangocffi is no longer being maintained.
+There are no plans to officially handover ownership of the project to another maintainer.
+PyGObject can be used as a replacement, but will also require migrating from cairocffi to pycairo.
+For more information, please see the :doc:`PyGObject Migration Guide <migration-guide>`.
+
 Installing
 ----------
 
@@ -19,17 +24,16 @@ systems.
 Linux
 ^^^^^
 
-These packages are usually installed as part of the base OS.
+For Ubuntu/Debian::
+
+    apt install libffi-dev libpango-1.0-0
+    # To use pangocffi (and pangocairocffi) with cairo
+    apt install libcairo2 libpangocairo-1.0-0
+
+Other Linux distributions may require a different setup.
 
 macOS
 ^^^^^
-
-The default installation of Python that Apple bundles with macOS does not support loading dynamic libraries used by pangocffi.
-Instead, it is recommended that python3 be installed via homebrew::
-
-    brew install python3
-
-To check if python3 has been installed by homebrew, run ``which python3``, and confirm the path is ``/opt/homebrew/bin/python3``.
 
 Use `homebrew`_ to install the packages::
 
@@ -38,13 +42,14 @@ Use `homebrew`_ to install the packages::
     brew install pango
     brew install glib
 
+.. _homebrew: https://brew.sh
+
 Windows
 ^^^^^^^
 
 If you are using a 64-bit Python, you can use `this binary installer`_ to install GTK 3.
 Use ``python --version --version`` to check whether you're running 32-bit or 64-bit Python.
 
-.. _homebrew: https://brew.sh
 .. _`this binary installer`: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer
 
 Installing pangocffi

@@ -1,6 +1,11 @@
 pangocffi
 =========
 
+**Deprecation Notice:** pangocffi is no longer being maintained.
+There are no plans to officially handover ownership of the project to another maintainer.
+PyGObject can be used as a replacement, but will also require migrating from cairocffi to pycairo.
+For more information, please see the :doc:`PyGObject Migration Guide <migration-guide>`.
+
 pangocffi is a `CFFI`_-based set of Python bindings for pango_.
 
 pangocffi on its own is not that useful, since it depends on a PangoFontMap
@@ -33,3 +38,4 @@ Documentation
     binding-progress
     changelog
     contributing
+    migration-guide
