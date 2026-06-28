@@ -5,6 +5,8 @@
 [![Build Status](https://github.com/leifgehrmann/pangocffi/actions/workflows/build.yml/badge.svg)](https://github.com/leifgehrmann/pangocffi/actions)
 [![Documentation Status](https://readthedocs.org/projects/pangocffi/badge/?version=latest)](https://pangocffi.readthedocs.io/en/latest/?badge=latest)
 
+**Deprecation Notice:** pangocffi is no longer being maintained. There are no plans to officially handover ownership of the project to another maintainer. PyGObject can be used as a replacement, but will also require migrating from cairocffi to pycairo. For more information, please see the [PyGObject Migration Guide](https://pangocffi.readthedocs.io/en/latest/migration-guide.html).
+
 pangocffi is a [CFFI]-based set of Python bindings for [pango].
 
 pangocffi on its own is not that useful, since it depends on a PangoFontMap
